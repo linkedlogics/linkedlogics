@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import dev.linkedlogics.LinkedLogics;
+import dev.linkedlogics.context.LogicContext;
 
 public class ServiceLocatorTests {
 	
@@ -36,14 +37,26 @@ public class ServiceLocatorTests {
 	}
 	
 	public static class PublisherA implements PublisherService {
-		
+
+		@Override
+		public boolean publish(LogicContext context) {
+			return false;
+		}
 	}
 	
 	public static class PublisherB implements PublisherService {
 		
+		@Override
+		public boolean publish(LogicContext context) {
+			return false;
+		}
 	}
 	
 	public static class ConsumerA implements ConsumerService {
-		
+
+		@Override
+		public boolean consume(LogicContext context) {
+			return false;
+		}
 	}
 }

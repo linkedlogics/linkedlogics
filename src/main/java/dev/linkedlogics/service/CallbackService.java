@@ -1,5 +1,12 @@
 package dev.linkedlogics.service;
 
-public interface CallbackService extends LinkedLogicsService {
+import dev.linkedlogics.context.LogicContext;
 
+public interface CallbackService extends LinkedLogicsService {
+	
+	boolean set(LogicContext context);
+	
+	LogicContext remove(String contextId);
+	
+	boolean callback(String contextId, Object result);
 }
