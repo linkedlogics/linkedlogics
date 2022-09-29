@@ -1,5 +1,10 @@
 package dev.linkedlogics;
 
-public class LinkedLogics {
+import dev.linkedlogics.service.ServiceConfigurer;
+import dev.linkedlogics.service.ServiceLocator;
 
+public class LinkedLogics {
+	public static void configure(ServiceConfigurer configurer) {
+		ServiceLocator.getInstance().configure(configurer);
+	}
 }
