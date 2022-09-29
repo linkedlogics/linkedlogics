@@ -22,7 +22,7 @@ public class Context {
 	
 	private String logicId;
 	private int logicVersion = LogicService.LATEST_VERSION;
-	private String logicPositionId;
+	private String logicPosition;
 	private String application;
 	private Map<String, Object> input = new HashMap<>();
 	private Map<String, Object> output = new HashMap<>();
