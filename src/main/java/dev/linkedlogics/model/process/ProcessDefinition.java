@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import lombok.AccessLevel;
@@ -23,6 +24,10 @@ public class ProcessDefinition {
 	private List<BaseLogicDefinition> logics = new ArrayList<BaseLogicDefinition>();
 	@Getter(value = AccessLevel.PUBLIC)
 	private Map<String, BaseLogicDefinition> positions;
+	
+	public Optional<BaseLogicDefinition> getLogicByPosition(String position) {
+		return Optional.ofNullable(positions.get(position));
+	}
 	
 	public List<BaseLogicDefinition> cloneLogics() {
 		return logics.stream().map(l -> l.cloneLogic()).collect(Collectors.toList());

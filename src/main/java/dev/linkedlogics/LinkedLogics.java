@@ -8,7 +8,11 @@ public class LinkedLogics {
 		ServiceLocator.getInstance().configure(configurer);
 	}
 	
-	public static void registerLogics(Object logics) {
-		ServiceLocator.getInstance().getLogicService().register(logics);
+	public static void registerLogic(Object logic) {
+		ServiceLocator.getInstance().getLogicService().register(logic);
+	}
+	
+	public static void registerProcess(Object process) {
+		ServiceLocator.getInstance().getProcessService().register(process);
 	}
 }

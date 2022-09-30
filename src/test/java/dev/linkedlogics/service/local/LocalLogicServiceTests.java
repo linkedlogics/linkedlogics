@@ -28,8 +28,8 @@ public class LocalLogicServiceTests {
 	@BeforeAll
 	public static void setUp() {
 		LinkedLogics.configure(new LocalServiceConfigurer());
-		LinkedLogics.registerLogics(new LogicsA());
-		LinkedLogics.registerLogics(LogicsB.class);
+		LinkedLogics.registerLogic(new LogicsA());
+		LinkedLogics.registerLogic(LogicsB.class);
 	}
 
 	@Test
@@ -88,7 +88,7 @@ public class LocalLogicServiceTests {
 	@DisplayName("should not parse duplicate logics from object")
 	public void shouldNotParseDuplicateLogicsFromObject() {
 		assertThatThrownBy(() -> {
-			LinkedLogics.registerLogics(LogicsC.class);
+			LinkedLogics.registerLogic(LogicsC.class);
 		}).isInstanceOf(AlreadyExistingError.class);
 	}
 
