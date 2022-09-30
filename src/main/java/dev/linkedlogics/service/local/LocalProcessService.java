@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import dev.linkedlogics.annotation.ProcessChain;
 import dev.linkedlogics.exception.AlreadyExistingError;
-import dev.linkedlogics.model.ProcessDefinition;
+import dev.linkedlogics.model.process.ProcessDefinition;
 import dev.linkedlogics.service.ProcessService;
 
 public class LocalProcessService implements ProcessService {
