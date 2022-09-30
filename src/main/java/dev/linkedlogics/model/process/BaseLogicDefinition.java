@@ -58,16 +58,6 @@ public abstract class BaseLogicDefinition implements Cloneable {
 			return (T) this;
 		}
 		
-		public T fork(String fork) {
-			this.logic.setFork(new ForkLogicDefinition(fork));
-			return (T) this;
-		}
-		
-		public T fork() {
-			this.logic.setFork(new ForkLogicDefinition());
-			return (T) this;
-		}
-		
 		public T join(String... join) {
 			this.logic.setJoin(new JoinLogicDefinition(join));
 			return (T) this;

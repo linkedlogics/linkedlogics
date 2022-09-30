@@ -4,5 +4,5 @@ import dev.linkedlogics.context.LogicContext;
 
 public interface ConsumerService extends LinkedLogicsService {
 	
-	boolean consume(LogicContext context);
+	void consume(LogicContext context);
 }

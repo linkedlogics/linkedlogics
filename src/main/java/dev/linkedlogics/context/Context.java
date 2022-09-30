@@ -1,6 +1,8 @@
 package dev.linkedlogics.context;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import dev.linkedlogics.service.LogicService;
@@ -13,6 +15,7 @@ public class Context {
 	private String id;
 	private String key;
 	private String parentId;
+	private Status status = Status.INITIAL;
 	
 	private String processId;
 	private int processVersion;
@@ -27,4 +30,8 @@ public class Context {
 	private Map<String, Object> input = new HashMap<>();
 	private Map<String, Object> output = new HashMap<>();
 	private ContextError error;
+	
+	private Map<String, Integer> retries = new HashMap<>();
+	private List<String> compensables = new ArrayList<>();
+	private Map<String, String> joinMap = new HashMap<>();
 }

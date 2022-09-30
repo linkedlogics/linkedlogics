@@ -15,4 +15,8 @@ public class LinkedLogics {
 	public static void registerProcess(Object process) {
 		ServiceLocator.getInstance().getProcessService().register(process);
 	}
+	
+	public static void shutdown() {
+		ServiceLocator.getInstance().shutdown();
+	}
 }

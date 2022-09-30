@@ -44,6 +44,16 @@ public class GroupLogicDefinition extends BaseLogicDefinition {
 			return this;
 		}
 		
+		public GroupLogicBuilder fork(String fork) {
+			this.getLogic().setFork(new ForkLogicDefinition(fork));
+			return this;
+		}
+		
+		public GroupLogicBuilder fork() {
+			this.getLogic().setFork(new ForkLogicDefinition());
+			return this;
+		}
+		
 		@Override
 		public GroupLogicDefinition build() {
 			this.getLogic().getLogics().forEach(l -> {

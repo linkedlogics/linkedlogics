@@ -6,7 +6,7 @@ import dev.linkedlogics.context.Context;
 
 public interface ContextService extends LinkedLogicsService {
 	
-	boolean set(Context context);
+	void set(Context context);
 
 	Optional<Context> get(String contextId);
 	

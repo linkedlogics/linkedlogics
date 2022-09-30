@@ -62,4 +62,12 @@ public class ServiceLocator {
 	public ProcessService getProcessService() {
 		return getService(ProcessService.class);
 	}
+	
+	public TriggerService getTriggerService() {
+		return getService(TriggerService.class);
+	}
+	
+	public void shutdown() {
+		services.values().stream().forEach(s -> s.stop());
+	}
 }

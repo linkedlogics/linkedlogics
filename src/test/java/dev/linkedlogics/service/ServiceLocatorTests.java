@@ -39,24 +39,24 @@ public class ServiceLocatorTests {
 	public static class PublisherA implements PublisherService {
 
 		@Override
-		public boolean publish(LogicContext context) {
-			return false;
+		public void  publish(LogicContext context) {
+
 		}
 	}
 	
 	public static class PublisherB implements PublisherService {
 		
 		@Override
-		public boolean publish(LogicContext context) {
-			return false;
+		public void publish(LogicContext context) {
+
 		}
 	}
 	
 	public static class ConsumerA implements ConsumerService {
 
 		@Override
-		public boolean consume(LogicContext context) {
-			return false;
+		public void consume(LogicContext context) {
+
 		}
 	}
 }

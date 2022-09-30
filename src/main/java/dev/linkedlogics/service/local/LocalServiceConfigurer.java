@@ -6,5 +6,11 @@ public class LocalServiceConfigurer extends ServiceConfigurer {
 	public LocalServiceConfigurer() {
 		configure(new LocalLogicService());
 		configure(new LocalProcessService());
+		configure(new LocalProcessorService());
+		configure(new LocalPublisherService());
+		configure(new LocalConsumerService());
+		configure(new LocalCallbackService());
+		configure(new LocalContextService());
+		configure(new LocalTriggerService());
 	}
 }

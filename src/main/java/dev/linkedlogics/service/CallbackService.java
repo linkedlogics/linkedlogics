@@ -4,9 +4,9 @@ import dev.linkedlogics.context.LogicContext;
 
 public interface CallbackService extends LinkedLogicsService {
 	
-	boolean set(LogicContext context);
+	void set(LogicContext context);
 	
 	LogicContext remove(String contextId);
 	
-	boolean callback(String contextId, Object result);
+	void callback(String contextId, Object result);
 }

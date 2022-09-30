@@ -1,8 +1,8 @@
 package dev.linkedlogics.service;
 
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.service.task.LinkedLogicsTask;
 
 public interface ProcessorService extends LinkedLogicsService {
 	
-	boolean process(LogicContext context);
+	void process(LinkedLogicsTask task);
 }

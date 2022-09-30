@@ -1,5 +1,6 @@
 package dev.linkedlogics.model.process;
 
+import dev.linkedlogics.model.process.GroupLogicDefinition.GroupLogicBuilder;
 import dev.linkedlogics.service.LogicService;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -38,6 +39,16 @@ public class SingleLogicDefinition extends BaseLogicDefinition {
 		
 		public SingleLogicBuilder compensate(SingleLogicDefinition compensationLogic) {
 			this.getLogic().setCompensationLogic(compensationLogic);
+			return this;
+		}
+		
+		public SingleLogicBuilder fork(String fork) {
+			this.getLogic().setFork(new ForkLogicDefinition(fork));
+			return this;
+		}
+		
+		public SingleLogicBuilder fork() {
+			this.getLogic().setFork(new ForkLogicDefinition());
 			return this;
 		}
 		
