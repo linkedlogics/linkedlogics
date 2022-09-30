@@ -1,5 +1,6 @@
 package dev.linkedlogics.service.local;
 
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -8,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import dev.linkedlogics.config.LinkedLogicsConfiguration;
 import dev.linkedlogics.context.LogicContext;
 import dev.linkedlogics.service.CallbackService;
+import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.task.CallbackExpireTask;
 import dev.linkedlogics.service.task.CallbackTask;
 
@@ -37,15 +39,16 @@ public class LocalCallbackService implements CallbackService {
 	}
 
 	@Override
-	public LogicContext remove(String contextId) {
-		return contextMap.remove(contextId);
+	public Optional<LogicContext> remove(String contextId) {
+		return Optional.ofNullable(contextMap.remove(contextId));
 	}
 
 	@Override
 	public void callback(String contextId, Object result) {
 		if (contextMap.containsKey(contextId)) {
-			LogicContext context = remove(contextId);
-			new CallbackTask(context, result).run();
+			remove(contextId).ifPresent(c -> {
+				ServiceLocator.getInstance().getProcessorService().process(new CallbackTask(c, result));
+			});
 		}
 	}
 }
