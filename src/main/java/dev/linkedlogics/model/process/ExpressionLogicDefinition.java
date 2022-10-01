@@ -10,6 +10,11 @@ public class ExpressionLogicDefinition {
 		this.expression = expression;
 	}
 	
+	public ExpressionLogicDefinition clone() {
+		ExpressionLogicDefinition clone = new ExpressionLogicDefinition(expression);
+		return clone;
+	}
+	
 	public static class ExpressionLogicDefinitionBuilder {
 		protected ExpressionLogicDefinition expression;
 		

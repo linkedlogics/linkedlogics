@@ -5,6 +5,7 @@ import static dev.linkedlogics.LinkedLogicsBuilder.logic;
 import static dev.linkedlogics.LinkedLogicsBuilder.group;
 import static dev.linkedlogics.LinkedLogicsBuilder.branch;
 import static dev.linkedlogics.LinkedLogicsBuilder.error;
+import static dev.linkedlogics.LinkedLogicsBuilder.expr;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
@@ -115,7 +116,7 @@ public class ProcessTests {
 								logic(LOGIC_2).build())
 						.build())
 					.add(group(
-								branch(true, logic(LOGIC_2).build(), logic(LOGIC_3).build()).build(), 
+								branch(expr("true"), logic(LOGIC_2).build(), logic(LOGIC_3).build()).build(), 
 								logic(LOGIC_3).build())
 						.build())
 					.build();

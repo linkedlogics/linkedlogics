@@ -23,6 +23,8 @@ test {
 dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
 	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.3'
+	implementation 'org.springframework:spring-expression:5.3.22'
+	implementation 'org.springframework:spring-context:5.3.22'		
 	compileOnly 'org.projectlombok:lombok:1.18.22'
 	annotationProcessor 'org.projectlombok:lombok:1.18.22'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'

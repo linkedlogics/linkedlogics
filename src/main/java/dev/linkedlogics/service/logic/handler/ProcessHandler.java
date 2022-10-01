@@ -1,14 +1,18 @@
  package dev.linkedlogics.service.logic.handler;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.context.LogicContext;
 import dev.linkedlogics.context.Status;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
+import dev.linkedlogics.model.process.ExpressionLogicDefinition;
 import dev.linkedlogics.model.process.ProcessDefinition;
 import dev.linkedlogics.model.process.SingleLogicDefinition;
+import dev.linkedlogics.service.EvaluatorService;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.TriggerService;
 import dev.linkedlogics.service.process.handler.BranchFlowHandler;
@@ -26,12 +30,13 @@ import dev.linkedlogics.service.process.handler.OutputFlowHandler;
 import dev.linkedlogics.service.process.handler.ProcessFlowHandler;
 import dev.linkedlogics.service.process.handler.RetryFlowHandler;
 import dev.linkedlogics.service.process.handler.SuccessFlowHandler;
+import dev.linkedlogics.service.process.handler.VerifyFlowHandler;
 import dev.linkedlogics.service.task.StartTask;
 
 public class ProcessHandler extends LogicHandler {
 	
 	private ProcessFlowHandler lastFlowHandler = new RetryFlowHandler(new SuccessFlowHandler(new OutputFlowHandler(new CleanupFlowHandler())));
-	private ProcessFlowHandler nextFlowHandler = new EmptyCandidateFlowHandler(new ForcedFlowHandler(new DisabledFlowHandler(new JoinFlowHandler(new ForkFlowHandler(new GroupFlowHandler(new BranchFlowHandler()))))));
+	private ProcessFlowHandler nextFlowHandler = new EmptyCandidateFlowHandler(new ForcedFlowHandler(new DisabledFlowHandler(new VerifyFlowHandler(new JoinFlowHandler(new ForkFlowHandler(new GroupFlowHandler(new BranchFlowHandler())))))));
 	private ProcessFlowHandler errorFlowHandler = new ErrorFlowHandler(new CompensateFlowHandler());
 	
 	
@@ -59,7 +64,18 @@ public class ProcessHandler extends LogicHandler {
 				context.setLogicVersion(logic.getLogicVersion());
 				context.setLogicPosition(logic.getPosition());
 				context.setApplication(logic.getApplication());
-				context.setInput(logic.getInputMap());
+				
+				final EvaluatorService evaluator = ServiceLocator.getInstance().getEvaluatorService();
+				Map<String, Object> inputs = new HashMap<>();
+				logic.getInputMap().entrySet().stream().forEach(e -> {
+					if (e.getValue() instanceof ExpressionLogicDefinition) {
+						inputs.put(e.getKey(), evaluator.evaluate((ExpressionLogicDefinition) e.getValue(), Map.of()));
+					} else {
+						inputs.put(e.getKey(), e.getValue());
+					}
+				});
+				context.setInput(inputs);
+				
 //				context.setLogicStepCounter(context.getLogicStepCounter() + 1);
 //				context.setSubmittedAt(OffsetDateTime.now());
 				context.setOutput(null);
@@ -71,7 +87,7 @@ public class ProcessHandler extends LogicHandler {
 //				context.setExecutedAt(null);
 				
 				ServiceLocator.getInstance().getContextService().set(context);
-				ServiceLocator.getInstance().getPublisherService().publish(LogicContext.fromLogic(context, (SingleLogicDefinition) flowResult.getSelectedLogic().get()));
+				ServiceLocator.getInstance().getPublisherService().publish(LogicContext.fromLogic(context));
 			}
 		});
 		

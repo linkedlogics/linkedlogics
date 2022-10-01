@@ -4,34 +4,35 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 import dev.linkedlogics.context.Context;
+import dev.linkedlogics.service.ServiceLocator;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
 public class BranchLogicDefinition extends BaseLogicDefinition {
-	private boolean condition;
+	private ExpressionLogicDefinition expression;
 	private BaseLogicDefinition leftLogic;
 	private BaseLogicDefinition rightLogic;
 	
 	
 	public boolean isSatisfied(Context context) {
-		return condition;
+		return (Boolean) ServiceLocator.getInstance().getEvaluatorService().evaluate(expression, context.getParams());
 	}
 	
 	public BranchLogicDefinition clone() {
 		BranchLogicDefinition clone = new BranchLogicDefinition();
-		clone.setCondition(isCondition());
+		clone.setExpression(getExpression().clone());
 		clone.setLeftLogic(getLeftLogic().clone());
 		clone.setRightLogic(getRightLogic().clone());
 		clone.getInputMap().putAll(getInputMap());
 		return clone;
 	}
 
-	public static class LogicBranchBuilder extends LogicBuilder<LogicBranchBuilder, BranchLogicDefinition> {
-		public LogicBranchBuilder(boolean condition, BaseLogicDefinition leftBranch, BaseLogicDefinition rightBranch) {
+	public static class BranchLogicBuilder extends LogicBuilder<BranchLogicBuilder, BranchLogicDefinition> {
+		public BranchLogicBuilder(ExpressionLogicDefinition expression, BaseLogicDefinition leftBranch, BaseLogicDefinition rightBranch) {
 			super(new BranchLogicDefinition());
-			getLogic().setCondition(condition);
+			getLogic().setExpression(expression);
 			getLogic().setLeftLogic(leftBranch);
 			leftBranch.setParentLogic(this.getLogic());
 			if (rightBranch != null) {

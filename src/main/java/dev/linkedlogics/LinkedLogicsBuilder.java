@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import dev.linkedlogics.model.process.BaseLogicDefinition;
-import dev.linkedlogics.model.process.BranchLogicDefinition.LogicBranchBuilder;
+import dev.linkedlogics.model.process.BranchLogicDefinition.BranchLogicBuilder;
 import dev.linkedlogics.model.process.ErrorLogicDefinition;
 import dev.linkedlogics.model.process.ErrorLogicDefinition.ErrorLogicDefinitionBuilder;
 import dev.linkedlogics.model.process.ExpressionLogicDefinition;
@@ -12,6 +12,7 @@ import dev.linkedlogics.model.process.GroupLogicDefinition.GroupLogicBuilder;
 import dev.linkedlogics.model.process.ProcessDefinition;
 import dev.linkedlogics.model.process.ProcessDefinition.ProcessBuilder;
 import dev.linkedlogics.model.process.SingleLogicDefinition.SingleLogicBuilder;
+import dev.linkedlogics.model.process.VerifyLogicDefinition.VerifyLogicBuilder;
 import dev.linkedlogics.service.LogicService;
 import dev.linkedlogics.service.ProcessService;
 import dev.linkedlogics.service.ServiceLocator;
@@ -56,12 +57,16 @@ public class LinkedLogicsBuilder {
 		return new GroupLogicBuilder(logicArray).inputs(process.getInputs());
 	}
 	
-	public static LogicBranchBuilder branch(boolean condition, BaseLogicDefinition leftBranch, BaseLogicDefinition rightBranch) {
-		return new LogicBranchBuilder(condition, leftBranch, rightBranch);
+	public static BranchLogicBuilder branch(ExpressionLogicDefinition expression, BaseLogicDefinition leftBranch, BaseLogicDefinition rightBranch) {
+		return new BranchLogicBuilder(expression, leftBranch, rightBranch);
 	}
 	
-	public static LogicBranchBuilder branch(boolean condition, BaseLogicDefinition leftBranch) {
-		return new LogicBranchBuilder(condition, leftBranch, null);
+	public static BranchLogicBuilder branch(ExpressionLogicDefinition expression, BaseLogicDefinition leftBranch) {
+		return new BranchLogicBuilder(expression, leftBranch, null);
+	}
+	
+	public static VerifyLogicBuilder verify(ExpressionLogicDefinition expression) {
+		return new VerifyLogicBuilder(expression);
 	}
 	
 	public static ErrorLogicDefinition.ErrorLogicDefinitionBuilder error(Integer... errorCodes) {

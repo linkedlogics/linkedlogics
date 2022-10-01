@@ -26,14 +26,14 @@ public class LogicContext {
 
 	private ContextError error;
 
-	public static LogicContext fromLogic(Context context, SingleLogicDefinition logic) {
+	public static LogicContext fromLogic(Context context) {
 		LogicContext logicContext = new LogicContext();
 		logicContext.setId(context.getId());
-		logicContext.setLogicId(logic.getLogicId());
-		logicContext.setLogicVersion(logic.getLogicVersion());
-		logicContext.setPosition(logic.getPosition());
-		logicContext.setApplication(logic.getApplication());
-		logicContext.setInput(logic.getInputMap());
+		logicContext.setLogicId(context.getLogicId());
+		logicContext.setLogicVersion(context.getLogicVersion());
+		logicContext.setPosition(context.getLogicPosition());
+		logicContext.setApplication(context.getApplication());
+		logicContext.setInput(context.getInput());
 		logicContext.setOutput(null);
 		return logicContext;
 	}
