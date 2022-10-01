@@ -3,8 +3,8 @@ package dev.linkedlogics.service.task;
 import dev.linkedlogics.context.LogicContext;
 import dev.linkedlogics.exception.AsyncTimeoutException;
 import dev.linkedlogics.service.ServiceLocator;
-import dev.linkedlogics.service.logic.handler.ErrorHandler;
-import dev.linkedlogics.service.logic.handler.ProcessHandler;
+import dev.linkedlogics.service.handler.logic.ErrorHandler;
+import dev.linkedlogics.service.handler.logic.ProcessHandler;
 
 public class CallbackExpireTask extends LinkedLogicsTask {
 	

@@ -1,4 +1,4 @@
-package dev.linkedlogics.service.logic.handler;
+package dev.linkedlogics.service.handler.logic;
 
 import java.lang.reflect.Modifier;
 import java.util.Arrays;

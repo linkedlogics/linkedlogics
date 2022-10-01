@@ -1,9 +1,9 @@
 package dev.linkedlogics.service.task;
 
 import dev.linkedlogics.context.LogicContext;
-import dev.linkedlogics.service.logic.handler.ErrorHandler;
-import dev.linkedlogics.service.logic.handler.OutputHandler;
-import dev.linkedlogics.service.logic.handler.ProcessHandler;
+import dev.linkedlogics.service.handler.logic.ErrorHandler;
+import dev.linkedlogics.service.handler.logic.OutputHandler;
+import dev.linkedlogics.service.handler.logic.ProcessHandler;
 import lombok.Getter;
 
 @Getter

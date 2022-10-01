@@ -2,11 +2,11 @@ package dev.linkedlogics.service.task;
 
 import dev.linkedlogics.context.LogicContext;
 import dev.linkedlogics.service.ServiceLocator;
-import dev.linkedlogics.service.logic.handler.AsyncHandler;
-import dev.linkedlogics.service.logic.handler.ErrorHandler;
-import dev.linkedlogics.service.logic.handler.InvokeHandler;
-import dev.linkedlogics.service.logic.handler.OutputHandler;
-import dev.linkedlogics.service.logic.handler.ProcessHandler;
+import dev.linkedlogics.service.handler.logic.AsyncHandler;
+import dev.linkedlogics.service.handler.logic.ErrorHandler;
+import dev.linkedlogics.service.handler.logic.InvokeHandler;
+import dev.linkedlogics.service.handler.logic.OutputHandler;
+import dev.linkedlogics.service.handler.logic.ProcessHandler;
 
 public class ProcessorTask extends LinkedLogicsTask {
 	public ProcessorTask(LogicContext context) {

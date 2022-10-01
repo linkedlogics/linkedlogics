@@ -1,4 +1,4 @@
- package dev.linkedlogics.service.logic.handler;
+ package dev.linkedlogics.service.handler.logic;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,23 +15,23 @@ import dev.linkedlogics.model.process.SingleLogicDefinition;
 import dev.linkedlogics.service.EvaluatorService;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.TriggerService;
-import dev.linkedlogics.service.process.handler.BranchFlowHandler;
-import dev.linkedlogics.service.process.handler.CleanupFlowHandler;
-import dev.linkedlogics.service.process.handler.CompensateFlowHandler;
-import dev.linkedlogics.service.process.handler.DisabledFlowHandler;
-import dev.linkedlogics.service.process.handler.EmptyCandidateFlowHandler;
-import dev.linkedlogics.service.process.handler.ErrorFlowHandler;
-import dev.linkedlogics.service.process.handler.ForcedFlowHandler;
-import dev.linkedlogics.service.process.handler.ForkFlowHandler;
-import dev.linkedlogics.service.process.handler.GroupFlowHandler;
-import dev.linkedlogics.service.process.handler.HandlerResult;
-import dev.linkedlogics.service.process.handler.JoinFlowHandler;
-import dev.linkedlogics.service.process.handler.OutputFlowHandler;
-import dev.linkedlogics.service.process.handler.ProcessFlowHandler;
-import dev.linkedlogics.service.process.handler.RetryFlowHandler;
-import dev.linkedlogics.service.process.handler.SavepointFlowHandler;
-import dev.linkedlogics.service.process.handler.SuccessFlowHandler;
-import dev.linkedlogics.service.process.handler.VerifyFlowHandler;
+import dev.linkedlogics.service.handler.process.BranchFlowHandler;
+import dev.linkedlogics.service.handler.process.CleanupFlowHandler;
+import dev.linkedlogics.service.handler.process.CompensateFlowHandler;
+import dev.linkedlogics.service.handler.process.DisabledFlowHandler;
+import dev.linkedlogics.service.handler.process.EmptyCandidateFlowHandler;
+import dev.linkedlogics.service.handler.process.ErrorFlowHandler;
+import dev.linkedlogics.service.handler.process.ForcedFlowHandler;
+import dev.linkedlogics.service.handler.process.ForkFlowHandler;
+import dev.linkedlogics.service.handler.process.GroupFlowHandler;
+import dev.linkedlogics.service.handler.process.HandlerResult;
+import dev.linkedlogics.service.handler.process.JoinFlowHandler;
+import dev.linkedlogics.service.handler.process.OutputFlowHandler;
+import dev.linkedlogics.service.handler.process.ProcessFlowHandler;
+import dev.linkedlogics.service.handler.process.RetryFlowHandler;
+import dev.linkedlogics.service.handler.process.SavepointFlowHandler;
+import dev.linkedlogics.service.handler.process.SuccessFlowHandler;
+import dev.linkedlogics.service.handler.process.VerifyFlowHandler;
 import dev.linkedlogics.service.task.StartTask;
 
 public class ProcessHandler extends LogicHandler {

@@ -1,29 +1,27 @@
-package dev.linkedlogics.service.process.handler;
+package dev.linkedlogics.service.handler.process;
 
 import java.util.Optional;
 
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
-import dev.linkedlogics.model.process.SavepointLogicDefinition;
 
-public class SavepointFlowHandler extends ProcessFlowHandler {
-	public SavepointFlowHandler() {
+public class DisabledFlowHandler extends ProcessFlowHandler {
+	public DisabledFlowHandler() {
 
 	}
-
-	public SavepointFlowHandler(ProcessFlowHandler handler) {
+	
+	public DisabledFlowHandler(ProcessFlowHandler handler) {
 		super(handler);
 	}
-
+	
 	@Override
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
 		if (candidate.isPresent()) {
-			if (candidate.get() instanceof SavepointLogicDefinition) {
-				context.getCompensables().clear();
+			if (candidate.get().isDisabled()) {
 				return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
+			} else {
+				return super.handle(candidate, candidatePosition, context);
 			}
-
-			return super.handle(candidate, candidatePosition, context);
 		} else {
 			return super.handle(candidate, candidatePosition, context);
 		}

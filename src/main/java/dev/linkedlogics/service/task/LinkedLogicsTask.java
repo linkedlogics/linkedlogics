@@ -1,7 +1,7 @@
 package dev.linkedlogics.service.task;
 
 import dev.linkedlogics.context.LogicContext;
-import dev.linkedlogics.service.logic.handler.LogicHandler;
+import dev.linkedlogics.service.handler.logic.LogicHandler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

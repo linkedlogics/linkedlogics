@@ -1,4 +1,4 @@
-package dev.linkedlogics.service.process.handler;
+package dev.linkedlogics.service.handler.process;
 
 import java.util.Optional;
 
