@@ -50,7 +50,7 @@ private final Map<String, Map<Integer, ProcessDefinition>> definitions = new Has
 	}
 	
 	protected void registerClass(Class processClass) {
-		Arrays.stream(processClass.getClass().getDeclaredMethods())
+		Arrays.stream(processClass.getDeclaredMethods())
 		.filter(m -> Modifier.isStatic(m.getModifiers()))
 		.filter(m -> m.getAnnotation(ProcessChain.class) != null)
 		.filter(m -> ProcessDefinition.class.isAssignableFrom(m.getReturnType()))

@@ -51,12 +51,4 @@ public class BranchLogicDefinition extends BaseLogicDefinition {
 			return super.build();
 		}
 	}
-	
-	public static LogicBranchBuilder branch(boolean condition, BaseLogicDefinition leftBranch, BaseLogicDefinition rightBranch) {
-		return new LogicBranchBuilder(condition, leftBranch, rightBranch);
-	}
-	
-	public static LogicBranchBuilder branch(boolean condition, BaseLogicDefinition leftBranch) {
-		return new LogicBranchBuilder(condition, leftBranch, null);
-	}
 }

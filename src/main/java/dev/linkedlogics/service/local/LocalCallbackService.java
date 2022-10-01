@@ -16,6 +16,7 @@ import dev.linkedlogics.service.task.CallbackTask;
 public class LocalCallbackService implements CallbackService {
 	private ConcurrentHashMap<String, LogicContext> contextMap = new ConcurrentHashMap<>();
 	private ScheduledExecutorService scheduler;
+	private ThreadLocal<String> contextId = new ThreadLocal<>();
 	
 	private int expireTime;
 	
@@ -50,5 +51,20 @@ public class LocalCallbackService implements CallbackService {
 				ServiceLocator.getInstance().getProcessorService().process(new CallbackTask(c, result));
 			});
 		}
+	}
+
+	@Override
+	public void setContextId(String contextId) {
+		this.contextId.set(contextId);
+	}
+	
+	@Override
+	public void unsetContextId() {
+		this.contextId.remove();
+	}
+
+	@Override
+	public String getContextId() {
+		return this.contextId.get();
 	}
 }

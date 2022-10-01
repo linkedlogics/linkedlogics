@@ -64,26 +64,4 @@ public class GroupLogicDefinition extends BaseLogicDefinition {
 			return super.build();
 		}
 	}
-	
-	public static GroupLogicBuilder group(BaseLogicDefinition... logics) {
-		return new GroupLogicBuilder(logics);
-	}
-	
-	public static GroupLogicBuilder process(String processId, int version) {
-		return ServiceLocator.getInstance().getProcessService().getProcess(processId, version).map(w -> {
-			List<BaseLogicDefinition> logics = w.cloneLogics();
-			BaseLogicDefinition[] logicArray = new BaseLogicDefinition[logics.size()];
-			logics.toArray(logicArray);
-			
-			return new GroupLogicBuilder(logicArray);
-		}).orElseThrow(() -> new IllegalArgumentException("missing process " + processId));
-	}
-	
-	public static GroupLogicBuilder process(ProcessDefinition process) {
-		List<BaseLogicDefinition> logics = process.cloneLogics();
-		BaseLogicDefinition[] logicArray = new BaseLogicDefinition[logics.size()];
-		logics.toArray(logicArray);
-		
-		return new GroupLogicBuilder(logicArray).inputs(process.getInputs());
-	}
 }

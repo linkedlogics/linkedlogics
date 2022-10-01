@@ -27,6 +27,6 @@ public class OutputHandler extends LogicHandler {
 			}	
 		}
 		
-		super.handle(context, result);
+		super.handle(context, null);
 	}
 }

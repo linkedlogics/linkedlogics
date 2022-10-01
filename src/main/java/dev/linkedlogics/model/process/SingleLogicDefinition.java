@@ -61,12 +61,4 @@ public class SingleLogicDefinition extends BaseLogicDefinition {
 	public String toString() {
 		return logicId;
 	}
-	
-	public static SingleLogicBuilder logic(String id, int version) {
-		return new SingleLogicBuilder().id(id).version(version);
-	}
-	
-	public static SingleLogicBuilder logic(String id) {
-		return new SingleLogicBuilder().id(id).version(LogicService.LATEST_VERSION);
-	}
 }

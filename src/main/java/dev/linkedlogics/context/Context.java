@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import dev.linkedlogics.service.LogicService;
 import lombok.Getter;
@@ -34,4 +35,11 @@ public class Context {
 	private Map<String, Integer> retries = new HashMap<>();
 	private List<String> compensables = new ArrayList<>();
 	private Map<String, String> joinMap = new HashMap<>();
+	
+	public Context(String processId, int processVersion, Map<String, Object> params) {
+		this.id = UUID.randomUUID().toString();
+		this.processId = processId;
+		this.processVersion = processVersion;
+		this.params.putAll(params);
+	}
 }

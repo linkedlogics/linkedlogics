@@ -84,14 +84,6 @@ public class ProcessDefinition {
 			return this.process;
 		}
 	}
-	
-	public static ProcessBuilder createProcess(String id, int version) {
-		return new ProcessBuilder().id(id).version(version);
-	}
-	
-	public static ProcessBuilder createProcess(String id) {
-		return new ProcessBuilder().id(id).version(LATEST_VERSION);
-	}
 }
 
 	

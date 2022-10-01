@@ -67,6 +67,10 @@ public class ServiceLocator {
 		return getService(TriggerService.class);
 	}
 	
+	public MapperService getMapperService() {
+		return getService(MapperService.class);
+	}
+	
 	public void shutdown() {
 		services.values().stream().forEach(s -> s.stop());
 	}

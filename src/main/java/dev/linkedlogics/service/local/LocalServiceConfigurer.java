@@ -12,5 +12,6 @@ public class LocalServiceConfigurer extends ServiceConfigurer {
 		configure(new LocalCallbackService());
 		configure(new LocalContextService());
 		configure(new LocalTriggerService());
+		configure(new LocalMapperService());
 	}
 }

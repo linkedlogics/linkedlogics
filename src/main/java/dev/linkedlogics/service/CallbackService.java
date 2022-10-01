@@ -11,4 +11,10 @@ public interface CallbackService extends LinkedLogicsService {
 	Optional<LogicContext> remove(String contextId);
 	
 	void callback(String contextId, Object result);
+	
+	void setContextId(String contextId);
+	
+	void unsetContextId();
+	
+	String getContextId();
 }

@@ -1,10 +1,10 @@
 package dev.linkedlogics.model.process;
 
-import static dev.linkedlogics.model.process.ProcessDefinition.createProcess;
-import static dev.linkedlogics.model.process.SingleLogicDefinition.logic;
-import static dev.linkedlogics.model.process.GroupLogicDefinition.group;
-import static dev.linkedlogics.model.process.BranchLogicDefinition.branch;
-import static dev.linkedlogics.model.process.ErrorLogicDefinition.error;
+import static dev.linkedlogics.LinkedLogicsBuilder.createProcess;
+import static dev.linkedlogics.LinkedLogicsBuilder.logic;
+import static dev.linkedlogics.LinkedLogicsBuilder.group;
+import static dev.linkedlogics.LinkedLogicsBuilder.branch;
+import static dev.linkedlogics.LinkedLogicsBuilder.error;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
@@ -60,8 +60,8 @@ public class ProcessTests {
 		assertThat(((SingleLogicDefinition)process.get().getLogicByPosition("1.1").get()).getLogicId()).isEqualTo(LOGIC_1);
 		assertThat(((SingleLogicDefinition)process.get().getLogicByPosition("1.2").get()).getLogicId()).isEqualTo(LOGIC_2);
 		assertThat(process.get().getLogicByPosition("2.1").get()).isInstanceOf(BranchLogicDefinition.class);
-		assertThat(((SingleLogicDefinition)process.get().getLogicByPosition("2.1a").get()).getLogicId()).isEqualTo(LOGIC_2);
-		assertThat(((SingleLogicDefinition)process.get().getLogicByPosition("2.1b").get()).getLogicId()).isEqualTo(LOGIC_3);
+		assertThat(((SingleLogicDefinition)process.get().getLogicByPosition("2.1L").get()).getLogicId()).isEqualTo(LOGIC_2);
+		assertThat(((SingleLogicDefinition)process.get().getLogicByPosition("2.1R").get()).getLogicId()).isEqualTo(LOGIC_3);
 		assertThat(((SingleLogicDefinition)process.get().getLogicByPosition("2.2").get()).getLogicId()).isEqualTo(LOGIC_3);
 	}
 	
@@ -70,8 +70,8 @@ public class ProcessTests {
 		Optional<ProcessDefinition> process = ServiceLocator.getInstance().getProcessService().getProcess(PROCESS_A, 3);
 		assertThat(process.get().getLogicByPosition("1").get()).isInstanceOf(SingleLogicDefinition.class);
 		assertThat(((SingleLogicDefinition)process.get().getLogicByPosition("1").get()).getLogicId()).isEqualTo(LOGIC_1);
-		assertThat(process.get().getLogicByPosition("1R").get()).isInstanceOf(SingleLogicDefinition.class);
-		assertThat(((SingleLogicDefinition)process.get().getLogicByPosition("1R").get()).getLogicId()).isEqualTo(LOGIC_2);
+		assertThat(process.get().getLogicByPosition("1Z").get()).isInstanceOf(SingleLogicDefinition.class);
+		assertThat(((SingleLogicDefinition)process.get().getLogicByPosition("1Z").get()).getLogicId()).isEqualTo(LOGIC_2);
 		assertThat(process.get().getLogicByPosition("2").get()).isInstanceOf(SingleLogicDefinition.class);
 		assertThat(((SingleLogicDefinition)process.get().getLogicByPosition("2").get()).getLogicId()).isEqualTo(LOGIC_3);
 	}
