@@ -11,6 +11,7 @@ import dev.linkedlogics.model.process.ExpressionLogicDefinition;
 import dev.linkedlogics.model.process.GroupLogicDefinition.GroupLogicBuilder;
 import dev.linkedlogics.model.process.ProcessDefinition;
 import dev.linkedlogics.model.process.ProcessDefinition.ProcessBuilder;
+import dev.linkedlogics.model.process.SavepointLogicDefinition.SavepointLogicBuilder;
 import dev.linkedlogics.model.process.SingleLogicDefinition.SingleLogicBuilder;
 import dev.linkedlogics.model.process.VerifyLogicDefinition.VerifyLogicBuilder;
 import dev.linkedlogics.service.LogicService;
@@ -67,6 +68,10 @@ public class LinkedLogicsBuilder {
 	
 	public static VerifyLogicBuilder verify(ExpressionLogicDefinition expression) {
 		return new VerifyLogicBuilder(expression);
+	}
+	
+	public static SavepointLogicBuilder savepoint() {
+		return new SavepointLogicBuilder();
 	}
 	
 	public static ErrorLogicDefinition.ErrorLogicDefinitionBuilder error(Integer... errorCodes) {

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
+import dev.linkedlogics.model.process.LogicPositioner;
 
 public abstract class ProcessFlowHandler {
 	protected Optional<ProcessFlowHandler> nextHandler;
@@ -23,6 +24,10 @@ public abstract class ProcessFlowHandler {
 	}
 	
 	public static String adjacentLogicPosition(String position) {
+		if (position.endsWith(LogicPositioner.COMPENSATE)) {
+			return position;
+		}
+		
 		String[] positions = position.split("\\.");
 		positions[positions.length - 1] = String.valueOf(Integer.parseInt(clearLogicPosition(positions[positions.length - 1])) + 1);
 		return Arrays.stream(positions).collect(Collectors.joining("."));

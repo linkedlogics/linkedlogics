@@ -29,6 +29,7 @@ import dev.linkedlogics.service.process.handler.JoinFlowHandler;
 import dev.linkedlogics.service.process.handler.OutputFlowHandler;
 import dev.linkedlogics.service.process.handler.ProcessFlowHandler;
 import dev.linkedlogics.service.process.handler.RetryFlowHandler;
+import dev.linkedlogics.service.process.handler.SavepointFlowHandler;
 import dev.linkedlogics.service.process.handler.SuccessFlowHandler;
 import dev.linkedlogics.service.process.handler.VerifyFlowHandler;
 import dev.linkedlogics.service.task.StartTask;
@@ -36,7 +37,7 @@ import dev.linkedlogics.service.task.StartTask;
 public class ProcessHandler extends LogicHandler {
 	
 	private ProcessFlowHandler lastFlowHandler = new RetryFlowHandler(new SuccessFlowHandler(new OutputFlowHandler(new CleanupFlowHandler())));
-	private ProcessFlowHandler nextFlowHandler = new EmptyCandidateFlowHandler(new ForcedFlowHandler(new DisabledFlowHandler(new VerifyFlowHandler(new JoinFlowHandler(new ForkFlowHandler(new GroupFlowHandler(new BranchFlowHandler())))))));
+	private ProcessFlowHandler nextFlowHandler = new EmptyCandidateFlowHandler(new ForcedFlowHandler(new DisabledFlowHandler(new VerifyFlowHandler(new SavepointFlowHandler(new JoinFlowHandler(new ForkFlowHandler(new GroupFlowHandler(new BranchFlowHandler()))))))));
 	private ProcessFlowHandler errorFlowHandler = new ErrorFlowHandler(new CompensateFlowHandler());
 	
 	
@@ -55,7 +56,7 @@ public class ProcessHandler extends LogicHandler {
 			HandlerResult flowResult = getNextLogic(context);
 			if (flowResult.isEndOfCandidates()) {
 				System.out.println("context finished " + context.getId());
-				context.setStatus(Status.FINISHED);
+				context.setStatus(context.getError() == null ? Status.FINISHED : Status.FAILED);
 				ServiceLocator.getInstance().getContextService().set(context);
 			} else if (flowResult.getSelectedLogic().isPresent()) {
 				SingleLogicDefinition logic = (SingleLogicDefinition) flowResult.getSelectedLogic().get();
@@ -69,7 +70,7 @@ public class ProcessHandler extends LogicHandler {
 				Map<String, Object> inputs = new HashMap<>();
 				logic.getInputMap().entrySet().stream().forEach(e -> {
 					if (e.getValue() instanceof ExpressionLogicDefinition) {
-						inputs.put(e.getKey(), evaluator.evaluate((ExpressionLogicDefinition) e.getValue(), Map.of()));
+						inputs.put(e.getKey(), evaluator.evaluate((ExpressionLogicDefinition) e.getValue(), context.getParams()));
 					} else {
 						inputs.put(e.getKey(), e.getValue());
 					}
@@ -131,10 +132,6 @@ public class ProcessHandler extends LogicHandler {
 			if (result.getNextCandidatePosition().isEmpty()) {
 				return result;
 			}
-		}
-		
-		if (!context.getCompensables().isEmpty()) {
-			return getNextLogic(context);
 		}
 		
 		return HandlerResult.noCandidate();
