@@ -22,7 +22,6 @@ public class ErrorHandler extends LogicHandler {
 			error = ((InvocationTargetException) error).getCause();
 		}
 		context.setError(ContextError.of(error));
-		
 		super.handleError(context, error);
 	}
 }

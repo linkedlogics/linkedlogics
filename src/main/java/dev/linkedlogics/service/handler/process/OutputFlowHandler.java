@@ -18,7 +18,7 @@ public class OutputFlowHandler extends ProcessFlowHandler {
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
 		if (candidate.isPresent()
 				&& context.getOutput() != null
-					&& context.getError() != null 
+					&& context.getError() == null 
 						&& context.getLogicId() != null 
 							&& context.getLogicPosition().equals(candidatePosition)) {
 			context.getOutput().entrySet().forEach(e -> {

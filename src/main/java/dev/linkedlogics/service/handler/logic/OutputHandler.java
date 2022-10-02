@@ -1,5 +1,6 @@
 package dev.linkedlogics.service.handler.logic;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import dev.linkedlogics.context.LogicContext;
@@ -20,6 +21,10 @@ public class OutputHandler extends LogicHandler {
 		LogicDefinition logic = findLogic(context.getLogicId(), context.getLogicVersion());
 		
 		if (logic.getMethod().getReturnType() != Void.class && result != null) {
+			if (context.getOutput() == null) {
+				context.setOutput(new HashMap<>());
+			}
+			
 			if (result instanceof Map && logic.isReturnMap()) {
 				context.getOutput().putAll((Map) result);
 			} else if (logic.getReturnAs() != null) {
