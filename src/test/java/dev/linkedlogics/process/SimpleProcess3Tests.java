@@ -64,7 +64,7 @@ public class SimpleProcess3Tests {
 	@Test
 	public void testScenario2() {
 		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_2", new HashMap<>() {{ put("list", new ArrayList<>());}});
-		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
+		assertThat(waitUntil(contextId, Status.FINISHED, 600000L)).isTrue();
 		
 		contextService.get(contextId).ifPresent(ctx -> {
 			assertThat(ctx.getParams().containsKey("list")).isTrue();
@@ -130,9 +130,38 @@ public class SimpleProcess3Tests {
 				.build();
 	}
 	
+	@Test
+	public void testScenario5() {
+		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_5", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
+		
+		contextService.get(contextId).ifPresent(ctx -> {
+			assertThat(ctx.getParams().containsKey("list")).isTrue();
+			assertThat(ctx.getParams().get("list")).asList().hasSize(2);
+			assertThat(ctx.getParams().get("list")).asList().contains(8, 16);
+		});
+	}
+	
+	@ProcessChain
+	public static ProcessDefinition scenario5() {
+		return createProcess("SIMPLE_SCENARIO_5", 0)
+				.add(group(logic("MULTIPLY").build(),
+						   logic("ADD").build())
+						.input("val1", 4).input("val2", 4)
+						.build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", expr("add_result")).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")).build())
+				.build();
+	}
+	
 	@Logic(id = "MULTIPLY", returnAs = "multiply_result")
 	public static Integer multiply(@Input("val1") Integer value1, @Input("val2") Integer value2) {
 		return value1 * value2;
+	}
+	
+	@Logic(id = "ADD", returnAs = "add_result")
+	public static Integer add(@Input("val1") Integer value1, @Input("val2") Integer value2) {
+		return value1 + value2;
 	}
 	
 	@Logic(id = "MULTIPLY_ADD", returnMap = true)

@@ -43,8 +43,12 @@ public class ErrorFlowHandler extends ProcessFlowHandler {
 		
 		if (errorDefinition.getErrorCodeSet() != null && errorDefinition.getErrorCodeSet().contains(error.getCode())) {
 			return true;
-		} else if (error.getMessage() != null && errorDefinition.getErrorMessageSet() != null) { 
-			return errorDefinition.getErrorMessageSet().stream().filter(s -> error.getMessage().contains(s)).findAny().isPresent();
+		} 
+		
+		if (error.getMessage() != null 
+				&& errorDefinition.getErrorMessageSet() != null
+					&& errorDefinition.getErrorMessageSet().stream().filter(s -> error.getMessage().contains(s)).findAny().isPresent()) { 
+			return true;
 		}
 
 		return false;

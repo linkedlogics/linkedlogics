@@ -16,7 +16,7 @@ public class CallbackTask extends LinkedLogicsTask {
 	}
 
 	@Override
-	public void run() {
+	public void handle() {
 		try {
 			handler.handle(context, result);
 		} catch (Throwable e) {

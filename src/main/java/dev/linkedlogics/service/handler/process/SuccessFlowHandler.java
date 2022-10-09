@@ -17,7 +17,7 @@ public class SuccessFlowHandler extends ProcessFlowHandler {
 
 	@Override
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
-		if (candidate.isPresent() && context.getLogicPosition().equals(candidatePosition)) {
+		if (candidate.isPresent() && candidatePosition.equals(context.getLogicPosition())) {
 			if (context.getError() == null && candidate.get() instanceof SingleLogicDefinition && ((SingleLogicDefinition) candidate.get()).getCompensationLogic() != null) {
 				context.getCompensables().add(((SingleLogicDefinition)candidate.get()).getCompensationLogic().getPosition());
 			}

@@ -13,7 +13,7 @@ public class CallbackExpireTask extends LinkedLogicsTask {
 	}
 	
 	@Override
-	public void run() {
+	public void handle() {
 		try {
 			ServiceLocator.getInstance().getCallbackService().remove(context.getId()).ifPresent(c -> {
 				handler.handleError(c, new AsyncTimeoutException(context.getLogicId(), context.getLogicVersion()));

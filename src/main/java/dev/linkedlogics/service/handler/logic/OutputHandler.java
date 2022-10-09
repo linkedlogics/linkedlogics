@@ -25,10 +25,12 @@ public class OutputHandler extends LogicHandler {
 				context.setOutput(new HashMap<>());
 			}
 			
+			String returnAs = context.getLogicReturnAs() != null ? context.getLogicReturnAs() : logic.getReturnAs();
+			
 			if (result instanceof Map && logic.isReturnMap()) {
 				context.getOutput().putAll((Map) result);
 			} else if (logic.getReturnAs() != null) {
-				context.getOutput().put(logic.getReturnAs(), result);
+				context.getOutput().put(returnAs, result);
 			}	
 		}
 		

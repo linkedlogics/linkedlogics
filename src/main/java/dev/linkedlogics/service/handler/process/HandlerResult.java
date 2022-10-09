@@ -28,4 +28,16 @@ public class HandlerResult {
 	public static HandlerResult endOfCandidates() {
 		return new HandlerResult(Optional.empty(), Optional.empty(), true);
 	}
+	
+	public String toString() {
+		if (nextCandidatePosition.isPresent()) {
+			return " NEXT[" + nextCandidatePosition.get() + "]";
+		}
+		
+		if (selectedLogic.isPresent()) {
+			return " SELECTED[" + selectedLogic.get().getPosition() + "]";
+		}
+		
+		return "UNKNOWN";
+	}
 }

@@ -12,6 +12,7 @@ public class SingleLogicDefinition extends BaseLogicDefinition {
 	private String logicId;
 	private int logicVersion = LogicService.LATEST_VERSION;
 	private String application;
+	private String returnAs;
 	private BaseLogicDefinition compensationLogic;
 	
 	public SingleLogicDefinition clone() {
@@ -34,6 +35,11 @@ public class SingleLogicDefinition extends BaseLogicDefinition {
 		
 		public SingleLogicBuilder version(int version) {
 			this.getLogic().setLogicVersion(version);
+			return this;
+		}
+		
+		public SingleLogicBuilder returnAs(String returnAs) {
+			this.getLogic().setReturnAs(returnAs);
 			return this;
 		}
 		

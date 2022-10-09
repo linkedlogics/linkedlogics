@@ -20,6 +20,7 @@ import dev.linkedlogics.service.handler.process.CleanupFlowHandler;
 import dev.linkedlogics.service.handler.process.CompensateFlowHandler;
 import dev.linkedlogics.service.handler.process.DisabledFlowHandler;
 import dev.linkedlogics.service.handler.process.EmptyCandidateFlowHandler;
+import dev.linkedlogics.service.handler.process.EmptyFlowHandler;
 import dev.linkedlogics.service.handler.process.ErrorFlowHandler;
 import dev.linkedlogics.service.handler.process.ForcedFlowHandler;
 import dev.linkedlogics.service.handler.process.ForkFlowHandler;
@@ -33,12 +34,15 @@ import dev.linkedlogics.service.handler.process.SavepointFlowHandler;
 import dev.linkedlogics.service.handler.process.SuccessFlowHandler;
 import dev.linkedlogics.service.handler.process.VerifyFlowHandler;
 import dev.linkedlogics.service.task.StartTask;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ProcessHandler extends LogicHandler {
 	
-	private ProcessFlowHandler lastFlowHandler = new RetryFlowHandler(new SuccessFlowHandler(new OutputFlowHandler(new CleanupFlowHandler())));
-	private ProcessFlowHandler nextFlowHandler = new EmptyCandidateFlowHandler(new ForcedFlowHandler(new DisabledFlowHandler(new VerifyFlowHandler(new SavepointFlowHandler(new JoinFlowHandler(new ForkFlowHandler(new GroupFlowHandler(new BranchFlowHandler()))))))));
-	private ProcessFlowHandler errorFlowHandler = new ErrorFlowHandler(new CompensateFlowHandler());
+	private ProcessFlowHandler waitingFlowHandler = new SuccessFlowHandler(new OutputFlowHandler());
+	private ProcessFlowHandler lastFlowHandler = new EmptyFlowHandler(new SuccessFlowHandler(new OutputFlowHandler(new CleanupFlowHandler())));
+	private ProcessFlowHandler nextFlowHandler = new EmptyFlowHandler(new EmptyCandidateFlowHandler(new ForcedFlowHandler(new DisabledFlowHandler(new VerifyFlowHandler(new SavepointFlowHandler(new JoinFlowHandler(new ForkFlowHandler(new GroupFlowHandler(new BranchFlowHandler())))))))));
+	private ProcessFlowHandler errorFlowHandler = new EmptyFlowHandler(new RetryFlowHandler(new ErrorFlowHandler(new CompensateFlowHandler())));
 	
 	
 	public ProcessHandler() {
@@ -55,7 +59,7 @@ public class ProcessHandler extends LogicHandler {
 			transfer(logicContext, context);
 			HandlerResult flowResult = getNextLogic(context);
 			if (flowResult.isEndOfCandidates()) {
-				System.out.println("context finished " + context.getId());
+				log.info("context finished " + context.getId());
 				context.setStatus(context.getError() == null ? Status.FINISHED : Status.FAILED);
 				ServiceLocator.getInstance().getContextService().set(context);
 			} else if (flowResult.getSelectedLogic().isPresent()) {
@@ -64,6 +68,7 @@ public class ProcessHandler extends LogicHandler {
 				context.setLogicId(logic.getLogicId());
 				context.setLogicVersion(logic.getLogicVersion());
 				context.setLogicPosition(logic.getPosition());
+				context.setLogicReturnAs(logic.getReturnAs());
 				context.setApplication(logic.getApplication());
 				
 				final EvaluatorService evaluator = ServiceLocator.getInstance().getEvaluatorService();
@@ -116,22 +121,38 @@ public class ProcessHandler extends LogicHandler {
 		ProcessDefinition process = findProcess(context.getProcessId(), context.getProcessVersion());
 		
 		HandlerResult result = handleLastLogic(context, process);
+		int iteration = 0;
 		while (result.getSelectedLogic().isEmpty()) {
 			if (result.getNextCandidatePosition().get().equals(context.getEndPosition())) {
 				return closeContext(context);
 			}
 			
+			if (ProcessFlowHandler.LOG_ENTER) {
+				log.info("ITERATION # "+ (++iteration));
+			}
 			Optional<BaseLogicDefinition> nextLogic = process.getLogicByPosition(result.getNextCandidatePosition().get());
 			
+			ProcessFlowHandler.tabs.clear();
 			if (nextLogic.isPresent() && context.getError() != null) {
+				if (ProcessFlowHandler.LOG_ENTER) log.info("ERROR HANDLERS");
 				result = errorFlowHandler.handle(nextLogic, result.getNextCandidatePosition().get(), context);
-				nextLogic = process.getLogicByPosition(result.getNextCandidatePosition().get());
+				
+				if (result.getNextCandidatePosition().isPresent()) {
+					nextLogic = process.getLogicByPosition(result.getNextCandidatePosition().get());
+				} else {
+					nextLogic = result.getSelectedLogic();
+					result = HandlerResult.nextCandidate(nextLogic.get().getPosition());
+				}
 			}
-			
+			ProcessFlowHandler.tabs.clear();
 			result = nextFlowHandler.handle(nextLogic, result.getNextCandidatePosition().get(), context);
 			if (result.getNextCandidatePosition().isEmpty()) {
 				return result;
 			}
+		}
+		
+		if (result.getSelectedLogic().isPresent()) {
+			return result;
 		}
 		
 		return HandlerResult.noCandidate();
@@ -141,7 +162,7 @@ public class ProcessHandler extends LogicHandler {
 		context.setStatus(context.getError() == null ? Status.FINISHED : Status.FAILED);
 		ServiceLocator.getInstance().getContextService().set(context);
 		List<TriggerService.Trigger> triggers = ServiceLocator.getInstance().getTriggerService().get(context.getId());
-		System.out.println("finished context " + context.getId() + " > " + triggers.size());
+		log.info("finished context " + context.getId() + " > " + triggers.size());
 		if (triggers != null && !triggers.isEmpty()) {
 			triggers.stream().forEach(t -> {
 				ServiceLocator.getInstance().getProcessorService().process(new StartTask(LogicContext.fromTrigger(context, t)));
@@ -158,6 +179,8 @@ public class ProcessHandler extends LogicHandler {
 			result = HandlerResult.nextCandidate(context.getStartPosition());
 		} else if (context.getStatus() == Status.WAITING) {
 			result = HandlerResult.nextCandidate(context.getLogicPosition());
+			Optional<BaseLogicDefinition> nextLogic = process.getLogicByPosition(result.getNextCandidatePosition().get());
+			waitingFlowHandler.handle(nextLogic, result.getNextCandidatePosition().get(), context);
 		} else {
 			result = HandlerResult.nextCandidate(context.getLogicPosition());
 			while (result.getNextCandidatePosition().isPresent()) {
@@ -168,13 +191,14 @@ public class ProcessHandler extends LogicHandler {
 				} 
 			}
 			
-			if (result.getSelectedLogic().isPresent()) {
-				return result;
-			} else if (context.getError() != null) {
-				result = HandlerResult.nextCandidate(context.getLogicPosition());
-			} else {
-				result = HandlerResult.nextCandidate(ProcessFlowHandler.adjacentLogicPosition(context.getLogicPosition()));
-			}
+//			if (result.getSelectedLogic().isPresent()) {
+//				return result;
+//			} else 
+				if (context.getError() != null) {
+					result = HandlerResult.nextCandidate(context.getLogicPosition());
+				} else {
+					result = HandlerResult.nextCandidate(ProcessFlowHandler.adjacentLogicPosition(context.getLogicPosition()));
+				}
 		}
 		
 		return result;

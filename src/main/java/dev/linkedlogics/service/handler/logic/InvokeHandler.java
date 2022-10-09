@@ -5,7 +5,9 @@ import java.util.Arrays;
 
 import dev.linkedlogics.context.LogicContext;
 import dev.linkedlogics.model.LogicDefinition;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class InvokeHandler extends LogicHandler {
 
 	public InvokeHandler() {
@@ -20,7 +22,7 @@ public class InvokeHandler extends LogicHandler {
 	public void handle(LogicContext context, Object result) {
 		LogicDefinition logic = findLogic(context.getLogicId(), context.getLogicVersion());
 		try {
-			System.out.println(String.format("> %-10s%s", context.getPosition(), context.getLogicId()));
+			log.info(String.format("> %-10s%s", context.getPosition(), context.getLogicId()));
 			Object methodResult = invokeMethod(context, logic, getInvokeParams(context, logic));
 			
 			if (!logic.isReturnAsync()) {

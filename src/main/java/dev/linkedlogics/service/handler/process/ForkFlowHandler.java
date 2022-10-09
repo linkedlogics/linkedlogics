@@ -37,10 +37,8 @@ public class ForkFlowHandler extends ProcessFlowHandler {
 				logicContext.setLogicId(null);
 				logicContext.setApplication(context.getApplication());
 				ServiceLocator.getInstance().getProcessorService().process(new StartTask(logicContext));
-				
 				return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 			}
-			
 			return super.handle(candidate, candidatePosition, context);
 		} else {
 			return super.handle(candidate, candidatePosition, context);

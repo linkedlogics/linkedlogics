@@ -3,9 +3,7 @@ package dev.linkedlogics.process;
 import static dev.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static dev.linkedlogics.LinkedLogicsBuilder.expr;
 import static dev.linkedlogics.LinkedLogicsBuilder.logic;
-import static dev.linkedlogics.LinkedLogicsBuilder.savepoint;
 import static dev.linkedlogics.LinkedLogicsBuilder.verify;
-import static dev.linkedlogics.LinkedLogicsBuilder.group;
 import static dev.linkedlogics.process.ProcessTestHelper.waitUntil;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,6 +18,7 @@ import dev.linkedlogics.LinkedLogics;
 import dev.linkedlogics.annotation.Input;
 import dev.linkedlogics.annotation.Logic;
 import dev.linkedlogics.annotation.ProcessChain;
+import dev.linkedlogics.context.Context;
 import dev.linkedlogics.context.Status;
 import dev.linkedlogics.model.process.ProcessDefinition;
 import dev.linkedlogics.service.ContextService;
@@ -27,9 +26,9 @@ import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.local.LocalServiceConfigurer;
 
 public class CompensateProcess1Tests {
-	
+
 	private static ContextService contextService;
-	
+
 	@BeforeAll
 	public static void setUp() {
 		LinkedLogics.configure(new LocalServiceConfigurer());
@@ -37,20 +36,19 @@ public class CompensateProcess1Tests {
 		LinkedLogics.registerProcess(CompensateProcess1Tests.class);
 		contextService = ServiceLocator.getInstance().getContextService();
 	}
-	
+
 	@Test
 	public void testScenario1() {
 		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_1", new HashMap<>() {{ put("list", new ArrayList<>());}});
 		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
-		
-		contextService.get(contextId).ifPresent(ctx -> {
-			assertThat(ctx.getParams().containsKey("list")).isTrue();
-			assertThat(ctx.getParams().get("list")).asList().hasSize(3);
-			assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2", "v3");
-		});
+
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
+		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2", "v3");
 	}
-	
-	
+
+
 	@ProcessChain
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
@@ -68,20 +66,19 @@ public class CompensateProcess1Tests {
 						.build())
 				.build();
 	}
-	
+
 	@Test
 	public void testScenario2() {
 		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_2", new HashMap<>() {{ put("list", new ArrayList<>());}});
 		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
-		
-		contextService.get(contextId).ifPresent(ctx -> {
-			assertThat(ctx.getParams().containsKey("list")).isTrue();
-			assertThat(ctx.getParams().get("list")).asList().hasSize(1);
-			assertThat(ctx.getParams().get("list")).asList().contains("v4");
-		});
+
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
+		assertThat(ctx.getParams().get("list")).asList().contains("v4");
 	}
-	
-	
+
+
 	@ProcessChain
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
@@ -102,20 +99,19 @@ public class CompensateProcess1Tests {
 						.input("list", expr("list")).input("val", "v4").forced().build())
 				.build();
 	}
-	
+
 	@Test
 	public void testScenario3() {
 		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_3", new HashMap<>() {{ put("list", new ArrayList<>());}});
 		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
-		
-		contextService.get(contextId).ifPresent(ctx -> {
-			assertThat(ctx.getParams().containsKey("list")).isTrue();
-			assertThat(ctx.getParams().get("list")).asList().hasSize(1);
-			assertThat(ctx.getParams().get("list")).asList().contains("v4");
-		});
+
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
+		assertThat(ctx.getParams().get("list")).asList().contains("v4");
 	}
-	
-	
+
+
 	@ProcessChain
 	public static ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
@@ -136,20 +132,19 @@ public class CompensateProcess1Tests {
 						.input("list", expr("list")).input("val", "v4").forced().build())
 				.build();
 	}
-	
+
 	@Test
 	public void testScenario4() {
 		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_4", new HashMap<>() {{ put("list", new ArrayList<>());}});
 		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
-		
-		contextService.get(contextId).ifPresent(ctx -> {
-			assertThat(ctx.getParams().containsKey("list")).isTrue();
-			assertThat(ctx.getParams().get("list")).asList().hasSize(1);
-			assertThat(ctx.getParams().get("list")).asList().contains("v4");
-		});
+
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
+		assertThat(ctx.getParams().get("list")).asList().contains("v4");
 	}
-	
-	
+
+
 	@ProcessChain
 	public static ProcessDefinition scenario4() {
 		return createProcess("SIMPLE_SCENARIO_4", 0)
@@ -170,20 +165,19 @@ public class CompensateProcess1Tests {
 						.input("list", expr("list")).input("val", "v4").forced().build())
 				.build();
 	}
-	
+
 	@Test
 	public void testScenario5() {
 		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_5", new HashMap<>() {{ put("list", new ArrayList<>());}});
 		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
-		
-		contextService.get(contextId).ifPresent(ctx -> {
-			assertThat(ctx.getParams().containsKey("list")).isTrue();
-			assertThat(ctx.getParams().get("list")).asList().hasSize(1);
-			assertThat(ctx.getParams().get("list")).asList().contains("v1");
-		});
+
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
+		assertThat(ctx.getParams().get("list")).asList().contains("v1");
 	}
-	
-	
+
+
 	@ProcessChain
 	public static ProcessDefinition scenario5() {
 		return createProcess("SIMPLE_SCENARIO_5", 0)
@@ -202,20 +196,19 @@ public class CompensateProcess1Tests {
 				.add(verify(expr("list.size() < 1")).build())
 				.build();
 	}
-	
+
 	@Test
 	public void testScenario6() {
 		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_6", new HashMap<>() {{ put("list", new ArrayList<>());}});
 		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
-		
-		contextService.get(contextId).ifPresent(ctx -> {
-			assertThat(ctx.getParams().containsKey("list")).isTrue();
-			assertThat(ctx.getParams().get("list")).asList().hasSize(2);
-			assertThat(ctx.getParams().get("list")).asList().contains("v2", "v4");
-		});
+
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
+		assertThat(ctx.getParams().get("list")).asList().contains("v2", "v4");
 	}
-	
-	
+
+
 	@ProcessChain
 	public static ProcessDefinition scenario6() {
 		return createProcess("SIMPLE_SCENARIO_6", 0)
@@ -236,20 +229,20 @@ public class CompensateProcess1Tests {
 						.input("list", expr("list")).input("val", "v4").forced().build())
 				.build();
 	}
-	
+
 	@Logic(id = "INSERT")
 	public static void insert(@Input("list") List<String> list, @Input("val") String value) {
 		list.add(value);
 	}
-	
+
 	@Logic(id = "REMOVE")
 	public static void remove(@Input("list") List<String> list, @Input("val") String value) {
 		list.remove(value);
 	}
-	
+
 	@Logic(id = "PRINT")
 	public static void print(@Input("list") List<String> list) {
 		System.out.println("List = " + list);
 	}
-	
+
 }

@@ -10,7 +10,7 @@ public class StartTask extends LinkedLogicsTask {
 	}
 	
 	@Override
-	public void run() {
+	public void handle() {
 		try {
 			handler.handle(context, null);
 		} catch (Throwable e) {

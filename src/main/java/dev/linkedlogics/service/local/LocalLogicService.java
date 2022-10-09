@@ -30,7 +30,7 @@ public class LocalLogicService implements LogicService {
 	@Override
 	public void register(Object logics) {
 		if (logics.getClass().equals(Class.class)) {
-			registerClass((Class) logics);
+			registerClass((Class<?>) logics);
 		} else {
 			registerObject(logics);
 		}
@@ -43,7 +43,7 @@ public class LocalLogicService implements LogicService {
 		.forEach(this::addLogic);
 	}
 
-	protected void registerClass(Class logicClass) {
+	protected void registerClass(Class<?> logicClass) {
 		Arrays.stream(logicClass.getDeclaredMethods())
 		.filter(m -> Modifier.isStatic(m.getModifiers()))
 		.filter(m -> m.getAnnotation(Logic.class) != null)

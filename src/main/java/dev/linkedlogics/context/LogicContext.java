@@ -1,11 +1,8 @@
 package dev.linkedlogics.context;
 
-import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import dev.linkedlogics.model.process.BaseLogicDefinition;
-import dev.linkedlogics.model.process.SingleLogicDefinition;
 import dev.linkedlogics.service.LogicService;
 import dev.linkedlogics.service.TriggerService.Trigger;
 import lombok.Getter;
@@ -18,6 +15,7 @@ public class LogicContext {
 
 	private String logicId;
 	private int logicVersion = LogicService.LATEST_VERSION;
+	private String logicReturnAs;
 	private String position;
 	private String application;
 
@@ -31,6 +29,7 @@ public class LogicContext {
 		logicContext.setId(context.getId());
 		logicContext.setLogicId(context.getLogicId());
 		logicContext.setLogicVersion(context.getLogicVersion());
+		logicContext.setLogicReturnAs(context.getLogicReturnAs());
 		logicContext.setPosition(context.getLogicPosition());
 		logicContext.setApplication(context.getApplication());
 		logicContext.setInput(context.getInput());

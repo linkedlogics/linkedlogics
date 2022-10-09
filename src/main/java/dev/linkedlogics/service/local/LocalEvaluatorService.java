@@ -3,7 +3,9 @@ package dev.linkedlogics.service.local;
 import java.util.Map;
 
 import org.springframework.context.expression.MapAccessor;
+import org.springframework.expression.EvaluationException;
 import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.ParseException;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
@@ -21,6 +23,13 @@ public class LocalEvaluatorService implements EvaluatorService {
 	public Object evaluate(ExpressionLogicDefinition expression, Map<String, Object> params) {
 		StandardEvaluationContext context = new StandardEvaluationContext(params);
 		context.addPropertyAccessor(new MapAccessor());
-	    return parser.parseExpression(expression.getExpression()).getValue(context);
+	    try {
+			return parser.parseExpression(expression.getExpression()).getValue(context);
+		} catch (EvaluationException e) {
+			System.err.println(e.getLocalizedMessage());
+		} catch (ParseException e) {
+			System.err.println(e.getLocalizedMessage());
+		}
+	    return null;
 	}
 }

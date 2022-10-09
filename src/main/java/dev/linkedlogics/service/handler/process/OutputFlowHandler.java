@@ -2,6 +2,7 @@ package dev.linkedlogics.service.handler.process;
 
 import java.util.Optional;
 
+import dev.linkedlogics.LinkedLogics;
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
 
@@ -19,8 +20,7 @@ public class OutputFlowHandler extends ProcessFlowHandler {
 		if (candidate.isPresent()
 				&& context.getOutput() != null
 					&& context.getError() == null 
-						&& context.getLogicId() != null 
-							&& context.getLogicPosition().equals(candidatePosition)) {
+						&& candidatePosition.equals(context.getLogicPosition())) {
 			context.getOutput().entrySet().forEach(e -> {
 				context.getParams().put(e.getKey(), e.getValue());
 			});

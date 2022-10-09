@@ -159,9 +159,36 @@ public class SimpleProcess1Tests {
 				.build();
 	}
 	
-	@Logic(id = "INSERT")
+	@Test
+	public void testScenario6() {
+		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_6", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
+		
+		contextService.get(contextId).ifPresent(ctx -> {
+			assertThat(ctx.getParams().containsKey("list")).isTrue();
+			assertThat(ctx.getParams().get("list")).asList().hasSize(3);
+			assertThat(ctx.getParams().get("list")).asList().contains("v1", "V2", "V3");
+		});
+	}
+	
+	
+	@ProcessChain
+	public static ProcessDefinition scenario6() {
+		return createProcess("SIMPLE_SCENARIO_6", 0)
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
+				.add(logic("INSERT", 0).input("list", expr("list")).input("val", "v2").build())
+				.add(logic("INSERT", 0).input("list", expr("list")).input("val", "v3").build())
+				.build();
+	}
+	
+	@Logic(id = "INSERT", version = 1)
 	public static void insert(@Input("list") List<String> list, @Input("val") String value) {
 		list.add(value);
+	}
+	
+	@Logic(id = "INSERT", version = 0)
+	public static void insertv2(@Input("list") List<String> list, @Input("val") String value) {
+		list.add(value.toUpperCase());
 	}
 	
 	@Logic(id = "REMOVE")

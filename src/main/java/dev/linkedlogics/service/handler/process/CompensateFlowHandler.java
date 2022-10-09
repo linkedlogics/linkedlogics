@@ -26,11 +26,9 @@ public class CompensateFlowHandler extends ProcessFlowHandler {
 					if (!candidatePosition.endsWith(LogicPositioner.COMPENSATE)) {
 						includeParent(candidatePosition, context);
 					}
-					
 					return HandlerResult.nextCandidate(lastCompensablePosition);
 				}
 			}
-
 			return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 		} else {
 			return super.handle(candidate, candidatePosition, context);
@@ -40,7 +38,7 @@ public class CompensateFlowHandler extends ProcessFlowHandler {
 	private void includeParent(String candidatePosition, Context context) {
 		boolean isIncluded = false;
 		for (int i = context.getCompensables().size() - 1; i >= 0; i--) {
-			String post = context.getCompensables().get(context.getCompensables().size() - 1);
+			String post = context.getCompensables().get(i);
 			if (!parentLogicPosition(post).equals(parentLogicPosition(candidatePosition))) {
 				context.getCompensables().add(i+1, adjacentLogicPosition(candidatePosition));
 				isIncluded = true;

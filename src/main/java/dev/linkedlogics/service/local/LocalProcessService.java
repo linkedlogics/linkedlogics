@@ -30,7 +30,7 @@ private final Map<String, Map<Integer, ProcessDefinition>> definitions = new Has
 	@Override
 	public void register(Object logics) {
 		if (logics.getClass().equals(Class.class)) {
-			registerClass((Class) logics);
+			registerClass((Class<?>) logics);
 		} else {
 			registerObject(logics);
 		}
@@ -49,7 +49,7 @@ private final Map<String, Map<Integer, ProcessDefinition>> definitions = new Has
 		}).forEach(this::addProcess);
 	}
 	
-	protected void registerClass(Class processClass) {
+	protected void registerClass(Class<?> processClass) {
 		Arrays.stream(processClass.getDeclaredMethods())
 		.filter(m -> Modifier.isStatic(m.getModifiers()))
 		.filter(m -> m.getAnnotation(ProcessChain.class) != null)
