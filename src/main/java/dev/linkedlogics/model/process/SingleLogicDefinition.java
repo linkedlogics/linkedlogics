@@ -1,5 +1,7 @@
 package dev.linkedlogics.model.process;
 
+import java.util.Map;
+
 import dev.linkedlogics.model.process.GroupLogicDefinition.GroupLogicBuilder;
 import dev.linkedlogics.service.LogicService;
 import lombok.AccessLevel;
@@ -62,6 +64,17 @@ public class SingleLogicDefinition extends BaseLogicDefinition {
 			this.getLogic().setRetry(RetryLogicDefinition.builder().maxRetries(maxRetries).delay(delay).build());
 			return this;
 		}
+		
+		public SingleLogicBuilder output(String key, Object value) {
+			this.getLogic().getOutputMap().put(key, value);
+			return this;
+		}
+		
+		public SingleLogicBuilder output(Map<String, Object> inputs) {
+			this.getLogic().getOutputMap().putAll(inputs);
+			return this;
+		}
+		
 	}
 	
 	public String toString() {

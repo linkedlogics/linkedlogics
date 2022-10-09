@@ -14,6 +14,7 @@ public abstract class BaseLogicDefinition implements Cloneable {
 	protected String position;
 	protected boolean isDisabled;
 	protected Map<String, Object> inputMap = new HashMap<>();
+	protected Map<String, Object> outputMap = new HashMap<>();
 	protected ForkLogicDefinition fork;
 	protected JoinLogicDefinition join;
 	protected boolean forced;
