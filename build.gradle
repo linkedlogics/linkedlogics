@@ -1,10 +1,11 @@
 plugins {
     id 'java'
     id 'jacoco'
+    id 'maven-publish'
 }
 
 group = 'dev.linkedlogics'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
@@ -43,3 +44,43 @@ dependencies {
 	testImplementation 'org.assertj:assertj-core:3.22.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
+
+
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'dev.linkedlogics'
+            artifactId = 'linkedlogics'
+            version = '1.0.0-SNAPSHOT'
+
+            from components.java
+        
+            pom {
+                name = 'LinkedLogics'
+                description = 'Linked-Logics Framework'
+                url = 'http://www.linkedlogics.dev'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'rdavudov'
+                        name = 'Rajab Davudov'
+                        email = 'radjab@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://inkedlogics/linkedlogics.git'
+                    developerConnection = 'scm:git:ssh://inkedlogics/linkedlogics.git'
+                    url = 'http://www.linkedlogics.dev'
+                }
+            }
+        }
+    }
+}
+
+

@@ -19,7 +19,7 @@ public class AsyncHandler extends LogicHandler {
 		LogicDefinition logic = findLogic(context.getLogicId(), context.getLogicVersion());
 		
 		if (logic.isReturnAsync()) {
-			ServiceLocator.getInstance().getCallbackService().set(context);
+			ServiceLocator.getInstance().getAsyncService().set(context);
 		}
 		
 		super.handle(context, result);

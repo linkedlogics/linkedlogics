@@ -47,8 +47,8 @@ public class ServiceLocator {
 		return getService(EvaluatorService.class);
 	}
 	
-	public CallbackService getCallbackService() {
-		return getService(CallbackService.class);
+	public AsyncService getAsyncService() {
+		return getService(AsyncService.class);
 	}
 	
 	public ContextService getContextService() {
@@ -69,6 +69,10 @@ public class ServiceLocator {
 	
 	public MapperService getMapperService() {
 		return getService(MapperService.class);
+	}
+	
+	public CallbackService getCallbackService() {
+		return getService(CallbackService.class);
 	}
 	
 	public void shutdown() {

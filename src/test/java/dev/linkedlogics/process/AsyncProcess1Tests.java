@@ -102,7 +102,7 @@ public class AsyncProcess1Tests {
 				try {
 					Thread.sleep(delay);
 				} catch (InterruptedException e) {}
-				LinkedLogics.callback(contextId, value1 * value2);
+				LinkedLogics.asyncCallback(contextId, value1 * value2);
 			}
 		}).start();
 	}

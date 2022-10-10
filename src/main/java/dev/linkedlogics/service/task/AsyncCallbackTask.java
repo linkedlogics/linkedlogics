@@ -7,10 +7,10 @@ import dev.linkedlogics.service.handler.logic.ProcessHandler;
 import lombok.Getter;
 
 @Getter
-public class CallbackTask extends LinkedLogicsTask {
+public class AsyncCallbackTask extends LinkedLogicsTask {
 	private Object result;
 	
-	public CallbackTask(LogicContext context, Object result) {
+	public AsyncCallbackTask(LogicContext context, Object result) {
 		super(context,  new OutputHandler(new ErrorHandler(new ProcessHandler())));
 		this.result = result;
 	}

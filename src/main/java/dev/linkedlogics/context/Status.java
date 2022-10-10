@@ -5,5 +5,7 @@ public enum Status {
 	STARTED,
 	WAITING,
 	FINISHED,
-	FAILED;
+	FAILED,
+	SCHEDULED,
+	TIMEDOUT;
 }

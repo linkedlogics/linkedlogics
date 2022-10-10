@@ -16,12 +16,12 @@ public abstract class LinkedLogicsTask implements Runnable {
 	@Override
 	public void run() {
 		try {
-			ServiceLocator.getInstance().getCallbackService().setContextId(context.getId());
+			ServiceLocator.getInstance().getAsyncService().setContextId(context.getId());
 			handle();
 		} catch (Throwable e) {
 			new ErrorHandler().handleError(context, e);
 		} finally {
-			ServiceLocator.getInstance().getCallbackService().unsetContextId();
+			ServiceLocator.getInstance().getAsyncService().unsetContextId();
 		}
 	}
 	

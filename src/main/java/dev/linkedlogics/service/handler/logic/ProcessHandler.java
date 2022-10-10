@@ -62,6 +62,7 @@ public class ProcessHandler extends LogicHandler {
 				log.info("context finished " + context.getId());
 				context.setStatus(context.getError() == null ? Status.FINISHED : Status.FAILED);
 				ServiceLocator.getInstance().getContextService().set(context);
+				ServiceLocator.getInstance().getCallbackService().publish(context);
 			} else if (flowResult.getSelectedLogic().isPresent()) {
 				SingleLogicDefinition logic = (SingleLogicDefinition) flowResult.getSelectedLogic().get();
 				

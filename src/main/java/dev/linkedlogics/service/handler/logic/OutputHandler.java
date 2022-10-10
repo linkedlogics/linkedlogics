@@ -29,7 +29,7 @@ public class OutputHandler extends LogicHandler {
 			
 			if (result instanceof Map && logic.isReturnMap()) {
 				context.getOutput().putAll((Map) result);
-			} else if (logic.getReturnAs() != null) {
+			} else if (returnAs != null) {
 				context.getOutput().put(returnAs, result);
 			}	
 		}

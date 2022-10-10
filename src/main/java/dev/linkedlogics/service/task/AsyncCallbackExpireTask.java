@@ -6,16 +6,16 @@ import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.handler.logic.ErrorHandler;
 import dev.linkedlogics.service.handler.logic.ProcessHandler;
 
-public class CallbackExpireTask extends LinkedLogicsTask {
+public class AsyncCallbackExpireTask extends LinkedLogicsTask {
 	
-	public CallbackExpireTask(LogicContext context) {
+	public AsyncCallbackExpireTask(LogicContext context) {
 		super(context, new ErrorHandler(new ProcessHandler()));
 	}
 	
 	@Override
 	public void handle() {
 		try {
-			ServiceLocator.getInstance().getCallbackService().remove(context.getId()).ifPresent(c -> {
+			ServiceLocator.getInstance().getAsyncService().remove(context.getId()).ifPresent(c -> {
 				handler.handleError(c, new AsyncTimeoutException(context.getLogicId(), context.getLogicVersion()));
 			});
 		} catch (Throwable e) {

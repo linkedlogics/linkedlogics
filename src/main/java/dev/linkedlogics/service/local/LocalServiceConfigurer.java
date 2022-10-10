@@ -9,10 +9,11 @@ public class LocalServiceConfigurer extends ServiceConfigurer {
 		configure(new LocalProcessorService());
 		configure(new LocalPublisherService());
 		configure(new LocalConsumerService());
-		configure(new LocalCallbackService());
+		configure(new LocalAsyncService());
 		configure(new LocalContextService());
 		configure(new LocalTriggerService());
 		configure(new LocalMapperService());
 		configure(new LocalEvaluatorService());
+		configure(new LocalCallbackService());
 	}
 }

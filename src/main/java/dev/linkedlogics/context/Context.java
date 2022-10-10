@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 
+import dev.linkedlogics.LinkedLogicsCallback;
 import dev.linkedlogics.service.LogicService;
 import lombok.Getter;
 import lombok.Setter;

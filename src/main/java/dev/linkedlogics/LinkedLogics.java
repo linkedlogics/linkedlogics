@@ -1,6 +1,7 @@
 package dev.linkedlogics;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.context.LogicContext;
@@ -31,8 +32,18 @@ public class LinkedLogics {
 	}
 	
 	public static String start(String processId, int version, Map<String, Object> params) {
+		return start(processId, version, params, null);
+	}
+	
+	public static String start(String processId, Map<String, Object> params) {
+		return start(processId, params, null);
+	}
+	
+	public static String start(String processId, int version, Map<String, Object> params, LinkedLogicsCallback callback) {
 		return ServiceLocator.getInstance().getProcessService().getProcess(processId, version).map(p -> {
 			Context context = new Context(p.getId(), p.getVersion(), params);
+			
+			ServiceLocator.getInstance().getCallbackService().set(context.getId(), callback);
 			ServiceLocator.getInstance().getContextService().set(context);
 			
 			LogicContext logicContext = new LogicContext();
@@ -43,9 +54,11 @@ public class LinkedLogics {
 		}).orElseThrow(() -> new IllegalArgumentException(String.format("process %s[%d] is not found", processId, version)));
 	}
 	
-	public static String start(String processId, Map<String, Object> params) {
+	public static String start(String processId, Map<String, Object> params, LinkedLogicsCallback callback) {
 		return ServiceLocator.getInstance().getProcessService().getProcess(processId).map(p -> {
 			Context context = new Context(p.getId(), p.getVersion(), params);
+
+			ServiceLocator.getInstance().getCallbackService().set(context.getId(), callback);
 			ServiceLocator.getInstance().getContextService().set(context);
 			
 			LogicContext logicContext = new LogicContext();
@@ -56,11 +69,11 @@ public class LinkedLogics {
 		}).orElseThrow(() -> new IllegalArgumentException(String.format("process %s is not found", processId)));
 	}
 	
-	public static void callback(String contextId, Object result) {
-		ServiceLocator.getInstance().getCallbackService().callback(contextId, result);
+	public static void asyncCallback(String contextId, Object result) {
+		ServiceLocator.getInstance().getAsyncService().asyncCallback(contextId, result);
 	}
 	
 	public static String getContextId() {
-		return ServiceLocator.getInstance().getCallbackService().getContextId();
+		return ServiceLocator.getInstance().getAsyncService().getContextId();
 	}
 }

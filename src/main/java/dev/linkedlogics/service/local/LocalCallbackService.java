@@ -6,17 +6,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import dev.linkedlogics.LinkedLogicsCallback;
 import dev.linkedlogics.config.LinkedLogicsConfiguration;
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 import dev.linkedlogics.service.CallbackService;
-import dev.linkedlogics.service.ServiceLocator;
-import dev.linkedlogics.service.task.CallbackExpireTask;
-import dev.linkedlogics.service.task.CallbackTask;
 
 public class LocalCallbackService implements CallbackService {
-	private ConcurrentHashMap<String, LogicContext> contextMap = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<String, LinkedLogicsCallback> callbackMap = new ConcurrentHashMap<>();
 	private ScheduledExecutorService scheduler;
-	private ThreadLocal<String> contextId = new ThreadLocal<>();
 	
 	private int expireTime;
 	
@@ -34,37 +31,20 @@ public class LocalCallbackService implements CallbackService {
 	}
 
 	@Override
-	public void set(LogicContext context) {
-		contextMap.put(context.getId(), context);
-		scheduler.schedule(new CallbackExpireTask(context), expireTime, TimeUnit.SECONDS);
+	public void set(String contextId, LinkedLogicsCallback callback) {
+		callbackMap.put(contextId, callback);
+		scheduler.schedule(() -> callback.onTimeout(), expireTime, TimeUnit.SECONDS);
 	}
 
 	@Override
-	public Optional<LogicContext> remove(String contextId) {
-		return Optional.ofNullable(contextMap.remove(contextId));
-	}
-
-	@Override
-	public void callback(String contextId, Object result) {
-		if (contextMap.containsKey(contextId)) {
-			remove(contextId).ifPresent(c -> {
-				ServiceLocator.getInstance().getProcessorService().process(new CallbackTask(c, result));
-			});
-		}
-	}
-
-	@Override
-	public void setContextId(String contextId) {
-		this.contextId.set(contextId);
+	public void publish(Context context) {
+		Optional.ofNullable(callbackMap.remove(context.getId())).ifPresent((c) -> {
+			if (context.getError() == null) {
+				c.onSuccess(context);
+			} else {
+				c.onFailure(context, context.getError());
+			}
+		});
 	}
 	
-	@Override
-	public void unsetContextId() {
-		this.contextId.remove();
-	}
-
-	@Override
-	public String getContextId() {
-		return this.contextId.get();
-	}
 }
