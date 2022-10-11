@@ -1,5 +1,7 @@
 linkedlogics:
   version: 1.0
+  application:
+    name: test
   
   
 services:

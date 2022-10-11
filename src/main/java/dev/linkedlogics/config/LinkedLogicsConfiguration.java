@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 public class LinkedLogicsConfiguration {
+	public static final String LINKEDLOGICS = "linkedlogics";
+	public static final String APPLICATION_NAME = "application.name";
 	private static final String CONFIG_FILE = "linkedlogics.yaml";
 	static Map<String, Object> configuration;
 	
@@ -38,12 +40,21 @@ public class LinkedLogicsConfiguration {
 	}
 	
 	public static Optional<Object> getConfig(String key) {
-		return Optional.ofNullable(findConfig(key, configuration));
+		return getConfig(LINKEDLOGICS, key);
+	}
+	
+	public static Optional<Object> getConfig(String prefix, String key) {
+		return Optional.ofNullable(findConfig(String.join(".", prefix, key), configuration));
 	}
 	
 	public static Object getConfigOrDefault(String key, Object defaultValue) {
-		return getConfig(key).orElse(defaultValue);
+		return getConfigOrDefault(LINKEDLOGICS, key, defaultValue);
 	}
+	
+	public static Object getConfigOrDefault(String prefix, String key, Object defaultValue) {
+		return getConfig(String.join(".", prefix, key)).orElse(defaultValue);
+	}
+	
 	
 	static Object findConfig(String key, Map<String, Object> configuration) {
 		String[] keys = key.split("\\.");

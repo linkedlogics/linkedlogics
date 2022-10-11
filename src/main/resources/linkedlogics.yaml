@@ -1,2 +1,4 @@
 linkedlogics:
+  application:
+    name: test
   version: 1.0

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import dev.linkedlogics.annotation.ProcessChain;
 import dev.linkedlogics.exception.AlreadyExistingError;
 import dev.linkedlogics.model.process.ProcessDefinition;
 import dev.linkedlogics.service.ProcessService;
@@ -38,7 +37,6 @@ private final Map<String, Map<Integer, ProcessDefinition>> definitions = new Has
 	
 	protected void registerObject(Object processObject) {
 		Arrays.stream(processObject.getClass().getDeclaredMethods())
-		.filter(m -> m.getAnnotation(ProcessChain.class) != null)
 		.filter(m -> ProcessDefinition.class.isAssignableFrom(m.getReturnType()))
 		.map(m -> {
 			try {
@@ -52,7 +50,6 @@ private final Map<String, Map<Integer, ProcessDefinition>> definitions = new Has
 	protected void registerClass(Class<?> processClass) {
 		Arrays.stream(processClass.getDeclaredMethods())
 		.filter(m -> Modifier.isStatic(m.getModifiers()))
-		.filter(m -> m.getAnnotation(ProcessChain.class) != null)
 		.filter(m -> ProcessDefinition.class.isAssignableFrom(m.getReturnType()))
 		.map(m -> {
 			try {

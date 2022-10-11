@@ -1,14 +1,11 @@
 package dev.linkedlogics;
 
 import java.util.Map;
-import java.util.function.Consumer;
 
-import dev.linkedlogics.context.Context;
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.config.LinkedLogicsConfiguration;
 import dev.linkedlogics.service.ServiceConfigurer;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.local.LocalServiceConfigurer;
-import dev.linkedlogics.service.task.StartTask;
 
 public class LinkedLogics {
 	static {
@@ -53,5 +50,9 @@ public class LinkedLogics {
 	
 	public static String getContextId() {
 		return ServiceLocator.getInstance().getAsyncService().getContextId();
+	}
+	
+	public static String getApplicationName() {
+		return LinkedLogicsConfiguration.getConfig(LinkedLogicsConfiguration.APPLICATION_NAME).map(c -> c.toString()).orElse(null);
 	}
 }
