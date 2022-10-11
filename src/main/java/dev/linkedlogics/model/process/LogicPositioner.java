@@ -26,6 +26,9 @@ public abstract class LogicPositioner {
 		} else if (logic instanceof SingleLogicDefinition && ((SingleLogicDefinition) logic).getCompensationLogic() != null) {
 			setPosition(((SingleLogicDefinition) logic).getCompensationLogic(), positionMap, position + COMPENSATE);
 			((SingleLogicDefinition) logic).getCompensationLogic().setForced(true);
+		} else if (logic instanceof ErrorLogicDefinition && ((ErrorLogicDefinition) logic).getErrorLogic() != null) {
+			setPosition(((ErrorLogicDefinition) logic).getErrorLogic(), positionMap, position + ERROR);
+			logic.setForced(true);
 		}
 		
 		if (logic.getError() != null && logic.getError().getErrorLogic() != null) {

@@ -23,10 +23,10 @@ class LinkedLogicsStarter {
 	
 	private static String start(ProcessDefinition process, Map<String, Object> params, LinkedLogicsCallback callback) {
 		Context context = new Context(process.getId(), process.getVersion(), params);
-
-		ServiceLocator.getInstance().getCallbackService().set(context.getId(), callback);
+		ServiceLocator.getInstance().getContextService().set(context);
+		
 		if (callback != null) {
-			ServiceLocator.getInstance().getContextService().set(context);
+			ServiceLocator.getInstance().getCallbackService().set(context.getId(), callback);
 		}
 		
 		LogicContext logicContext = new LogicContext();

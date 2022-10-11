@@ -6,7 +6,7 @@ import java.util.Set;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
 import dev.linkedlogics.model.process.BranchLogicDefinition.BranchLogicBuilder;
 import dev.linkedlogics.model.process.ErrorLogicDefinition;
-import dev.linkedlogics.model.process.ErrorLogicDefinition.ErrorLogicDefinitionBuilder;
+import dev.linkedlogics.model.process.ErrorLogicDefinition.ErrorLogicBuilder;
 import dev.linkedlogics.model.process.ExpressionLogicDefinition;
 import dev.linkedlogics.model.process.GroupLogicDefinition.GroupLogicBuilder;
 import dev.linkedlogics.model.process.ProcessDefinition;
@@ -74,20 +74,20 @@ public class LinkedLogicsBuilder {
 		return new SavepointLogicBuilder();
 	}
 	
-	public static ErrorLogicDefinition.ErrorLogicDefinitionBuilder error(Integer... errorCodes) {
-		return new ErrorLogicDefinitionBuilder().errorCodeSet(Set.of(errorCodes));
+	public static ErrorLogicDefinition.ErrorLogicBuilder error(Integer... errorCodes) {
+		return new ErrorLogicBuilder().errorCodeSet(Set.of(errorCodes));
 	}
 	
-	public static ErrorLogicDefinition.ErrorLogicDefinitionBuilder error(String... errorMessages) {
-		return new ErrorLogicDefinitionBuilder().errorMessageSet(Set.of(errorMessages));
+	public static ErrorLogicDefinition.ErrorLogicBuilder error(String... errorMessages) {
+		return new ErrorLogicBuilder().errorMessageSet(Set.of(errorMessages));
 	}
 	
-	public static ErrorLogicDefinition.ErrorLogicDefinitionBuilder error() {
-		return new ErrorLogicDefinitionBuilder();
+	public static ErrorLogicDefinition.ErrorLogicBuilder error() {
+		return new ErrorLogicBuilder();
 	}
 	
-	public static ErrorLogicDefinition.ErrorLogicDefinitionBuilder error(BaseLogicDefinition errorLogic) {
-		return new ErrorLogicDefinitionBuilder().errorLogic(errorLogic);
+	public static ErrorLogicDefinition.ErrorLogicBuilder error(BaseLogicDefinition errorLogic) {
+		return new ErrorLogicBuilder().errorLogic(errorLogic);
 	}
 	
 	public static ExpressionLogicDefinition expr(String expression) {

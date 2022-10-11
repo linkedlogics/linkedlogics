@@ -21,10 +21,18 @@ public class ErrorFlowHandler extends ProcessFlowHandler {
 		if (candidate.isPresent() && context.getError() != null) {
 
 			if (candidate.get().getError() != null && matches(context.getError(), candidate.get().getError())) {
-				context.setError(null);
+				setError(context, candidate.get().getError());
 				
 				if (candidate.get().getError().getErrorLogic() != null) {
 					return HandlerResult.nextCandidate(candidate.get().getError().getErrorLogic().getPosition());
+				} else {
+					return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
+				}
+			} else if (candidate.get() instanceof ErrorLogicDefinition && matches(context.getError(), (ErrorLogicDefinition) candidate.get())) {
+				setError(context, (ErrorLogicDefinition) candidate.get());
+				
+				if (((ErrorLogicDefinition) candidate.get()).getErrorLogic() != null) {
+					return HandlerResult.nextCandidate(((ErrorLogicDefinition) candidate.get()).getErrorLogic().getPosition());
 				} else {
 					return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 				}
@@ -35,9 +43,24 @@ public class ErrorFlowHandler extends ProcessFlowHandler {
 			return super.handle(candidate, candidatePosition, context);
 		}
 	}
+	
+	private void setError(Context context, ErrorLogicDefinition errorDefinition) {
+		if (!errorDefinition.isThrowAgain()) {
+			context.setError(null);
+		} else {
+			if (errorDefinition.getThrowErrorCode() != null) {
+				context.getError().setCode(errorDefinition.getThrowErrorCode());
+			}
+			
+			if (errorDefinition.getThrowErrorMessage() != null) {
+				context.getError().setMessage(errorDefinition.getThrowErrorMessage());
+			}
+		}
+	}
 
 	private boolean matches(ContextError error, ErrorLogicDefinition errorDefinition) {
-		if (errorDefinition.getErrorCodeSet() == null && errorDefinition.getErrorMessageSet() == null) {
+		if ((errorDefinition.getErrorCodeSet() == null || errorDefinition.getErrorCodeSet().isEmpty()) 
+				&& (errorDefinition.getErrorMessageSet() == null || errorDefinition.getErrorMessageSet().isEmpty())) {
 			return true;
 		}
 		
