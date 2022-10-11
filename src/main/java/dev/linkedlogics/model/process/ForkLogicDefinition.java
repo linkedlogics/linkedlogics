@@ -2,8 +2,6 @@ package dev.linkedlogics.model.process;
 
 import java.util.Optional;
 
-import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 
 @Getter

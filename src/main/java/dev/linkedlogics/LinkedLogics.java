@@ -53,6 +53,6 @@ public class LinkedLogics {
 	}
 	
 	public static String getApplicationName() {
-		return LinkedLogicsConfiguration.getConfig(LinkedLogicsConfiguration.APPLICATION_NAME).map(c -> c.toString()).orElse(null);
+		return LinkedLogicsConfiguration.getConfig(LinkedLogicsConfiguration.APPLICATION_NAME).map(c -> c.toString()).orElseThrow(() -> new NullPointerException("missing application name"));
 	}
 }

@@ -14,7 +14,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public abstract class Parameter {
 	protected String name;
-	protected Class type;
+	protected Class<?> type;
 	protected boolean required;
 
 	public Object getParameterValue(LogicContext context) {
@@ -42,7 +42,7 @@ public abstract class Parameter {
 		return parameters;
 	}
 	
-	public static Parameter initParameter(Class type, Annotation[] annotations) {
+	public static Parameter initParameter(Class<?> type, Annotation[] annotations) {
 		if (annotations.length == 0) {
 			return new NullParameter();
 		} else {

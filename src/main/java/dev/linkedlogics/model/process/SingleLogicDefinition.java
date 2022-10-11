@@ -2,7 +2,6 @@ package dev.linkedlogics.model.process;
 
 import java.util.Map;
 
-import dev.linkedlogics.model.process.GroupLogicDefinition.GroupLogicBuilder;
 import dev.linkedlogics.service.LogicService;
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -40,7 +40,7 @@ public class MetricsHandler extends LogicHandler {
 		
 		if (exception != null) {
 			ContextError error = ContextError.of(exception);
-			key.append("error[").append(error.getCode()).append("]");
+			key.append(DELIMITER).append("error[").append(error.getCode()).append("]");
 		}
 		
 		return key.toString();

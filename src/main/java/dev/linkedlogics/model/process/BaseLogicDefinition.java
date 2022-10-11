@@ -37,10 +37,10 @@ public abstract class BaseLogicDefinition implements Cloneable {
 		return Optional.ofNullable(parentLogic);
 	}
 	
-	public static class LogicBuilder<T, L> {
-		protected BaseLogicDefinition logic;
+	public static class LogicBuilder<T, L extends BaseLogicDefinition> {
+		protected L logic;
 		
-		public LogicBuilder(BaseLogicDefinition logic) {
+		public LogicBuilder(L logic) {
 			this.logic = logic;
 		}
 		

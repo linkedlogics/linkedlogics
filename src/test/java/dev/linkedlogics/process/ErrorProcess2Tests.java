@@ -139,6 +139,66 @@ public class ErrorProcess2Tests {
 				.build();
 	}
 
+	@Test
+	public void testScenario5() {
+		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_5", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
+
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
+		assertThat(ctx.getParams().get("list")).asList().contains(2, 4);
+	}
+
+	@ProcessChain
+	public static ProcessDefinition scenario5() {
+		return createProcess("SIMPLE_SCENARIO_5", 0)
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 3).handle(error().build()).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 4).build())
+				.build();
+	}
+	
+	@Test
+	public void testScenario6() {
+		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_6", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
+
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
+		assertThat(ctx.getParams().get("list")).asList().contains(2);
+	}
+
+	@ProcessChain
+	public static ProcessDefinition scenario6() {
+		return createProcess("SIMPLE_SCENARIO_6", 0)
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 3).handle(error(-100).build()).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 4).build())
+				.build();
+	}
+	
+	
+	@Test
+	public void testScenario7() {
+		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_7", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
+
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
+		assertThat(ctx.getParams().get("list")).asList().contains(2, 4);
+	}
+
+	@ProcessChain
+	public static ProcessDefinition scenario7() {
+		return createProcess("SIMPLE_SCENARIO_7", 0)
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 3).handle(error(-100).build()).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 4).forced().build())
+				.build();
+	}
 
 	@Logic(id = "INSERT", returnAs = "insert_result")
 	public static boolean insert(@Input("list") List<Integer> list, @Input("val") Integer value) {
