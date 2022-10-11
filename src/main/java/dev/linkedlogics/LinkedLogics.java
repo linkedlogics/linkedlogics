@@ -32,41 +32,19 @@ public class LinkedLogics {
 	}
 	
 	public static String start(String processId, int version, Map<String, Object> params) {
-		return start(processId, version, params, null);
+		return LinkedLogicsStarter.start(processId, version, params, null);
 	}
 	
 	public static String start(String processId, Map<String, Object> params) {
-		return start(processId, params, null);
+		return LinkedLogicsStarter.start(processId, params, null);
 	}
 	
 	public static String start(String processId, int version, Map<String, Object> params, LinkedLogicsCallback callback) {
-		return ServiceLocator.getInstance().getProcessService().getProcess(processId, version).map(p -> {
-			Context context = new Context(p.getId(), p.getVersion(), params);
-			
-			ServiceLocator.getInstance().getCallbackService().set(context.getId(), callback);
-			ServiceLocator.getInstance().getContextService().set(context);
-			
-			LogicContext logicContext = new LogicContext();
-			logicContext.setId(context.getId());
-			
-			ServiceLocator.getInstance().getProcessorService().process(new StartTask(logicContext));
-			return context.getId();
-		}).orElseThrow(() -> new IllegalArgumentException(String.format("process %s[%d] is not found", processId, version)));
+		return LinkedLogicsStarter.start(processId, version, params, callback);
 	}
 	
 	public static String start(String processId, Map<String, Object> params, LinkedLogicsCallback callback) {
-		return ServiceLocator.getInstance().getProcessService().getProcess(processId).map(p -> {
-			Context context = new Context(p.getId(), p.getVersion(), params);
-
-			ServiceLocator.getInstance().getCallbackService().set(context.getId(), callback);
-			ServiceLocator.getInstance().getContextService().set(context);
-			
-			LogicContext logicContext = new LogicContext();
-			logicContext.setId(context.getId());
-			
-			ServiceLocator.getInstance().getProcessorService().process(new StartTask(logicContext));
-			return context.getId();
-		}).orElseThrow(() -> new IllegalArgumentException(String.format("process %s is not found", processId)));
+		return LinkedLogicsStarter.start(processId, params, callback);
 	}
 	
 	public static void asyncCallback(String contextId, Object result) {
