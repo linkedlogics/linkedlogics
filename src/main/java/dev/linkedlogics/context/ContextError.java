@@ -1,5 +1,7 @@
 package dev.linkedlogics.context;
 
+import java.lang.reflect.InvocationTargetException;
+
 import dev.linkedlogics.exception.LogicException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +20,10 @@ public class ContextError {
 	private ErrorType type;
 	
 	public static ContextError of(Throwable e) {
+		if (e instanceof InvocationTargetException) {
+			e = ((InvocationTargetException) e).getCause();
+		}
+		
 		if (e instanceof LogicException) {
 			return new ContextError((((LogicException) e).getErrorCode()), (((LogicException) e).getErrorMessage()), (((LogicException) e).getErrorType()));
 		} else {

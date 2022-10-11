@@ -1,5 +1,6 @@
  package dev.linkedlogics.service.handler.logic;
 
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,7 @@ public class ProcessHandler extends LogicHandler {
 			if (flowResult.isEndOfCandidates()) {
 				log.info("context finished " + context.getId());
 				context.setStatus(context.getError() == null ? Status.FINISHED : Status.FAILED);
+				context.setFinishedAt(OffsetDateTime.now());
 				ServiceLocator.getInstance().getContextService().set(context);
 				ServiceLocator.getInstance().getCallbackService().publish(context);
 			} else if (flowResult.getSelectedLogic().isPresent()) {
@@ -92,6 +94,7 @@ public class ProcessHandler extends LogicHandler {
 //				context.setLogicExecutionTime(0);
 //				context.setLogicTotalExecutionTime(0);
 //				context.setExecutedAt(null);
+				context.setUpdatedAt(OffsetDateTime.now());
 				
 				ServiceLocator.getInstance().getContextService().set(context);
 				ServiceLocator.getInstance().getPublisherService().publish(LogicContext.fromLogic(context));

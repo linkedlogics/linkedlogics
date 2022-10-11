@@ -52,9 +52,8 @@ public class LinkedLogicsConfiguration {
 	}
 	
 	public static Object getConfigOrDefault(String prefix, String key, Object defaultValue) {
-		return getConfig(String.join(".", prefix, key)).orElse(defaultValue);
+		return getConfig(prefix, key).orElse(defaultValue);
 	}
-	
 	
 	static Object findConfig(String key, Map<String, Object> configuration) {
 		String[] keys = key.split("\\.");

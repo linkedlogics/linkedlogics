@@ -2,7 +2,6 @@ package dev.linkedlogics.service.handler.logic;
 
 import dev.linkedlogics.context.LogicContext;
 import dev.linkedlogics.model.LogicDefinition;
-import dev.linkedlogics.service.ServiceLocator;
 
 public class AsyncHandler extends LogicHandler {
 	
@@ -18,10 +17,8 @@ public class AsyncHandler extends LogicHandler {
 	public void handle(LogicContext context, Object result) {
 		LogicDefinition logic = findLogic(context.getLogicId(), context.getLogicVersion());
 		
-		if (logic.isReturnAsync()) {
-			ServiceLocator.getInstance().getAsyncService().set(context);
+		if (!logic.isReturnAsync()) {
+			super.handle(context, result);	
 		}
-		
-		super.handle(context, result);
 	}
 }

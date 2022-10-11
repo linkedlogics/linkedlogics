@@ -75,6 +75,11 @@ public class ServiceLocator {
 		return getService(CallbackService.class);
 	}
 	
+	public MetricsService getMetricsService() {
+		return getService(MetricsService.class);
+
+	}
+	
 	public void shutdown() {
 		services.values().stream().forEach(s -> s.stop());
 	}

@@ -1,5 +1,6 @@
 package dev.linkedlogics.context;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +36,10 @@ public class Context {
 	private Map<String, Object> output = new HashMap<>();
 	private ContextError error;
 	
+	private OffsetDateTime createdAt;
+	private OffsetDateTime updatedAt;
+	private OffsetDateTime finishedAt;
+	
 	private Map<String, Integer> retries = new HashMap<>();
 	private List<String> compensables = new ArrayList<>();
 	private Map<String, String> joinMap = new HashMap<>();
@@ -44,5 +49,6 @@ public class Context {
 		this.processId = processId;
 		this.processVersion = processVersion;
 		this.params.putAll(params);
+		this.createdAt = OffsetDateTime.now();
 	}
 }

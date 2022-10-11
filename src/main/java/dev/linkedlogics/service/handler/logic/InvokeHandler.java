@@ -1,10 +1,13 @@
 package dev.linkedlogics.service.handler.logic;
 
 import java.lang.reflect.Modifier;
+import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 
 import dev.linkedlogics.context.LogicContext;
 import dev.linkedlogics.model.LogicDefinition;
+import dev.linkedlogics.service.ServiceLocator;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -21,14 +24,18 @@ public class InvokeHandler extends LogicHandler {
 	@Override
 	public void handle(LogicContext context, Object result) {
 		LogicDefinition logic = findLogic(context.getLogicId(), context.getLogicVersion());
+		context.setExecutedAt(OffsetDateTime.now());
 		try {
+			if (logic.isReturnAsync()) {
+				ServiceLocator.getInstance().getAsyncService().set(context);
+			}
+			
 			log.info(String.format("> %-10s%s", context.getPosition(), context.getLogicId()));
 			Object methodResult = invokeMethod(context, logic, getInvokeParams(context, logic));
-			
-			if (!logic.isReturnAsync()) {
-				super.handle(context, methodResult);	
-			}
+			context.setExecutedIn(Duration.between(context.getExecutedAt(), OffsetDateTime.now()).toMillis());
+			super.handle(context, methodResult);	
 		} catch (Exception e) {
+			context.setExecutedIn(Duration.between(context.getExecutedAt(), OffsetDateTime.now()).toMillis());
 			super.handleError(context, e);
 		}
 	}

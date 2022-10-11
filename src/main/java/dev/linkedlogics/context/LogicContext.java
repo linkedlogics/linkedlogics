@@ -1,5 +1,6 @@
 package dev.linkedlogics.context;
 
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +22,10 @@ public class LogicContext {
 
 	private Map<String, Object> input = new HashMap<>();
 	private Map<String, Object> output = new HashMap<>();
+	
+	private OffsetDateTime createdAt;
+	private OffsetDateTime executedAt;
+	private long executedIn;
 
 	private ContextError error;
 
@@ -34,6 +39,7 @@ public class LogicContext {
 		logicContext.setApplication(context.getApplication());
 		logicContext.setInput(context.getInput());
 		logicContext.setOutput(null);
+		logicContext.setCreatedAt(OffsetDateTime.now());
 		return logicContext;
 	}
 
