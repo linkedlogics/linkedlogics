@@ -19,7 +19,7 @@ public abstract class BaseLogicDefinition implements Cloneable {
 	protected JoinLogicDefinition join;
 	protected boolean forced;
 	protected RetryLogicDefinition retry;
-	protected DelayLogicDefinition delay;
+	protected DelayedLogicDefinition delayed;
 	protected ErrorLogicDefinition error;
 	
 	protected BaseLogicDefinition parentLogic;
@@ -66,6 +66,11 @@ public abstract class BaseLogicDefinition implements Cloneable {
 		
 		public T forced() {
 			this.logic.setForced(true);
+			return (T) this;
+		}
+		
+		public T delayed(int delay) {
+			this.logic.setDelayed(new DelayedLogicDefinition(delay));
 			return (T) this;
 		}
 		

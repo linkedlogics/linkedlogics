@@ -19,6 +19,7 @@ import dev.linkedlogics.service.TriggerService;
 import dev.linkedlogics.service.handler.process.BranchFlowHandler;
 import dev.linkedlogics.service.handler.process.CleanupFlowHandler;
 import dev.linkedlogics.service.handler.process.CompensateFlowHandler;
+import dev.linkedlogics.service.handler.process.DelayedFlowHandler;
 import dev.linkedlogics.service.handler.process.DisabledFlowHandler;
 import dev.linkedlogics.service.handler.process.EmptyCandidateFlowHandler;
 import dev.linkedlogics.service.handler.process.EmptyFlowHandler;
@@ -42,7 +43,7 @@ public class ProcessHandler extends LogicHandler {
 	
 	private ProcessFlowHandler waitingFlowHandler = new SuccessFlowHandler(new OutputFlowHandler());
 	private ProcessFlowHandler lastFlowHandler = new EmptyFlowHandler(new SuccessFlowHandler(new OutputFlowHandler(new CleanupFlowHandler())));
-	private ProcessFlowHandler nextFlowHandler = new EmptyFlowHandler(new EmptyCandidateFlowHandler(new ForcedFlowHandler(new DisabledFlowHandler(new VerifyFlowHandler(new SavepointFlowHandler(new JoinFlowHandler(new ForkFlowHandler(new GroupFlowHandler(new BranchFlowHandler())))))))));
+	private ProcessFlowHandler nextFlowHandler = new EmptyFlowHandler(new EmptyCandidateFlowHandler(new ForcedFlowHandler(new DisabledFlowHandler(new DelayedFlowHandler(new VerifyFlowHandler(new SavepointFlowHandler(new JoinFlowHandler(new ForkFlowHandler(new GroupFlowHandler(new BranchFlowHandler()))))))))));
 	private ProcessFlowHandler errorFlowHandler = new EmptyFlowHandler(new RetryFlowHandler(new ErrorFlowHandler(new CompensateFlowHandler())));
 	
 	
@@ -72,6 +73,7 @@ public class ProcessHandler extends LogicHandler {
 				context.setLogicVersion(logic.getLogicVersion());
 				context.setLogicPosition(logic.getPosition());
 				context.setLogicReturnAs(logic.getReturnAs());
+				context.setSubmittedAt(OffsetDateTime.now());
 				context.setApplication(logic.getApplication());
 				
 				final EvaluatorService evaluator = ServiceLocator.getInstance().getEvaluatorService();
@@ -88,9 +90,7 @@ public class ProcessHandler extends LogicHandler {
 //				context.setLogicStepCounter(context.getLogicStepCounter() + 1);
 //				context.setSubmittedAt(OffsetDateTime.now());
 				context.setOutput(null);
-				if (context.getStatus() == Status.INITIAL) {
-					context.setStatus(Status.STARTED);
-				}
+				context.setStatus(Status.STARTED);
 //				context.setLogicExecutionTime(0);
 //				context.setLogicTotalExecutionTime(0);
 //				context.setExecutedAt(null);
@@ -119,6 +119,7 @@ public class ProcessHandler extends LogicHandler {
 		context.setLogicPosition(logicContext.getPosition());
 		context.setOutput(logicContext.getOutput());
 		context.setError(logicContext.getError() != null ? logicContext.getError() : context.getError());
+		context.setExecutedAt(logicContext.getExecutedAt());
 	}
 	
 	private HandlerResult getNextLogic(Context context) {
@@ -185,6 +186,8 @@ public class ProcessHandler extends LogicHandler {
 			result = HandlerResult.nextCandidate(context.getLogicPosition());
 			Optional<BaseLogicDefinition> nextLogic = process.getLogicByPosition(result.getNextCandidatePosition().get());
 			waitingFlowHandler.handle(nextLogic, result.getNextCandidatePosition().get(), context);
+		} else if (context.getStatus() == Status.SCHEDULED) {
+			result = HandlerResult.nextCandidate(context.getLogicPosition());
 		} else {
 			result = HandlerResult.nextCandidate(context.getLogicPosition());
 			while (result.getNextCandidatePosition().isPresent()) {
@@ -195,16 +198,13 @@ public class ProcessHandler extends LogicHandler {
 				} 
 			}
 			
-//			if (result.getSelectedLogic().isPresent()) {
-//				return result;
-//			} else 
-				if (context.getError() != null) {
-					result = HandlerResult.nextCandidate(context.getLogicPosition());
-				} else {
-					result = HandlerResult.nextCandidate(ProcessFlowHandler.adjacentLogicPosition(context.getLogicPosition()));
-				}
+			if (context.getError() != null) {
+				result = HandlerResult.nextCandidate(context.getLogicPosition());
+			} else {
+				result = HandlerResult.nextCandidate(ProcessFlowHandler.adjacentLogicPosition(context.getLogicPosition()));
+			}
 		}
-		
+
 		return result;
 	}
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dev.linkedlogics.service.LogicService;
+import dev.linkedlogics.service.SchedulerService.Schedule;
 import dev.linkedlogics.service.TriggerService.Trigger;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,7 +40,7 @@ public class LogicContext {
 		logicContext.setApplication(context.getApplication());
 		logicContext.setInput(context.getInput());
 		logicContext.setOutput(null);
-		logicContext.setCreatedAt(OffsetDateTime.now());
+		logicContext.setCreatedAt(context.getSubmittedAt());
 		return logicContext;
 	}
 
@@ -52,6 +53,14 @@ public class LogicContext {
 		logicContext.setOutput(context.getParams());
 		logicContext.setApplication(context.getApplication());
 		
+		return logicContext;
+	}
+	
+	public static LogicContext fromSchedule(Schedule schedule) {
+		LogicContext logicContext = new LogicContext();
+		logicContext.setId(schedule.getContextId());
+		logicContext.setLogicId(schedule.getLogicId());
+		logicContext.setPosition(schedule.getLogicPosition());
 		return logicContext;
 	}
 }

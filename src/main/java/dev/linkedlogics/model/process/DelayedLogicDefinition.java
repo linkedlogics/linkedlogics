@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class DelayLogicDefinition {
+public class DelayedLogicDefinition {
 	private int delay;
 }

@@ -35,10 +35,13 @@ public class Context {
 	private Map<String, Object> input = new HashMap<>();
 	private Map<String, Object> output = new HashMap<>();
 	private ContextError error;
+	private OffsetDateTime submittedAt;
+	private OffsetDateTime executedAt;
 	
 	private OffsetDateTime createdAt;
 	private OffsetDateTime updatedAt;
 	private OffsetDateTime finishedAt;
+	private OffsetDateTime expiredAt;
 	
 	private Map<String, Integer> retries = new HashMap<>();
 	private List<String> compensables = new ArrayList<>();
