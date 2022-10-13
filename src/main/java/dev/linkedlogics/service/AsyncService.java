@@ -12,6 +12,8 @@ public interface AsyncService extends LinkedLogicsService {
 	
 	void asyncCallback(String contextId, Object result);
 	
+	void asyncCallerror(String contextId, Throwable error);
+	
 	void setContextId(String contextId);
 	
 	void unsetContextId();

@@ -10,6 +10,7 @@ import dev.linkedlogics.config.LinkedLogicsConfiguration;
 import dev.linkedlogics.context.LogicContext;
 import dev.linkedlogics.service.AsyncService;
 import dev.linkedlogics.service.ServiceLocator;
+import dev.linkedlogics.service.task.AsyncCallbackErrorTask;
 import dev.linkedlogics.service.task.AsyncCallbackExpireTask;
 import dev.linkedlogics.service.task.AsyncCallbackTask;
 
@@ -49,6 +50,15 @@ public class LocalAsyncService implements AsyncService {
 		if (contextMap.containsKey(contextId)) {
 			remove(contextId).ifPresent(c -> {
 				ServiceLocator.getInstance().getProcessorService().process(new AsyncCallbackTask(c, result));
+			});
+		}
+	}
+
+	@Override
+	public void asyncCallerror(String contextId, Throwable error) {
+		if (contextMap.containsKey(contextId)) {
+			remove(contextId).ifPresent(c -> {
+				ServiceLocator.getInstance().getProcessorService().process(new AsyncCallbackErrorTask(c, error));
 			});
 		}
 	}

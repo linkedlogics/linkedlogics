@@ -17,7 +17,9 @@ import dev.linkedlogics.LinkedLogics;
 import dev.linkedlogics.annotation.Input;
 import dev.linkedlogics.annotation.Logic;
 import dev.linkedlogics.annotation.ProcessChain;
+import dev.linkedlogics.context.ContextError.ErrorType;
 import dev.linkedlogics.context.Status;
+import dev.linkedlogics.exception.LogicException;
 import dev.linkedlogics.model.process.ProcessDefinition;
 import dev.linkedlogics.service.ContextService;
 import dev.linkedlogics.service.ServiceLocator;
@@ -88,6 +90,32 @@ public class AsyncProcess1Tests {
 				.build();
 	}
 	
+	@Test
+	public void testScenario3() {
+		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_3", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		assertThat(waitUntil(contextId, Status.FAILED, 10000)).isTrue();
+
+		contextService.get(contextId).ifPresent(ctx -> {
+			assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
+			assertThat(ctx.getError()).isNotNull();
+			assertThat(ctx.getParams().get("list")).asList().hasSize(2);
+			assertThat(ctx.getParams().get("list")).asList().contains(2, 4);
+		});
+	}
+	
+	
+	@ProcessChain
+	public static ProcessDefinition scenario3() {
+		return createProcess("SIMPLE_SCENARIO_3", 0)
+				.add(logic("INSERT").input("list", expr("list")).input("val", 1).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
+				.add(logic("MULTIPLY_ERROR").input("val1", 3).input("val2", 2).input("delayed", 500L).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 4).forced().build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 6).build())
+				.build();
+	}
+	
 	@Logic(id = "MULTIPLY", returnAs = "multiply_result")
 	public static Integer multiply(@Input("val1") Integer value1, @Input("val2") Integer value2) {
 		return value1 * value2;
@@ -103,6 +131,20 @@ public class AsyncProcess1Tests {
 					Thread.sleep(delay);
 				} catch (InterruptedException e) {}
 				LinkedLogics.asyncCallback(contextId, value1 * value2);
+			}
+		}).start();
+	}
+	
+	@Logic(id = "MULTIPLY_ERROR", returnAsync = true, returnAs = "multiply_result")
+	public static void multiplyError(@Input("val1") Integer value1, @Input("val2") Integer value2, @Input("delayed") Long delay) {
+		String contextId = LinkedLogics.getContextId();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(delay);
+				} catch (InterruptedException e) {}
+				LinkedLogics.asyncCallback(contextId, new LogicException(-1, "multiplication error", ErrorType.PERMANENT));
 			}
 		}).start();
 	}

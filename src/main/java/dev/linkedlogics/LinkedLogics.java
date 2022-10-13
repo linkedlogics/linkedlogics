@@ -48,6 +48,10 @@ public class LinkedLogics {
 		ServiceLocator.getInstance().getAsyncService().asyncCallback(contextId, result);
 	}
 	
+	public static void asyncCallback(String contextId, Throwable error) {
+		ServiceLocator.getInstance().getAsyncService().asyncCallerror(contextId, error);
+	}
+	
 	public static String getContextId() {
 		return ServiceLocator.getInstance().getAsyncService().getContextId();
 	}
