@@ -5,11 +5,13 @@ import java.lang.reflect.InvocationTargetException;
 import dev.linkedlogics.exception.LogicException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ContextError {
 	public static final int DEFAULT_ERROR_CODE = -1;
 	

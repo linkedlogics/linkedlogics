@@ -21,10 +21,6 @@ public class OutputHandler extends LogicHandler {
 		LogicDefinition logic = findLogic(context.getLogicId(), context.getLogicVersion());
 		
 		if (logic.getMethod().getReturnType() != Void.class && result != null) {
-			if (context.getOutput() == null) {
-				context.setOutput(new HashMap<>());
-			}
-			
 			String returnAs = context.getLogicReturnAs() != null ? context.getLogicReturnAs() : logic.getReturnAs();
 			
 			if (result instanceof Map && logic.isReturnMap()) {

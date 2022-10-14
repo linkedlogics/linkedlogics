@@ -4,6 +4,7 @@ import java.lang.reflect.Modifier;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 import dev.linkedlogics.context.LogicContext;
 import dev.linkedlogics.model.LogicDefinition;
@@ -44,6 +45,10 @@ public class InvokeHandler extends LogicHandler {
 		return Arrays.stream(logic.getParameters()).map(p -> p.getParameterValue(context)).toArray();
 	}
 	
+	protected int[] getInvokeReturnedParamIndexes(LogicContext context, LogicDefinition logic) {
+		return IntStream.range(0, logic.getParameters().length).filter(i -> logic.getParameters()[i].isReturned()).toArray();
+	}
+	
 	protected Object invokeMethod(LogicContext context, LogicDefinition logic, Object[] params) throws Exception {
 		Object result = null;
 		if (Modifier.isStatic(logic.getMethod().getModifiers())) {
@@ -51,6 +56,11 @@ public class InvokeHandler extends LogicHandler {
 		} else {
 			result = logic.getMethod().invoke(logic.getObject(), params);
 		}
+		
+		Arrays.stream(getInvokeReturnedParamIndexes(context, logic)).forEach(i -> {
+			context.getOutput().put(logic.getParameters()[i].getName(), params[i]);
+		});
+		
 		return result;
 	}
 }

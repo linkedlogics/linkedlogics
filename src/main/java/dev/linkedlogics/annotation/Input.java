@@ -8,5 +8,6 @@ import java.lang.annotation.*;
 public @interface Input {
     String value();
     boolean required() default false;
+    boolean returned() default false;
     String description() default "";
 }

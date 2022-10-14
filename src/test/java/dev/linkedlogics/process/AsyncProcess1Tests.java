@@ -17,6 +17,7 @@ import dev.linkedlogics.LinkedLogics;
 import dev.linkedlogics.annotation.Input;
 import dev.linkedlogics.annotation.Logic;
 import dev.linkedlogics.annotation.ProcessChain;
+import dev.linkedlogics.context.Context;
 import dev.linkedlogics.context.ContextError.ErrorType;
 import dev.linkedlogics.context.Status;
 import dev.linkedlogics.exception.LogicException;
@@ -26,9 +27,9 @@ import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.local.LocalServiceConfigurer;
 
 public class AsyncProcess1Tests {
-	
+
 	private static ContextService contextService;
-	
+
 	@BeforeAll
 	public static void setUp() {
 		LinkedLogics.configure(new LocalServiceConfigurer());
@@ -36,7 +37,7 @@ public class AsyncProcess1Tests {
 		LinkedLogics.registerProcess(AsyncProcess1Tests.class);
 		contextService = ServiceLocator.getInstance().getContextService();
 	}
-	
+
 	@Test
 	public void testScenario1() {
 		long start = System.currentTimeMillis();
@@ -46,14 +47,13 @@ public class AsyncProcess1Tests {
 
 		assertThat(finish - start).isGreaterThan(500);
 		assertThat(finish - start).isLessThan(1000);
-		contextService.get(contextId).ifPresent(ctx -> {
-			assertThat(ctx.getParams().containsKey("list")).isTrue();
-			assertThat(ctx.getParams().get("list")).asList().hasSize(3);
-			assertThat(ctx.getParams().get("list")).asList().contains(2, 4, 6);
-		});
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
+		assertThat(ctx.getParams().get("list")).asList().contains(2, 4, 6);
 	}
-	
-	
+
+
 	@ProcessChain
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
@@ -64,21 +64,20 @@ public class AsyncProcess1Tests {
 				.add(logic("INSERT").input("list", expr("list")).input("val", 4).build())
 				.build();
 	}
-	
+
 	@Test
 	public void testScenario2() {
 		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_2", new HashMap<>() {{ put("list", new ArrayList<>());}});
 		assertThat(waitUntil(contextId, Status.FAILED, 10000)).isTrue();
 
-		contextService.get(contextId).ifPresent(ctx -> {
-			assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
-			assertThat(ctx.getError()).isNotNull();
-			assertThat(ctx.getParams().get("list")).asList().hasSize(1);
-			assertThat(ctx.getParams().get("list")).asList().contains(2);
-		});
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
+		assertThat(ctx.getError()).isNotNull();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
+		assertThat(ctx.getParams().get("list")).asList().contains(2);
 	}
-	
-	
+
+
 	@ProcessChain
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
@@ -89,21 +88,25 @@ public class AsyncProcess1Tests {
 				.add(logic("INSERT").input("list", expr("list")).input("val", 4).build())
 				.build();
 	}
-	
+
 	@Test
 	public void testScenario3() {
 		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_3", new HashMap<>() {{ put("list", new ArrayList<>());}});
 		assertThat(waitUntil(contextId, Status.FAILED, 10000)).isTrue();
-
-		contextService.get(contextId).ifPresent(ctx -> {
-			assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
-			assertThat(ctx.getError()).isNotNull();
-			assertThat(ctx.getParams().get("list")).asList().hasSize(2);
-			assertThat(ctx.getParams().get("list")).asList().contains(2, 4);
-		});
+//		try {
+//			Thread.sleep(1000000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
+		assertThat(ctx.getError()).isNotNull();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
+		assertThat(ctx.getParams().get("list")).asList().contains(2, 4);
 	}
-	
-	
+
+
 	@ProcessChain
 	public static ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
@@ -115,12 +118,12 @@ public class AsyncProcess1Tests {
 				.add(logic("INSERT").input("list", expr("list")).input("val", 6).build())
 				.build();
 	}
-	
+
 	@Logic(id = "MULTIPLY", returnAs = "multiply_result")
 	public static Integer multiply(@Input("val1") Integer value1, @Input("val2") Integer value2) {
 		return value1 * value2;
 	}
-	
+
 	@Logic(id = "MULTIPLY_ASYNC", returnAsync = true, returnAs = "multiply_result")
 	public static void multiply(@Input("val1") Integer value1, @Input("val2") Integer value2, @Input("delayed") Long delay) {
 		String contextId = LinkedLogics.getContextId();
@@ -134,7 +137,7 @@ public class AsyncProcess1Tests {
 			}
 		}).start();
 	}
-	
+
 	@Logic(id = "MULTIPLY_ERROR", returnAsync = true, returnAs = "multiply_result")
 	public static void multiplyError(@Input("val1") Integer value1, @Input("val2") Integer value2, @Input("delayed") Long delay) {
 		String contextId = LinkedLogics.getContextId();
@@ -148,19 +151,21 @@ public class AsyncProcess1Tests {
 			}
 		}).start();
 	}
-	
+
 	@Logic(id = "INSERT", returnAs = "insert_result")
-	public static boolean insert(@Input("list") List<Integer> list, @Input("val") Integer value) {
+	public static boolean insert(@Input(value = "list", returned = true) List<Integer> list, @Input("val") Integer value) {
 		if (value % 2 == 0) {
+			System.out.println(value + " > " + list.toString());
 			list.add(value);
+			System.out.println(value + " > " + list.toString());
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Logic(id = "REMOVE", returnAs = "remove_result")
-	public static boolean remove(@Input("list") List<Integer> list, @Input("val") Integer value) {
+	public static boolean remove(@Input(value = "list", returned = true) List<Integer> list, @Input("val") Integer value) {
 		return list.remove(value);
 	}
-	
+
 }

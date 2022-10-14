@@ -98,7 +98,7 @@ public class SimpleProcess4Tests {
 	}
 
 	@Logic(id = "INSERT", returnAs = "insert_result")
-	public static boolean insert(@Input("list") List<Integer> list, @Input("val") Integer value) {
+	public static boolean insert(@Input(value = "list", returned = true) List<Integer> list, @Input("val") Integer value) {
 		list.add(value);
 		return true;
 	}

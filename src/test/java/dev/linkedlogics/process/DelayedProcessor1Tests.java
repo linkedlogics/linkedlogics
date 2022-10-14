@@ -97,17 +97,17 @@ public class DelayedProcessor1Tests {
 	}
 
 	@Logic(id = "INSERT", version = 1)
-	public static void insert(@Input("list") List<String> list, @Input("val") String value) {
+	public static void insert(@Input(value = "list", returned = true) List<String> list, @Input("val") String value) {
 		list.add(value);
 	}
 
 	@Logic(id = "INSERT", version = 0)
-	public static void insertv2(@Input("list") List<String> list, @Input("val") String value) {
+	public static void insertv2(@Input(value = "list", returned = true) List<String> list, @Input("val") String value) {
 		list.add(value.toUpperCase());
 	}
 
 	@Logic(id = "REMOVE")
-	public static void remove(@Input("list") List<String> list, @Input("val") String value) {
+	public static void remove(@Input(value = "list", returned = true) List<String> list, @Input("val") String value) {
 		list.remove(value);
 	}
 

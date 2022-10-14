@@ -39,7 +39,7 @@ public class LogicContext {
 		logicContext.setPosition(context.getLogicPosition());
 		logicContext.setApplication(context.getApplication());
 		logicContext.setInput(context.getInput());
-		logicContext.setOutput(null);
+		logicContext.setOutput(new HashMap<>());
 		logicContext.setCreatedAt(context.getSubmittedAt());
 		return logicContext;
 	}

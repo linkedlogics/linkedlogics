@@ -5,7 +5,7 @@ import dev.linkedlogics.context.LogicContext;
 public class NullParameter extends Parameter {
 
 	public NullParameter() {
-		super(null, null, false);
+		super(null, null, false, false);
 	}
 	
 	@Override

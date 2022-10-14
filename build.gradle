@@ -34,6 +34,8 @@ jacoco {
 dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
 	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.3'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.13.3'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3'
 	implementation 'org.springframework:spring-expression:5.3.22'
 	implementation 'org.springframework:spring-context:5.3.22'	
 	implementation 'org.slf4j:slf4j-api:1.7.36'	

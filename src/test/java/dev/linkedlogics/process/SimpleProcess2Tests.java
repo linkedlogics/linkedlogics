@@ -232,12 +232,12 @@ public class SimpleProcess2Tests {
 	}
 
 	@Logic(id = "INSERT")
-	public static void insert(@Input("list") List<String> list, @Input("val") String value) {
+	public static void insert(@Input(value = "list", returned = true) List<String> list, @Input("val") String value) {
 		list.add(value);
 	}
 
 	@Logic(id = "REMOVE")
-	public static void remove(@Input("list") List<String> list, @Input("val") String value) {
+	public static void remove(@Input(value = "list", returned = true) List<String> list, @Input("val") String value) {
 		list.remove(value);
 	}
 

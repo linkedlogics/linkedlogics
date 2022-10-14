@@ -4,8 +4,8 @@ import dev.linkedlogics.context.LogicContext;
 
 public class InputParameter extends Parameter {
 
-	public InputParameter(String name, Class<?> type, boolean required) {
-		super(name, type, required);
+	public InputParameter(String name, Class<?> type, boolean required, boolean returned) {
+		super(name, type, required, returned);
 	}
 	
 	@Override

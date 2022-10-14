@@ -57,12 +57,11 @@ public class RetryProcess1Tests {
 		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_1", new HashMap<>() {{ put("list", new ArrayList<>());}});
 		assertThat(waitUntil(contextId, Status.FAILED, 12000)).isTrue();
 
-		contextService.get(contextId).ifPresent(ctx -> {
-			assertThat(ctx.getParams().containsKey("list")).isTrue();
-			assertThat(retryCounter.get()).isEqualTo(3);
-			assertThat(ctx.getParams().get("list")).asList().hasSize(0);
-			assertThat(ctx.getParams().get("list")).asList().contains();
-		});
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(retryCounter.get()).isEqualTo(3);
+		assertThat(ctx.getParams().get("list")).asList().hasSize(0);
+		assertThat(ctx.getParams().get("list")).asList().contains();
 	}
 
 	@ProcessChain
@@ -81,7 +80,7 @@ public class RetryProcess1Tests {
 		Context ctx = contextService.get(contextId).get();
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
-		
+
 		assertThat(retryCounter.get()).isEqualTo(2);
 		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
 		assertThat(ctx.getParams().get("list")).asList().contains(1, 2);
@@ -119,7 +118,7 @@ public class RetryProcess1Tests {
 	}
 
 	@Logic(id = "INSERT", returnAs = "insert_result")
-	public static boolean insert(@Input("list") List<Integer> list, @Input("val") Integer value) {
+	public static boolean insert(@Input(value = "list", returned = true) List<Integer> list, @Input("val") Integer value) {
 		if (value % 2 == 0) {
 			list.add(value);
 			return true;
@@ -129,7 +128,7 @@ public class RetryProcess1Tests {
 	}
 
 	@Logic(id = "INSERT_SAFE", returnAs = "insert_result")
-	public static boolean insertSafe(@Input("list") List<Integer> list, @Input("val") Integer value) {
+	public static boolean insertSafe(@Input(value = "list", returned = true) List<Integer> list, @Input("val") Integer value) {
 		if (value % 2 == 0) {
 			list.add(value);
 			return true;
@@ -144,7 +143,7 @@ public class RetryProcess1Tests {
 	}
 
 	@Logic(id = "REMOVE", returnAs = "remove_result")
-	public static boolean remove(@Input("list") List<Integer> list, @Input("val") Integer value) {
+	public static boolean remove(@Input(value = "list", returned = true) List<Integer> list, @Input("val") Integer value) {
 		return list.remove(value);
 	}
 }

@@ -11,15 +11,18 @@ import java.util.function.Consumer;
 import dev.linkedlogics.LinkedLogicsCallback;
 import dev.linkedlogics.service.LogicService;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
+@NoArgsConstructor
 public class Context {
 	private String id;
 	private String key;
 	private String parentId;
 	private Status status = Status.INITIAL;
+	private int version;
 	
 	private String processId;
 	private int processVersion;

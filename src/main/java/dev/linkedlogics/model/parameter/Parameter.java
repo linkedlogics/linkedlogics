@@ -16,6 +16,7 @@ public abstract class Parameter {
 	protected String name;
 	protected Class<?> type;
 	protected boolean required;
+	protected boolean returned;
 
 	public Object getParameterValue(LogicContext context) {
 		Object value = getValue(context);
@@ -49,7 +50,7 @@ public abstract class Parameter {
 			for (Annotation annotation : annotations) {
 				if (annotation instanceof Input) {
 					Input param = (Input) annotation ;
-					return new InputParameter(param.value(), type, param.required());
+					return new InputParameter(param.value(), type, param.required(), param.returned());
 				}
 			}
 			return new NullParameter();

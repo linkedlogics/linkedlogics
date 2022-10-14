@@ -1,6 +1,6 @@
 package dev.linkedlogics.config;
 
-import dev.linkedlogics.process.ErrorProcess3Tests;
+import dev.linkedlogics.process.DelayedProcessor1Tests;
 import dev.linkedlogics.process.RetryProcess1Tests;
 import dev.linkedlogics.service.handler.process.ProcessFlowHandler;
 
@@ -11,8 +11,7 @@ public class Main {
 		RetryProcess1Tests t = new RetryProcess1Tests();
 		t.setUp();
 		t.resetCounter();
-		t.testScenario2();
+		t.testScenario1();
 		
-//		new ConfigurationTests().shoudNotFindDefaultSimpleKey();
 	}
 }

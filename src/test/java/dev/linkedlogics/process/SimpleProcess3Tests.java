@@ -166,7 +166,7 @@ public class SimpleProcess3Tests {
 	}
 
 	@Logic(id = "INSERT", returnAs = "insert_result")
-	public static boolean insert(@Input("list") List<Integer> list, @Input("val") Integer value) {
+	public static boolean insert(@Input(value = "list", returned = true) List<Integer> list, @Input("val") Integer value) {
 		if (value % 2 == 0) {
 			list.add(value);
 			return true;
@@ -175,7 +175,7 @@ public class SimpleProcess3Tests {
 	}
 
 	@Logic(id = "REMOVE", returnAs = "remove_result")
-	public static boolean remove(@Input("list") List<Integer> list, @Input("val") Integer value) {
+	public static boolean remove(@Input(value = "list", returned = true) List<Integer> list, @Input("val") Integer value) {
 		return list.remove(value);
 	}
 

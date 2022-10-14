@@ -98,6 +98,8 @@ public class ProcessHandler extends LogicHandler {
 				
 				ServiceLocator.getInstance().getContextService().set(context);
 				ServiceLocator.getInstance().getPublisherService().publish(LogicContext.fromLogic(context));
+			} else {
+				ServiceLocator.getInstance().getContextService().set(context);
 			}
 		});
 		
@@ -144,9 +146,11 @@ public class ProcessHandler extends LogicHandler {
 				
 				if (result.getNextCandidatePosition().isPresent()) {
 					nextLogic = process.getLogicByPosition(result.getNextCandidatePosition().get());
-				} else {
+				} else if (result.getSelectedLogic().isPresent()) {
 					nextLogic = result.getSelectedLogic();
 					result = HandlerResult.nextCandidate(nextLogic.get().getPosition());
+				} else {
+					return result;
 				}
 			}
 			ProcessFlowHandler.tabs.clear();
