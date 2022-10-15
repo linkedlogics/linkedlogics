@@ -31,7 +31,7 @@ public abstract class LogicPositioner {
 		});
 	}
 
-	public static void setPosition(BaseLogicDefinition logic, Map<String, BaseLogicDefinition> positionMap, String position) {
+	private static void setPosition(BaseLogicDefinition logic, Map<String, BaseLogicDefinition> positionMap, String position) {
 		logic.setPosition(position);
 		positionMap.put(position, logic);
 

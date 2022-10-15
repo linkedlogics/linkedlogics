@@ -1,8 +1,6 @@
 package dev.linkedlogics.service.local;
 
-import dev.linkedlogics.service.SchedulerService;
 import dev.linkedlogics.service.ServiceConfigurer;
-import dev.linkedlogics.service.SchedulerService.Schedule;
 
 public class LocalServiceConfigurer extends ServiceConfigurer {
 	public LocalServiceConfigurer() {

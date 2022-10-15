@@ -51,6 +51,8 @@ public class InvokeHandler extends LogicHandler {
 	
 	protected Object invokeMethod(LogicContext context, LogicDefinition logic, Object[] params) throws Exception {
 		Object result = null;
+		logic.getMethod().setAccessible(true);
+		
 		if (Modifier.isStatic(logic.getMethod().getModifiers())) {
 			result = logic.getMethod().invoke(null, params);
 		} else {

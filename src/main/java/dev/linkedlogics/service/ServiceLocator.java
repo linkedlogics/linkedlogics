@@ -77,7 +77,6 @@ public class ServiceLocator {
 	
 	public MetricsService getMetricsService() {
 		return getService(MetricsService.class);
-
 	}
 	
 	public void shutdown() {

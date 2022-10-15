@@ -6,6 +6,7 @@ import static dev.linkedlogics.LinkedLogicsBuilder.group;
 import static dev.linkedlogics.LinkedLogicsBuilder.logic;
 import static dev.linkedlogics.LinkedLogicsBuilder.verify;
 import static dev.linkedlogics.LinkedLogicsBuilder.error;
+import static dev.linkedlogics.LinkedLogicsBuilder.savepoint;
 import static dev.linkedlogics.process.ProcessTestHelper.waitUntil;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -369,6 +370,38 @@ public class ErrorProcess1Tests {
 						.handle(error(-200).errorMessageSet(Set.of("error")).errorLogic(logic("INSERT").input("list", expr("list")).input("val", "v6").disabled().build()).build())
 						.build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v7").build())
+				.build();
+	}
+	
+	@Test
+	public void testScenario11() {
+		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_11", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
+
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
+		assertThat(ctx.getParams().get("list")).asList().contains("v1");
+	}
+
+
+	@ProcessChain
+	public static ProcessDefinition scenario11() {
+		return createProcess("SIMPLE_SCENARIO_11", 0)
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1")
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v1").build())
+						.build())
+				.add(savepoint().build())
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v2")
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v2").build())	
+						.build(),
+						logic("INSERT").input("list", expr("list")).input("val", "v3")
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3").build())
+						.build(),
+						verify(expr("false")).code(-100).message("failure").build())
+						.handle(error(-200).build())
+						.build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v4").build())
 				.build();
 	}
 
