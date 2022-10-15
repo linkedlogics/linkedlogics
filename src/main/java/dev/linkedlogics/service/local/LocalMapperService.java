@@ -1,6 +1,7 @@
 package dev.linkedlogics.service.local;
 
 import java.text.SimpleDateFormat;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -34,5 +35,10 @@ public class LocalMapperService implements MapperService {
 		} catch (Throwable e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public <T> T convertFrom(Object object, Class<T> targetClass) {
+		return mapper.convertValue(object, targetClass);
 	}
 }

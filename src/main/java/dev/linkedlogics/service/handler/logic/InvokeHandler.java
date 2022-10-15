@@ -42,7 +42,12 @@ public class InvokeHandler extends LogicHandler {
 	}
 	
 	protected Object[] getInvokeParams(LogicContext context, LogicDefinition logic) {
-		return Arrays.stream(logic.getParameters()).map(p -> p.getParameterValue(context)).toArray();
+		return Arrays.stream(logic.getParameters())
+				.map(p -> {
+					Object value = p.getParameterValue(context);
+					return ServiceLocator.getInstance().getMapperService().convertFrom(value, p.getType());
+				})
+				.toArray();
 	}
 	
 	protected int[] getInvokeReturnedParamIndexes(LogicContext context, LogicDefinition logic) {
