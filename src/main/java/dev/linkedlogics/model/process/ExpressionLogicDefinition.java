@@ -10,7 +10,7 @@ public class ExpressionLogicDefinition {
 		this.expression = expression;
 	}
 	
-	public ExpressionLogicDefinition clone() {
+	public ExpressionLogicDefinition cloneLogic() {
 		ExpressionLogicDefinition clone = new ExpressionLogicDefinition(expression);
 		return clone;
 	}

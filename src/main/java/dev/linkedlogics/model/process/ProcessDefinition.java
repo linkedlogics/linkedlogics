@@ -7,22 +7,21 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import dev.linkedlogics.model.process.helper.LogicPositioner;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter(value = AccessLevel.PACKAGE)
-public class ProcessDefinition {
+@Setter
+public class ProcessDefinition implements Comparable<ProcessDefinition> {
 	public static final int LATEST_VERSION = -1;
 	
 	private String id;
 	private int version = LATEST_VERSION;
 	private Map<String, Object> inputs = new HashMap<>();
 	
-	@Getter(value = AccessLevel.PACKAGE)
 	private List<BaseLogicDefinition> logics = new ArrayList<BaseLogicDefinition>();
-	@Getter(value = AccessLevel.PUBLIC)
 	private Map<String, BaseLogicDefinition> positions;
 	
 	public Optional<BaseLogicDefinition> getLogicByPosition(String position) {
@@ -31,6 +30,14 @@ public class ProcessDefinition {
 	
 	public List<BaseLogicDefinition> cloneLogics() {
 		return logics.stream().map(l -> l.cloneLogic()).collect(Collectors.toList());
+	}
+	
+	@Override
+	public int compareTo(ProcessDefinition o) {
+		if (this.getId().equals(o.getId())) {
+			return this.getVersion() - o.getVersion();
+		}
+		return this.getId().compareTo(o.getId());
 	}
 	
 	public static class ProcessBuilder {
@@ -69,18 +76,7 @@ public class ProcessDefinition {
 		}
 		
 		public ProcessDefinition build() {
-			Map<String, BaseLogicDefinition> positions = new HashMap<>();
-			for (int i = 0; i < this.process.getLogics().size(); i++) {
-				LogicPositioner.setPosition(this.process.getLogics().get(i), positions, String.valueOf(i+1));
-			}
-			this.process.setPositions(positions);
-			
-			this.process.getLogics().forEach(l -> {
-				this.process.getInputs().entrySet().forEach(e -> {
-					l.getInputMap().putIfAbsent(e.getKey(), e.getValue());
-				});
-			});
-			
+			LogicPositioner.setPositions(this.process);
 			return this.process;
 		}
 	}

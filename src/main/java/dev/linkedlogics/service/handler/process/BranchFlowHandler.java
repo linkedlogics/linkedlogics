@@ -5,7 +5,7 @@ import java.util.Optional;
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
 import dev.linkedlogics.model.process.BranchLogicDefinition;
-import dev.linkedlogics.model.process.LogicPositioner;
+import dev.linkedlogics.model.process.helper.LogicPositioner;
 
 public class BranchFlowHandler extends ProcessFlowHandler {
 	public BranchFlowHandler() {

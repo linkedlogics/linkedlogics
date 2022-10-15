@@ -1,6 +1,5 @@
 package dev.linkedlogics;
 
-import java.util.List;
 import java.util.Set;
 
 import dev.linkedlogics.model.process.BaseLogicDefinition;
@@ -9,14 +8,13 @@ import dev.linkedlogics.model.process.ErrorLogicDefinition;
 import dev.linkedlogics.model.process.ErrorLogicDefinition.ErrorLogicBuilder;
 import dev.linkedlogics.model.process.ExpressionLogicDefinition;
 import dev.linkedlogics.model.process.GroupLogicDefinition.GroupLogicBuilder;
-import dev.linkedlogics.model.process.ProcessDefinition;
 import dev.linkedlogics.model.process.ProcessDefinition.ProcessBuilder;
+import dev.linkedlogics.model.process.ProcessLogicDefinition.ProcessLogicBuilder;
 import dev.linkedlogics.model.process.SavepointLogicDefinition.SavepointLogicBuilder;
 import dev.linkedlogics.model.process.SingleLogicDefinition.SingleLogicBuilder;
 import dev.linkedlogics.model.process.VerifyLogicDefinition.VerifyLogicBuilder;
 import dev.linkedlogics.service.LogicService;
 import dev.linkedlogics.service.ProcessService;
-import dev.linkedlogics.service.ServiceLocator;
 
 public class LinkedLogicsBuilder {
 	
@@ -40,22 +38,8 @@ public class LinkedLogicsBuilder {
 		return new GroupLogicBuilder(logics);
 	}
 	
-	public static GroupLogicBuilder process(String processId, int version) {
-		return ServiceLocator.getInstance().getProcessService().getProcess(processId, version).map(w -> {
-			List<BaseLogicDefinition> logics = w.cloneLogics();
-			BaseLogicDefinition[] logicArray = new BaseLogicDefinition[logics.size()];
-			logics.toArray(logicArray);
-			
-			return new GroupLogicBuilder(logicArray);
-		}).orElseThrow(() -> new IllegalArgumentException("missing process " + processId));
-	}
-	
-	public static GroupLogicBuilder process(ProcessDefinition process) {
-		List<BaseLogicDefinition> logics = process.cloneLogics();
-		BaseLogicDefinition[] logicArray = new BaseLogicDefinition[logics.size()];
-		logics.toArray(logicArray);
-		
-		return new GroupLogicBuilder(logicArray).inputs(process.getInputs());
+	public static ProcessLogicBuilder process(String processId, int version) {
+		return new ProcessLogicBuilder(processId, version);
 	}
 	
 	public static BranchLogicBuilder branch(ExpressionLogicDefinition expression, BaseLogicDefinition leftBranch, BaseLogicDefinition rightBranch) {

@@ -21,10 +21,11 @@ public class BranchLogicDefinition extends BaseLogicDefinition {
 	
 	public BranchLogicDefinition clone() {
 		BranchLogicDefinition clone = new BranchLogicDefinition();
-		clone.setExpression(getExpression().clone());
-		clone.setLeftLogic(getLeftLogic().clone());
-		clone.setRightLogic(getRightLogic().clone());
-		clone.getInputMap().putAll(getInputMap());
+		clone.setExpression(getExpression().cloneLogic());
+		clone.setLeftLogic(getLeftLogic().cloneLogic());
+		if (getRightLogic() != null) {
+			clone.setRightLogic(getRightLogic().cloneLogic());
+		}
 		return clone;
 	}
 

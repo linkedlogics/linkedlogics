@@ -19,7 +19,7 @@ public class VerifyLogicDefinition extends BaseLogicDefinition {
 	
 	public VerifyLogicDefinition clone() {
 		VerifyLogicDefinition clone = new VerifyLogicDefinition();
-		clone.setExpression(getExpression().clone());
+		clone.setExpression(getExpression().cloneLogic());
 		clone.setErrorCode(getErrorCode());
 		clone.setErrorMessage(getErrorMessage());
 		return clone;

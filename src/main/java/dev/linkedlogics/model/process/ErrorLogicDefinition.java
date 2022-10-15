@@ -20,7 +20,10 @@ public class ErrorLogicDefinition extends BaseLogicDefinition {
 		ErrorLogicDefinition clone = new ErrorLogicDefinition();
 		clone.setErrorCodeSet(new HashSet<>(getErrorCodeSet()));
 		clone.setErrorMessageSet(new HashSet<>(getErrorMessageSet()));
-		clone.setErrorLogic(errorLogic != null ? errorLogic.clone() : null);
+		clone.setErrorLogic(errorLogic != null ? errorLogic.cloneLogic() : null);
+		clone.setThrowAgain(isThrowAgain());
+		clone.setThrowErrorCode(getThrowErrorCode());
+		clone.setThrowErrorMessage(getThrowErrorMessage());
 		return clone;
 	}
 	

@@ -7,4 +7,8 @@ import lombok.Getter;
 @Builder
 public class DelayedLogicDefinition {
 	private int delay;
+	
+	public DelayedLogicDefinition cloneLogic() {
+		return new DelayedLogicDefinition(getDelay());
+	}
 }

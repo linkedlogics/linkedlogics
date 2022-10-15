@@ -18,7 +18,7 @@ import dev.linkedlogics.annotation.ProcessChain;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.local.LocalServiceConfigurer;
 
-public class ProcessTests {
+public class LogicPositionerTests {
 	public static final String PROCESS_A = "proces_a";
 	
 	public static final String LOGIC_1 = "logic_1";

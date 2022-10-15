@@ -8,10 +8,11 @@ import java.util.Optional;
 
 import dev.linkedlogics.exception.AlreadyExistingError;
 import dev.linkedlogics.model.process.ProcessDefinition;
+import dev.linkedlogics.model.process.helper.LogicDependencies;
 import dev.linkedlogics.service.ProcessService;
 
 public class LocalProcessService implements ProcessService {
-private final Map<String, Map<Integer, ProcessDefinition>> definitions = new HashMap<>();
+	private final Map<String, Map<Integer, ProcessDefinition>> definitions = new HashMap<>();
 	
 	@Override
 	public Optional<ProcessDefinition> getProcess(String processId) {
@@ -74,5 +75,11 @@ private final Map<String, Map<Integer, ProcessDefinition>> definitions = new Has
 				throw new AlreadyExistingError(definition.getId(), definition.getVersion(), "PROCESS");	
 			}
 		}
+		
+		definitions.values()
+			.stream()
+			.flatMap(m -> m.values().stream())
+			.sorted((p1, p2) -> p1.compareTo(p2))
+			.forEach(LogicDependencies::setDependencies);
 	}
 }

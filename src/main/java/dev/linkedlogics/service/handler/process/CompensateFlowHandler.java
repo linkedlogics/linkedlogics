@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
-import dev.linkedlogics.model.process.LogicPositioner;
+import dev.linkedlogics.model.process.helper.LogicPositioner;
 
 public class CompensateFlowHandler extends ProcessFlowHandler {
 	public CompensateFlowHandler() {

@@ -16,7 +16,6 @@ public class GroupLogicDefinition extends BaseLogicDefinition {
 	public GroupLogicDefinition clone() {
 		GroupLogicDefinition clone = new GroupLogicDefinition();
 		clone.setLogics(this.getLogics().stream().map(l -> l.clone()).collect(Collectors.toList()));
-		clone.getInputMap().putAll(getInputMap());
 		return clone;
 	}
 	
@@ -24,18 +23,20 @@ public class GroupLogicDefinition extends BaseLogicDefinition {
 		return "group";
 	}
 	
+	protected void addLogics(List<BaseLogicDefinition> logics) {
+		logics.forEach(l -> {
+			if (!getLogics().isEmpty()) {
+				getLogics().get(getLogics().size() - 1).setAdjacentLogic(l);
+			}
+			getLogics().add(l);
+			l.setParentLogic(this);
+		});
+	}
+	
 	public static class GroupLogicBuilder extends LogicBuilder<GroupLogicBuilder, GroupLogicDefinition> {
 		public GroupLogicBuilder(BaseLogicDefinition... logics) {
 			super(new GroupLogicDefinition());
-			Arrays.stream(logics).forEach(this::addLogic);
-		}
-		
-		private void addLogic(BaseLogicDefinition logic) {
-			if (!this.getLogic().getLogics().isEmpty()) {
-				this.getLogic().getLogics().get(this.getLogic().getLogics().size() - 1).setAdjacentLogic(logic);
-			}
-			this.getLogic().getLogics().add(logic);
-			logic.setParentLogic(this.getLogic());
+			this.getLogic().addLogics(Arrays.stream(logics).collect(Collectors.toList()));
 		}
 		
 		public GroupLogicBuilder retry(int maxRetries, int delay) {

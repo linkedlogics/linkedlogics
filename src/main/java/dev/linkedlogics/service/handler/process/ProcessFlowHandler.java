@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
-import dev.linkedlogics.model.process.LogicPositioner;
 import dev.linkedlogics.model.process.ProcessDefinition;
+import dev.linkedlogics.model.process.helper.LogicPositioner;
 import dev.linkedlogics.service.ServiceLocator;
 import lombok.extern.slf4j.Slf4j;
 

@@ -8,4 +8,9 @@ import lombok.Getter;
 public class RetryLogicDefinition {
 	private int maxRetries;
 	private int delay;
+	
+	public RetryLogicDefinition cloneLogic() {
+		RetryLogicDefinition clone = new RetryLogicDefinition(getMaxRetries(), getDelay());
+		return clone;
+	}
 }

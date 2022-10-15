@@ -1,18 +1,41 @@
-package dev.linkedlogics.model.process;
+package dev.linkedlogics.model.process.helper;
 
+import java.util.HashMap;
 import java.util.Map;
+
+import dev.linkedlogics.model.process.BaseLogicDefinition;
+import dev.linkedlogics.model.process.BranchLogicDefinition;
+import dev.linkedlogics.model.process.ErrorLogicDefinition;
+import dev.linkedlogics.model.process.GroupLogicDefinition;
+import dev.linkedlogics.model.process.ProcessDefinition;
+import dev.linkedlogics.model.process.ProcessLogicDefinition;
+import dev.linkedlogics.model.process.SingleLogicDefinition;
 
 public abstract class LogicPositioner {
 	public static final String BRANCH_LEFT = "L";
 	public static final String BRANCH_RIGHT = "R";
 	public static final String COMPENSATE = "Z";
 	public static final String ERROR = "E";
-	
+
+	public static void setPositions(ProcessDefinition process) {
+		Map<String, BaseLogicDefinition> positions = new HashMap<>();
+		for (int i = 0; i < process.getLogics().size(); i++) {
+			LogicPositioner.setPosition(process.getLogics().get(i), positions, String.valueOf(i+1));
+		}
+		process.setPositions(positions);
+
+		process.getLogics().forEach(l -> {
+			process.getInputs().entrySet().forEach(e -> {
+				l.getInputMap().putIfAbsent(e.getKey(), e.getValue());
+			});
+		});
+	}
+
 	public static void setPosition(BaseLogicDefinition logic, Map<String, BaseLogicDefinition> positionMap, String position) {
 		logic.setPosition(position);
 		positionMap.put(position, logic);
-		
-		if (logic instanceof GroupLogicDefinition) {
+
+		if (logic instanceof GroupLogicDefinition || logic instanceof ProcessLogicDefinition) {
 			GroupLogicDefinition group = (GroupLogicDefinition) logic;
 			for (int i = 0; i < group.getLogics().size(); i++) {
 				setPosition(group.getLogics().get(i), positionMap, position + "." + (i+1));
@@ -30,7 +53,7 @@ public abstract class LogicPositioner {
 			setPosition(((ErrorLogicDefinition) logic).getErrorLogic(), positionMap, position + ERROR);
 			logic.setForced(true);
 		}
-		
+
 		if (logic.getError() != null && logic.getError().getErrorLogic() != null) {
 			setPosition(logic.getError().getErrorLogic(), positionMap, position + ERROR);
 		}

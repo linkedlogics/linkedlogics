@@ -1,6 +1,7 @@
 package dev.linkedlogics.model.process;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class JoinLogicDefinition {
@@ -8,5 +9,10 @@ public class JoinLogicDefinition {
 	
 	public JoinLogicDefinition(String[] key) {
 		this.key = key;
+	}
+	
+	public JoinLogicDefinition cloneLogic() {
+		JoinLogicDefinition clone = new JoinLogicDefinition(getKey());
+		return clone;
 	}
 }

@@ -8,8 +8,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter(value = AccessLevel.PACKAGE)
-@Getter(value = AccessLevel.PUBLIC)
+@Setter
+@Getter
 public abstract class BaseLogicDefinition implements Cloneable {
 	protected String position;
 	protected boolean isDisabled;
@@ -25,9 +25,17 @@ public abstract class BaseLogicDefinition implements Cloneable {
 	protected BaseLogicDefinition parentLogic;
 	protected BaseLogicDefinition adjacentLogic;
 	
-	public BaseLogicDefinition cloneLogic() {
+	public final BaseLogicDefinition cloneLogic() {
 		BaseLogicDefinition clone = clone();
 		clone.setDisabled(isDisabled);
+		clone.setFork(fork != null ? fork.cloneLogic() : null);
+		clone.setJoin(join != null ? join.cloneLogic() : null);
+		clone.setForced(isForced());
+		clone.setRetry(retry != null ? retry.cloneLogic() : null);
+		clone.setDelayed(delayed != null ? delayed.cloneLogic() : null);
+		clone.setError(error != null ? (ErrorLogicDefinition) error.cloneLogic() : null);
+		clone.getInputMap().putAll(getInputMap());
+		clone.getOutputMap().putAll(getOutputMap());
 		return clone;
 	}
 	

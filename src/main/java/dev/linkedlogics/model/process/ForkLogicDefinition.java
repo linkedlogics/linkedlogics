@@ -3,8 +3,10 @@ package dev.linkedlogics.model.process;
 import java.util.Optional;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class ForkLogicDefinition {
 	private Optional<String> key;
 	
@@ -14,5 +16,11 @@ public class ForkLogicDefinition {
 	
 	public ForkLogicDefinition() {
 		this.key = Optional.empty();
+	}
+	
+	public ForkLogicDefinition cloneLogic() {
+		ForkLogicDefinition clone = new ForkLogicDefinition();
+		clone.setKey(getKey());
+		return clone;
 	}
 }
