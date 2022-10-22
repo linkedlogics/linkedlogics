@@ -39,6 +39,11 @@ public class SingleLogicDefinition extends BaseLogicDefinition {
 			return this;
 		}
 		
+		public SingleLogicBuilder application(String application) {
+			this.getLogic().setApplication(application);
+			return this;
+		}
+		
 		public SingleLogicBuilder returnAs(String returnAs) {
 			this.getLogic().setReturnAs(returnAs);
 			return this;
@@ -73,7 +78,6 @@ public class SingleLogicDefinition extends BaseLogicDefinition {
 			this.getLogic().getOutputMap().putAll(inputs);
 			return this;
 		}
-		
 	}
 	
 	public String toString() {

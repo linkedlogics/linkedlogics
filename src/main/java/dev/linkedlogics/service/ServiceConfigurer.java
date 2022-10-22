@@ -14,6 +14,7 @@ public class ServiceConfigurer {
 	
 	public ServiceConfigurer configure(LinkedLogicsService service) {
 		getLinkedInterfaces(service).forEach(c -> services.put(c, service));
+		services.put(service.getClass(), service);
 		return this;
 	}
 	
@@ -23,6 +24,6 @@ public class ServiceConfigurer {
 	}
 	
 	public Stream<Class<?>> getLinkedInterfaces(LinkedLogicsService service) {
-		return Arrays.stream(service.getClass().getInterfaces()).filter(i -> LinkedLogicsService.class.isAssignableFrom(i));
+		return Arrays.stream(service.getClass().getInterfaces()).filter(i -> i == LinkedLogicsService.class || LinkedLogicsService.class.isAssignableFrom(i));
 	}
 }

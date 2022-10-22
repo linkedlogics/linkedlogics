@@ -57,7 +57,7 @@ public class InputProcess1Tests {
 	}
 
 	@Logic(id = "GET_FULLNAME", returnAs = "fullname")
-	public static String gFullname(@Input(value = "person") Person person) {
+	public static String getFullname(@Input(value = "person") Person person) {
 		return person.getFirstname() + " " + person.getLastname();
 	}
 

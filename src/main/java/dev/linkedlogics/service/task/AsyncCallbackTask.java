@@ -11,7 +11,7 @@ public class AsyncCallbackTask extends LinkedLogicsTask {
 	private Object result;
 	
 	public AsyncCallbackTask(LogicContext context, Object result) {
-		super(context,  new OutputHandler(new ErrorHandler(new ProcessHandler())));
+		super(context, new OutputHandler(new ErrorHandler(new ProcessHandler())));
 		this.result = result;
 	}
 
