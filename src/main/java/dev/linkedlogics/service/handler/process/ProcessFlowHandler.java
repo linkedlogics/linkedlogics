@@ -43,10 +43,6 @@ public abstract class ProcessFlowHandler {
 		}
 	}
 	
-	protected ProcessDefinition findProcess(Context context) {
-		return ServiceLocator.getInstance().getProcessService().getProcess(context.getProcessId(), context.getProcessVersion()).orElseThrow(() -> new IllegalArgumentException(String.format("process %s[%d] is not found", context.getProcessId(), context.getProcessVersion())));
-	}
-	
 	public static String adjacentLogicPosition(String position) {
 		if (position.endsWith(LogicPositioner.COMPENSATE)) {
 			return position;
