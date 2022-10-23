@@ -46,7 +46,7 @@ public class OrderLogics {
 	private OrderService orderService;
 	
 	@Logic(id = CREATE_ORDER, returnAs = "order")
-	public Order createOrder(@Input("customer") Customer customer, @Input("itemId") Long itemId) {
+	public Order createOrder(@Input("customer") Customer customer, @Input("itemId") String itemId) {
 		Order order = orderService.create(customer.getCustomerId(), itemId);
 		if (!order.isSuccess()) {
 			throw new LogicException(-1, "Order creation failed", ErrorType.PERMANENT);
