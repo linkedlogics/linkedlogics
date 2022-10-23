@@ -86,3 +86,19 @@ public class Processes {
 	}
 }
 ```
+#### Execution
+Process can be initiated from any microservice as following: 
+##### Process Execution
+```
+package dev.linkedlogics.sample.process;
+
+public class Main {
+	
+	public static void main(String[] args)  {
+		Customer customer = new Customer();
+		customer.setCustomerId(1L);
+		
+		LinkedLogics.start("NEW_ORDER", new HashMap<>() {{ put("customer", customer);}});
+	}
+}
+```
