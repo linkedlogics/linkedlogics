@@ -1,8 +1,6 @@
 ### Linked-Logics Framework
 
-Linked-Logics is a decentralized workflow execution engine for building distributed, resilient and scalable applications. Linked-Logics is a different implementation of [EPC](https://en.wikipedia.org/wiki/Event-driven_process_chain) and a good candidate for introducing [Sagas](https://microservices.io/patterns/data/saga.html) in microservices. 
-
-It comes with simplicty and minimal framework footprint. It is very easy to use and high performant.
+Linked-Logics is a decentralized workflow execution engine for building distributed, resilient and scalable applications. Linked-Logics has a different approach and is a good candidate for introducing [Sagas](https://microservices.io/patterns/data/saga.html) in microservices. It combines both `orchestration` and `choreography` together by providing DSL for orchestration and decentralized execution like in `choreography`. It comes with simplicty and minimal framework footprint. It is very easy to use and high performant.
 
 Main features:
 - It is decentralized (no single point of failure)
@@ -13,19 +11,64 @@ Main features:
 - It supports expression language to customize workflows
 
 #### Logic
-Logic is an executable part of workflow which is executed at its owner service or application. Logics are defined by `id` and its owner `application`.
+Logic is an executable part of workflow which is executed inside its owner microservice. Logics are defined by `id` which is unique within its owner. Any public method can be defined as a logic by using `@Logic` annotation.
+##### Charging Microservice
+```
+package dev.linkedlogics.sample.charging;
 
-<!--
-**linkedlogics/linkedlogics** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+public class ChargingLogics {
+	private ChargingService chargingService;
+	private RefundService refundService;
+	
+	@Logic(id = CHARGE_CUSTOMER, returnAs = "charging_result")
+	public boolean chargeCustomer(@Input("customer") Customer customer, @Input("amount") Double amount) {
+		double chargedAmount = chargingService.charge(customer.getCustomerId(), amount);
+		return chargedAmount > 0;
+	}
+	
+	@Logic(id = REFUND_CUSTOMER, returnAs = "refund_result")
+	public boolean refundCustomer(@Input("customer") Customer customer, @Input("amount") Double amount) {
+		double refundedAmount = refundService.refund(customer.getCustomerId(), amount);
+		return refundedAmount > 0;
+	}
+}
+```
+##### Order Microservice
+```
+package dev.linkedlogics.sample.order;
 
-Here are some ideas to get you started:
+public class OrderLogics {
+	private OrderService orderService;
+	
+	@Logic(id = CREATE_ORDER, returnAs = "order")
+	public Order createOrder(@Input("customer") Customer customer, @Input("itemId") Long itemId) {
+		return orderService.create(customer.getCustomerId(), itemId);
+	}
+}
+```
+#### Process
+Process is workflow definition. Any class can provide process objects, it just needs to have methods returning `ProcessDeProcessDefinition`. In below example we are calling two logics from two different microservices with compensation logics. Workflow will trigger compenstaion in case any failure occurs before execution is finished.
+##### Process Definition
+```
+package dev.linkedlogics.sample.process;
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+public class Processes {
+	
+	public static ProcessDefinition createNewOrderProcess() {
+		return createProcess("NEW_ORDER", 0)
+					.add(logic(CHARGE_CUSTOMER)
+								.input("customer", expr("customer"))
+								.input("amount", 1.25)
+								.compensate(logic(REFUND_CUSTOMER)
+						 					.input("customer", expr("customer"))
+						 					.input("amount", 1.25)
+						 					.build())
+						 .build())
+					.add(logic(CREATE_ORDER)
+								.input("customer", expr("customer"))
+								.input("itemId", "ITEM_1")
+								.build())
+					.build();
+	}
+}
+```
