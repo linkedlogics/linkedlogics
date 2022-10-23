@@ -4,10 +4,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.context.LogicContext;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
-import dev.linkedlogics.service.MapperService;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.task.StartTask;
 
@@ -60,7 +63,11 @@ public class ForkFlowHandler extends ProcessFlowHandler {
 	}
 	
 	private Map<String, Object> cloneParams(Map<String, Object> params) {
-		MapperService mapper = ServiceLocator.getInstance().getMapperService();
-		return mapper.mapFrom(mapper.mapTo(params), Map.class);
+		try {
+			ObjectMapper mapper = ServiceLocator.getInstance().getMapperService().getMapper();
+			return (Map<String, Object>) mapper.readValue(mapper.writeValueAsString(params), Map.class);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

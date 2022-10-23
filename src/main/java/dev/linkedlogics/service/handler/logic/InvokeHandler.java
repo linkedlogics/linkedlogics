@@ -1,13 +1,23 @@
 package dev.linkedlogics.service.handler.logic;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.linkedlogics.context.LogicContext;
 import dev.linkedlogics.model.LogicDefinition;
+import dev.linkedlogics.model.parameter.CollectionParameter;
+import dev.linkedlogics.model.parameter.MapParameter;
+import dev.linkedlogics.service.MapperService;
 import dev.linkedlogics.service.ServiceLocator;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,8 +54,16 @@ public class InvokeHandler extends LogicHandler {
 	protected Object[] getInvokeParams(LogicContext context, LogicDefinition logic) {
 		return Arrays.stream(logic.getParameters())
 				.map(p -> {
+					ObjectMapper mapper = ServiceLocator.getInstance().getMapperService().getMapper();
 					Object value = p.getParameterValue(context);
-					return ServiceLocator.getInstance().getMapperService().convertFrom(value, p.getType());
+					if (value instanceof Collection && p instanceof CollectionParameter) {
+						CollectionParameter collectionParameter = (CollectionParameter) p;
+						return mapper.convertValue(value, mapper.getTypeFactory().constructCollectionType((Class<? extends Collection>) p.getType(), collectionParameter.getGenericType()));
+ 					} else if (value instanceof Map<?, ?> && p instanceof MapParameter) {
+ 						MapParameter mapParameter = (MapParameter) p;
+						return mapper.convertValue(value, mapper.getTypeFactory().constructMapType((Class<? extends Map>) value.getClass(), mapParameter.getKeyType(), mapParameter.getValueType()));
+ 					}
+					return mapper.convertValue(value, p.getType());
 				})
 				.toArray();
 	}

@@ -2,6 +2,7 @@ package dev.linkedlogics.service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ServiceLocator {
 	private static final ServiceLocator INSTANCE = new ServiceLocator();
@@ -17,10 +18,9 @@ public class ServiceLocator {
 			if (this.services.containsKey(e.getKey())) {
 				this.services.remove(e.getKey()).stop();
 			}
-			
 			this.services.put(e.getKey(), e.getValue());
-			e.getValue().start();
 		});
+		configurer.getServices().values().stream().collect(Collectors.toSet()).stream().forEach(s -> s.start());
 	}
 	
 	public <T> T getService(Class<T> serviceClass) {
@@ -80,6 +80,6 @@ public class ServiceLocator {
 	}
 	
 	public void shutdown() {
-		services.values().stream().forEach(s -> s.stop());
+		services.values().stream().collect(Collectors.toSet()).stream().forEach(s -> s.stop());
 	}
 }

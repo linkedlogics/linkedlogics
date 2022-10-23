@@ -12,6 +12,9 @@ Main features:
 - It provides very powerfull DSL for building workflows
 - It supports expression language to customize workflows
 
+#### Logic
+Logic is an executable part of workflow which is executed at its owner service or application. Logics are defined by `id` and its owner `application`.
+
 <!--
 **linkedlogics/linkedlogics** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 

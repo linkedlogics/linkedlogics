@@ -2,11 +2,9 @@ package dev.linkedlogics.service;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public interface MapperService extends LinkedLogicsService {
 
-	public <T> T mapFrom(String object, Class<T> objectClass);
-
-	public String mapTo(Object object);
-	
-	public <T> T convertFrom(Object object, Class<T> targetClass);
+	public ObjectMapper getMapper() ;
 }

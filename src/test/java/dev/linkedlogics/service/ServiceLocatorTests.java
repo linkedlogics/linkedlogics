@@ -7,14 +7,12 @@ import static org.mockito.Mockito.verify;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.linkedlogics.LinkedLogics;
 import dev.linkedlogics.context.LogicContext;
+import lombok.Getter;
 
-@ExtendWith(MockitoExtension.class)
 public class ServiceLocatorTests {
 	
 	@BeforeAll
@@ -41,6 +39,20 @@ public class ServiceLocatorTests {
 		
 		verify(service, times(1)).start();
 		verify(service, times(1)).stop();
+	}
+	
+	@Test
+	@DisplayName("should start and stop service")
+	public void shouldStartAndStopServiceOnce() {
+		ServiceConfigurer configurer = new ServiceConfigurer();
+		PublisherConsumer service = new PublisherConsumer();
+		configurer.configure(service);
+		
+		ServiceLocator.getInstance().configure(configurer);
+		ServiceLocator.getInstance().shutdown();
+		
+		assertThat(service.getStartCounter()).isEqualTo(1);
+		assertThat(service.getStopCounter()).isEqualTo(1);
 	}
 	
 	public static class ConfigurerA extends ServiceConfigurer {
@@ -77,6 +89,32 @@ public class ServiceLocatorTests {
 		@Override
 		public void consume(LogicContext context) {
 
+		}
+	}
+	
+	@Getter
+	public static class PublisherConsumer implements PublisherService, ConsumerService {
+		private int startCounter;
+		private int stopCounter;
+		
+		@Override
+		public void start() {
+			startCounter++;
+		}
+
+		@Override
+		public void stop() {
+			stopCounter++;
+		}
+
+		@Override
+		public void consume(LogicContext context) {
+			
+		}
+
+		@Override
+		public void publish(LogicContext context) {
+			
 		}
 	}
 }

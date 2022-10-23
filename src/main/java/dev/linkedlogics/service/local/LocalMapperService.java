@@ -18,27 +18,9 @@ public class LocalMapperService implements MapperService {
 		mapper.registerModule(new JavaTimeModule());
 		mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH24:mm:ss.SZ"));
 	}
-
+	
 	@Override
-	public <T> T mapFrom(String string, Class<T> objectClass) {
-		try {
-			return (T) mapper.readValue(string, objectClass);
-		} catch (Throwable e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public String mapTo(Object object) {
-		try {
-			return mapper.writeValueAsString(object);
-		} catch (Throwable e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public <T> T convertFrom(Object object, Class<T> targetClass) {
-		return mapper.convertValue(object, targetClass);
+	public ObjectMapper getMapper() {
+		return mapper;
 	}
 }
