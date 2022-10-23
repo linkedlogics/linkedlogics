@@ -75,10 +75,12 @@ public class Processes {
 						 	.input("amount", 1.25)
 						 .build())
 					.build())
-				.add(logic(CREATE_ORDER)
-						.application(ORDER_SERVICE)
-						.input("customer", expr("customer"))
-						.input("itemId", "ITEM_1")
+				.add(branch(expr("charging_result == true"), 
+							logic(CREATE_ORDER)
+								.application(ORDER_SERVICE)
+								.input("customer", expr("customer"))
+								.input("itemId", "ITEM_1")
+							.build())
 					.build())
 				.build();
 	}
