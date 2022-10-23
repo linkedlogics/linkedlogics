@@ -56,7 +56,7 @@ public class OrderLogics {
 }
 ```
 #### Process
-Process is workflow definition. Any class can provide process objects, it just needs to have methods returning `ProcessDeProcessDefinition`. In below example we are calling two logics from two different microservices with compensation logics. Workflow will trigger compenstaion in case any failure occurs before execution is finished.
+Process is workflow definition. Any class can provide process objects, it just needs to have methods returning `ProcessDefinition`. In below example we are calling two logics from two different microservices with compensation logics. Workflow will trigger compenstaion in case any failure occurs before execution is finished.
 ##### Process Definition
 ```
 package dev.linkedlogics.sample.process;
@@ -76,11 +76,11 @@ public class Processes {
 						 .build())
 					.build())
 				.add(branch(expr("charging_result == true"), 
-							logic(CREATE_ORDER)
-								.application(ORDER_SERVICE)
-								.input("customer", expr("customer"))
-								.input("itemId", "ITEM_1")
-							.build())
+						logic(CREATE_ORDER)
+							.application(ORDER_SERVICE)
+							.input("customer", expr("customer"))
+							.input("itemId", "ITEM_1")
+						.build())
 					.build())
 				.build();
 	}
