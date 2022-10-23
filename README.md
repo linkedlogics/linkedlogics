@@ -1,14 +1,19 @@
 ### Linked-Logics Framework
 
-Linked-Logics is a decentralized workflow execution engine for building distributed, resilient and scalable applications. Linked-Logics has a different approach and is a good candidate for introducing [Sagas](https://microservices.io/patterns/data/saga.html) in microservices. It combines both `orchestration` and `choreography` together by providing DSL for orchestration and decentralized execution like in `choreography`. It comes with simplicty and minimal framework footprint. It is very easy to use and high performant.
+Linked-Logics is a decentralized workflow execution engine for building distributed, resilient and scalable applications. Linked-Logics has a different approach and is a good candidate for introducing [Sagas](https://microservices.io/patterns/data/saga.html) in microservices. It combines both `orchestration` and `choreography` together by providing DSL for **orchestration** and decentralized execution like in **choreography**. It is very simple to use and has minimal framework footprint.
 
-Main features:
+**Main features:**
 - It is decentralized (no single point of failure)
-- It is fully event-driven
+- It is fully event-driven, no syncronous calls
 - It is backed by Kafka, RabbitMQ etc.
-- It has minimal framework footprint (just one single annotation)
-- It provides very powerfull DSL for building workflows
-- It supports expression language to customize workflows
+- It has minimal framework footprint (just one single annotation `@Logic`)
+- It provides very powerfull DSL for building complex workflows
+- It supports expression language to customize workflows using SpEL
+- It supports versioning of workflows and logics
+- It provides powerfull **compensation** mechanism and error handling required in **Sagas**
+- It provides standard **timeout** and **retry** mechanisms
+- It supports easy **fork** and **join** workflows
+- It supports **asynchronous** logics
 
 #### Logic
 Logic is an executable part of workflow which is executed inside its owner microservice. Logics are defined by `id` which is unique within its owner. Any public method can be defined as a logic by using `@Logic` annotation.
@@ -56,19 +61,19 @@ public class Processes {
 	
 	public static ProcessDefinition createNewOrderProcess() {
 		return createProcess("NEW_ORDER", 0)
-					.add(logic(CHARGE_CUSTOMER)
-								.input("customer", expr("customer"))
-								.input("amount", 1.25)
-								.compensate(logic(REFUND_CUSTOMER)
-						 					.input("customer", expr("customer"))
-						 					.input("amount", 1.25)
-						 					.build())
+				.add(logic(CHARGE_CUSTOMER)
+						.input("customer", expr("customer"))
+						.input("amount", 1.25)
+						.compensate(logic(REFUND_CUSTOMER)
+						 	.input("customer", expr("customer"))
+						 	.input("amount", 1.25)
 						 .build())
-					.add(logic(CREATE_ORDER)
-								.input("customer", expr("customer"))
-								.input("itemId", "ITEM_1")
-								.build())
-					.build();
+					.build())
+				.add(logic(CREATE_ORDER)
+						.input("customer", expr("customer"))
+						.input("itemId", "ITEM_1")
+					.build())
+				.build();
 	}
 }
 ```
