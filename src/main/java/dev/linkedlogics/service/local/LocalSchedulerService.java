@@ -7,11 +7,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import dev.linkedlogics.config.LinkedLogicsConfiguration;
-import dev.linkedlogics.context.LogicContext;
 import dev.linkedlogics.service.SchedulerService;
-import dev.linkedlogics.service.ServiceLocator;
-import dev.linkedlogics.service.task.DelayedTask;
-import dev.linkedlogics.service.task.RetryTask;
 import lombok.AllArgsConstructor;
 
 public class LocalSchedulerService implements SchedulerService {
@@ -43,11 +39,7 @@ public class LocalSchedulerService implements SchedulerService {
 
 		@Override
 		public void run() {
-			if (schedule.getType() == ScheduleType.DELAY) {
-				ServiceLocator.getInstance().getProcessorService().process(new DelayedTask(LogicContext.fromSchedule(schedule)));
-			} else if (schedule.getType() == ScheduleType.RETRY) {
-				ServiceLocator.getInstance().getProcessorService().process(new RetryTask(LogicContext.fromSchedule(schedule)));
-			} 
+			handle(schedule);
 		}
 	}
 }

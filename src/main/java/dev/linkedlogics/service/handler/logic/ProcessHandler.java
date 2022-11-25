@@ -66,6 +66,14 @@ public class ProcessHandler extends LogicHandler {
 				context.setFinishedAt(OffsetDateTime.now());
 				ServiceLocator.getInstance().getContextService().set(context);
 				ServiceLocator.getInstance().getCallbackService().publish(context);
+				
+				List<TriggerService.Trigger> triggers = ServiceLocator.getInstance().getTriggerService().get(context.getId());
+				log.info("finished context " + context.getId() + " > " + triggers.size());
+				if (triggers != null && !triggers.isEmpty()) {
+					triggers.stream().forEach(t -> {
+						ServiceLocator.getInstance().getProcessorService().process(new StartTask(LogicContext.fromTrigger(context, t)));
+					});
+				}
 			} else if (flowResult.getSelectedLogic().isPresent()) {
 				SingleLogicDefinition logic = (SingleLogicDefinition) flowResult.getSelectedLogic().get();
 				
@@ -168,17 +176,7 @@ public class ProcessHandler extends LogicHandler {
 	}
 	
 	private HandlerResult closeContext(Context context) {
-		context.setStatus(context.getError() == null ? Status.FINISHED : Status.FAILED);
-		ServiceLocator.getInstance().getContextService().set(context);
-		List<TriggerService.Trigger> triggers = ServiceLocator.getInstance().getTriggerService().get(context.getId());
-		log.info("finished context " + context.getId() + " > " + triggers.size());
-		if (triggers != null && !triggers.isEmpty()) {
-			triggers.stream().forEach(t -> {
-				ServiceLocator.getInstance().getProcessorService().process(new StartTask(LogicContext.fromTrigger(context, t)));
-			});
-		}
-		
-		return HandlerResult.noCandidate();
+		return HandlerResult.endOfCandidates();
 	}
 	
 	private HandlerResult handleLastLogic(Context context, ProcessDefinition process) {
