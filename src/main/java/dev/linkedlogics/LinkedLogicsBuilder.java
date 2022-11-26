@@ -10,6 +10,7 @@ import dev.linkedlogics.model.process.ExpressionLogicDefinition;
 import dev.linkedlogics.model.process.GroupLogicDefinition.GroupLogicBuilder;
 import dev.linkedlogics.model.process.ProcessDefinition.ProcessBuilder;
 import dev.linkedlogics.model.process.ProcessLogicDefinition.ProcessLogicBuilder;
+import dev.linkedlogics.model.process.RetryLogicDefinition;
 import dev.linkedlogics.model.process.SavepointLogicDefinition.SavepointLogicBuilder;
 import dev.linkedlogics.model.process.SingleLogicDefinition.SingleLogicBuilder;
 import dev.linkedlogics.model.process.VerifyLogicDefinition.VerifyLogicBuilder;
@@ -72,6 +73,10 @@ public class LinkedLogicsBuilder {
 	
 	public static ErrorLogicDefinition.ErrorLogicBuilder error(BaseLogicDefinition errorLogic) {
 		return new ErrorLogicBuilder().errorLogic(errorLogic);
+	}
+	
+	public static RetryLogicDefinition.RetryLogicBuilder retry(int maxRetries, int delay) {
+		return new RetryLogicDefinition.RetryLogicBuilder(maxRetries, delay);
 	}
 	
 	public static ExpressionLogicDefinition expr(String expression) {

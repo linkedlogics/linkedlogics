@@ -4,13 +4,14 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import dev.linkedlogics.context.Context;
-import dev.linkedlogics.context.Status;
+import dev.linkedlogics.context.ContextError;
 import dev.linkedlogics.context.ContextError.ErrorType;
+import dev.linkedlogics.context.Status;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
 import dev.linkedlogics.model.process.RetryLogicDefinition;
 import dev.linkedlogics.service.SchedulerService;
-import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.SchedulerService.Schedule;
+import dev.linkedlogics.service.ServiceLocator;
 
 public class RetryFlowHandler extends ProcessFlowHandler {
 	public RetryFlowHandler() {
@@ -24,9 +25,10 @@ public class RetryFlowHandler extends ProcessFlowHandler {
 	@Override
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
 		if (candidate.isPresent() && candidate.get().getRetry() != null) {
-			if (context.getError() != null) {
+			RetryLogicDefinition retry = candidate.get().getRetry();
+			
+			if (context.getError() != null && matches(context.getError(), retry)) {
 				if (context.getError().getType() == ErrorType.TEMPORARY) {
-					RetryLogicDefinition retry = candidate.get().getRetry();
 					int retries = context.getRetries().getOrDefault(candidatePosition, 1);
 					if (retries < retry.getMaxRetries()) {
 						context.getRetries().put(candidatePosition, retries + 1);
@@ -51,5 +53,22 @@ public class RetryFlowHandler extends ProcessFlowHandler {
 		}
 
 		return super.handle(candidate, candidatePosition, context);
+	}
+	
+	private boolean matches(ContextError error, RetryLogicDefinition retryDefinition) {
+		boolean matchResult = false;
+		
+		if ((retryDefinition.getErrorCodeSet() == null || retryDefinition.getErrorCodeSet().isEmpty()) 
+				&& (retryDefinition.getErrorMessageSet() == null || retryDefinition.getErrorMessageSet().isEmpty())) {
+			matchResult = true;
+		} else if (retryDefinition.getErrorCodeSet() != null && retryDefinition.getErrorCodeSet().contains(error.getCode())) {
+			matchResult = true;
+		} else if (error.getMessage() != null 
+				&& retryDefinition.getErrorMessageSet() != null
+					&& retryDefinition.getErrorMessageSet().stream().filter(s -> error.getMessage().contains(s)).findAny().isPresent()) { 
+			matchResult = true;
+		}
+
+		return retryDefinition.isExclude() ? !matchResult : matchResult;
 	}
 }

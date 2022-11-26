@@ -6,6 +6,7 @@ import static dev.linkedlogics.LinkedLogicsBuilder.group;
 import static dev.linkedlogics.LinkedLogicsBuilder.logic;
 import static dev.linkedlogics.LinkedLogicsBuilder.verify;
 import static dev.linkedlogics.LinkedLogicsBuilder.error;
+import static dev.linkedlogics.LinkedLogicsBuilder.retry;
 import static dev.linkedlogics.process.ProcessTestHelper.waitUntil;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -112,6 +113,29 @@ public class RetryProcess1Tests {
 				.add(group(logic("INSERT").input("list", expr("list")).input("val", 2).build(),
 						logic("INSERT").input("list", expr("list")).input("val", 1).build())
 						.retry(3, 1)
+						.build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 3).build())
+				.build();
+	}
+	
+	@Test
+	public void testScenario4() {
+		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_4", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		assertThat(waitUntil(contextId, Status.FAILED, 12000)).isTrue();
+
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(retryCounter.get()).isEqualTo(1);
+		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
+		assertThat(ctx.getParams().get("list")).asList().contains(2);
+	}
+
+	@ProcessChain
+	public static ProcessDefinition scenario4() {
+		return createProcess("SIMPLE_SCENARIO_4", 0)
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", 2).build(),
+						logic("INSERT").input("list", expr("list")).input("val", 1).build())
+						.retry(retry(3, 1).errorCodeSet(-1).exclude().build())
 						.build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", 3).build())
 				.build();

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import dev.linkedlogics.model.process.SingleLogicDefinition.SingleLogicBuilder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,7 +41,12 @@ public class GroupLogicDefinition extends BaseLogicDefinition {
 		}
 		
 		public GroupLogicBuilder retry(int maxRetries, int delay) {
-			this.getLogic().setRetry(RetryLogicDefinition.builder().maxRetries(maxRetries).delay(delay).build());
+			this.getLogic().setRetry(new RetryLogicDefinition.RetryLogicBuilder(maxRetries, delay).build());
+			return this;
+		}
+		
+		public GroupLogicBuilder retry(RetryLogicDefinition retry) {
+			this.getLogic().setRetry(retry);
 			return this;
 		}
 		

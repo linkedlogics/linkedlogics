@@ -45,6 +45,7 @@ public abstract class BaseLogicDefinition implements Cloneable {
 		return Optional.ofNullable(parentLogic);
 	}
 	
+	@Getter
 	public static class LogicBuilder<T, L extends BaseLogicDefinition> {
 		protected L logic;
 		
@@ -85,10 +86,6 @@ public abstract class BaseLogicDefinition implements Cloneable {
 		public T handle(ErrorLogicDefinition error) {
 			this.logic.setError(error);
 			return (T) this;
-		}
-		
-		protected L getLogic() {
-			return (L) this.logic;
 		}
 		
 		public L build() {

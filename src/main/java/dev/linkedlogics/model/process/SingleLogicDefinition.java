@@ -65,7 +65,12 @@ public class SingleLogicDefinition extends BaseLogicDefinition {
 		}
 		
 		public SingleLogicBuilder retry(int maxRetries, int delay) {
-			this.getLogic().setRetry(RetryLogicDefinition.builder().maxRetries(maxRetries).delay(delay).build());
+			this.getLogic().setRetry(new RetryLogicDefinition.RetryLogicBuilder(maxRetries, delay).build());
+			return this;
+		}
+		
+		public SingleLogicBuilder retry(RetryLogicDefinition retry) {
+			this.getLogic().setRetry(retry);
 			return this;
 		}
 		
