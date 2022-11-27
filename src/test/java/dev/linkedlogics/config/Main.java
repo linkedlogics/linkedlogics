@@ -2,11 +2,9 @@ package dev.linkedlogics.config;
 
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +12,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import dev.linkedlogics.annotation.Input;
 import dev.linkedlogics.annotation.Logic;
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 import dev.linkedlogics.model.parameter.Parameter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,7 +41,7 @@ public class Main {
 		Map<String, Object> map = new HashMap<>() {{ put("persons", persons);}};
 		
 		Map<String, Object> copyMap = mapper.readValue(mapper.writeValueAsString(map), Map.class);
-		LogicContext ctx = new LogicContext();
+		Context ctx = new Context();
 		ctx.setInput(copyMap);
 		
 		

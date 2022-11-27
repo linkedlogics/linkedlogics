@@ -3,8 +3,6 @@ package dev.linkedlogics.model.process;
 import java.util.HashSet;
 import java.util.Set;
 
-import dev.linkedlogics.model.process.BaseLogicDefinition.LogicBuilder;
-import dev.linkedlogics.model.process.RetryLogicDefinition.RetryLogicBuilder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

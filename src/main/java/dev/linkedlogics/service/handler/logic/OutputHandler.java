@@ -1,9 +1,8 @@
 package dev.linkedlogics.service.handler.logic;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 import dev.linkedlogics.model.LogicDefinition;
 
 public class OutputHandler extends LogicHandler {
@@ -17,7 +16,7 @@ public class OutputHandler extends LogicHandler {
 	}
 
 	@Override
-	public void handle(LogicContext context, Object result) {
+	public void handle(Context context, Object result) {
 		LogicDefinition logic = findLogic(context.getLogicId(), context.getLogicVersion());
 		
 		if (logic.getMethod().getReturnType() != Void.class && result != null) {

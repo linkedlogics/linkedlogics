@@ -2,13 +2,13 @@ package dev.linkedlogics.service;
 
 import java.util.Optional;
 
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 
 public interface AsyncService extends LinkedLogicsService {
 	
-	void set(LogicContext context);
+	void set(Context context);
 	
-	Optional<LogicContext> remove(String contextId);
+	Optional<Context> remove(String contextId);
 	
 	void asyncCallback(String contextId, Object result);
 	

@@ -2,7 +2,7 @@ package dev.linkedlogics.service.handler.logic;
 
 import java.util.Optional;
 
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 import dev.linkedlogics.model.LogicDefinition;
 import dev.linkedlogics.service.ServiceLocator;
 
@@ -17,11 +17,11 @@ public abstract class LogicHandler {
 		this.nextHandler = Optional.of(nextHandler);
 	}
 	
-	public void handle(LogicContext context, Object result) {
+	public void handle(Context context, Object result) {
 		nextHandler.ifPresent(h -> h.handle(context, result));
 	}
 	
-	public void handleError(LogicContext context, Throwable error) {
+	public void handleError(Context context, Throwable error) {
 		nextHandler.ifPresent(h -> h.handleError(context, error));
 	}
 	

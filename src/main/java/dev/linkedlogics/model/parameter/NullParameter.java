@@ -1,6 +1,6 @@
 package dev.linkedlogics.model.parameter;
 
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 
 public class NullParameter extends Parameter {
 
@@ -9,7 +9,7 @@ public class NullParameter extends Parameter {
 	}
 	
 	@Override
-	protected Object getValue(LogicContext context) {
+	protected Object getValue(Context context) {
 		return null;
 	}
 }

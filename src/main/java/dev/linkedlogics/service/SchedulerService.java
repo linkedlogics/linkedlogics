@@ -2,9 +2,10 @@ package dev.linkedlogics.service;
 
 import java.time.OffsetDateTime;
 
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 import dev.linkedlogics.service.task.DelayedTask;
 import dev.linkedlogics.service.task.RetryTask;
+import dev.linkedlogics.service.task.TimeoutTask;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,10 +17,12 @@ public interface SchedulerService extends LinkedLogicsService {
 	
 	default void handle(Schedule schedule) {
 		if (schedule.getType() == ScheduleType.DELAY) {
-			ServiceLocator.getInstance().getProcessorService().process(new DelayedTask(LogicContext.fromSchedule(schedule)));
+			ServiceLocator.getInstance().getProcessorService().process(new DelayedTask(Context.fromSchedule(schedule)));
 		} else if (schedule.getType() == ScheduleType.RETRY) {
-			ServiceLocator.getInstance().getProcessorService().process(new RetryTask(LogicContext.fromSchedule(schedule)));
-		} 
+			ServiceLocator.getInstance().getProcessorService().process(new RetryTask(Context.fromSchedule(schedule)));
+		} else if (schedule.getType() == ScheduleType.TIMEOUT) {
+			ServiceLocator.getInstance().getProcessorService().process(new TimeoutTask(Context.fromSchedule(schedule)));
+		}
 	}
 
 	@Getter

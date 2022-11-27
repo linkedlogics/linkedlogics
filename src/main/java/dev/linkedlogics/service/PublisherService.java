@@ -1,8 +1,8 @@
 package dev.linkedlogics.service;
 
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 
 public interface PublisherService extends LinkedLogicsService {
 	
-	void publish(LogicContext context);
+	void publish(Context context);
 }

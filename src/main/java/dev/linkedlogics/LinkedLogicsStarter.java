@@ -3,7 +3,6 @@ package dev.linkedlogics;
 import java.util.Map;
 
 import dev.linkedlogics.context.Context;
-import dev.linkedlogics.context.LogicContext;
 import dev.linkedlogics.exception.MissingLogicError;
 import dev.linkedlogics.model.process.ProcessDefinition;
 import dev.linkedlogics.model.process.ProcessLogicDefinition;
@@ -40,10 +39,7 @@ class LinkedLogicsStarter {
 			ServiceLocator.getInstance().getCallbackService().set(context.getId(), callback);
 		}
 		
-		LogicContext logicContext = new LogicContext();
-		logicContext.setId(context.getId());
-		
-		ServiceLocator.getInstance().getProcessorService().process(new StartTask(logicContext));
+		ServiceLocator.getInstance().getProcessorService().process(new StartTask(context));
 		return context.getId();
 	}
 }

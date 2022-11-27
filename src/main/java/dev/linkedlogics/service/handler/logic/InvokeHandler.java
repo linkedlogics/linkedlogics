@@ -1,23 +1,19 @@
 package dev.linkedlogics.service.handler.logic;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 import dev.linkedlogics.model.LogicDefinition;
 import dev.linkedlogics.model.parameter.CollectionParameter;
 import dev.linkedlogics.model.parameter.MapParameter;
-import dev.linkedlogics.service.MapperService;
 import dev.linkedlogics.service.ServiceLocator;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,7 +29,7 @@ public class InvokeHandler extends LogicHandler {
 	}
 	
 	@Override
-	public void handle(LogicContext context, Object result) {
+	public void handle(Context context, Object result) {
 		LogicDefinition logic = findLogic(context.getLogicId(), context.getLogicVersion());
 		context.setExecutedAt(OffsetDateTime.now());
 		try {
@@ -41,7 +37,7 @@ public class InvokeHandler extends LogicHandler {
 				ServiceLocator.getInstance().getAsyncService().set(context);
 			}
 			
-			log.info(String.format("> %-10s%s", context.getPosition(), context.getLogicId()));
+			log.info(String.format("> %-10s%s", context.getLogicPosition(), context.getLogicId()));
 			Object methodResult = invokeMethod(context, logic, getInvokeParams(context, logic));
 			context.setExecutedIn(Duration.between(context.getExecutedAt(), OffsetDateTime.now()).toMillis());
 			super.handle(context, methodResult);	
@@ -51,7 +47,7 @@ public class InvokeHandler extends LogicHandler {
 		}
 	}
 	
-	protected Object[] getInvokeParams(LogicContext context, LogicDefinition logic) {
+	protected Object[] getInvokeParams(Context context, LogicDefinition logic) {
 		return Arrays.stream(logic.getParameters())
 				.map(p -> {
 					ObjectMapper mapper = ServiceLocator.getInstance().getMapperService().getMapper();
@@ -68,11 +64,11 @@ public class InvokeHandler extends LogicHandler {
 				.toArray();
 	}
 	
-	protected int[] getInvokeReturnedParamIndexes(LogicContext context, LogicDefinition logic) {
+	protected int[] getInvokeReturnedParamIndexes(Context context, LogicDefinition logic) {
 		return IntStream.range(0, logic.getParameters().length).filter(i -> logic.getParameters()[i].isReturned()).toArray();
 	}
 	
-	protected Object invokeMethod(LogicContext context, LogicDefinition logic, Object[] params) throws Exception {
+	protected Object invokeMethod(Context context, LogicDefinition logic, Object[] params) throws Exception {
 		Object result = null;
 		logic.getMethod().setAccessible(true);
 		

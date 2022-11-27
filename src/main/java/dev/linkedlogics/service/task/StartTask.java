@@ -1,12 +1,13 @@
 package dev.linkedlogics.service.task;
 
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 import dev.linkedlogics.service.handler.logic.ErrorHandler;
 import dev.linkedlogics.service.handler.logic.ProcessHandler;
+import dev.linkedlogics.service.handler.logic.PublishHandler;
 
 public class StartTask extends LinkedLogicsTask {
-	public StartTask(LogicContext context) {
-		super(context, new ProcessHandler());
+	public StartTask(Context context) {
+		super(context, new ProcessHandler(new PublishHandler()));
 	}
 	
 	@Override

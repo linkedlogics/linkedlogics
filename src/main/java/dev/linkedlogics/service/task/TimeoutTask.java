@@ -2,13 +2,14 @@ package dev.linkedlogics.service.task;
 
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.service.handler.logic.ErrorHandler;
+import dev.linkedlogics.service.handler.logic.MetricsHandler;
 import dev.linkedlogics.service.handler.logic.ProcessHandler;
 import dev.linkedlogics.service.handler.logic.PublishHandler;
-import dev.linkedlogics.service.handler.logic.ValidHandler;
+import dev.linkedlogics.service.handler.logic.TimeoutHandler;
 
-public class DelayedTask extends LinkedLogicsTask {
-	public DelayedTask(Context context) {
-		super(context, new ValidHandler(new ProcessHandler(new PublishHandler())));
+public class TimeoutTask extends LinkedLogicsTask {
+	public TimeoutTask(Context context) {
+		super(context, new TimeoutHandler(new MetricsHandler(new ErrorHandler(new ProcessHandler(new PublishHandler())))));
 	}
 	
 	@Override

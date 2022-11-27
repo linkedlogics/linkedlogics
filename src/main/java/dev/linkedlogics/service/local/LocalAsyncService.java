@@ -7,7 +7,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import dev.linkedlogics.config.LinkedLogicsConfiguration;
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 import dev.linkedlogics.service.AsyncService;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.task.AsyncCallbackErrorTask;
@@ -15,7 +15,7 @@ import dev.linkedlogics.service.task.AsyncCallbackExpireTask;
 import dev.linkedlogics.service.task.AsyncCallbackTask;
 
 public class LocalAsyncService implements AsyncService {
-	private ConcurrentHashMap<String, LogicContext> contextMap = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<String, Context> contextMap = new ConcurrentHashMap<>();
 	private ScheduledExecutorService scheduler;
 	private ThreadLocal<String> contextId = new ThreadLocal<>();
 	
@@ -35,13 +35,13 @@ public class LocalAsyncService implements AsyncService {
 	}
 
 	@Override
-	public void set(LogicContext context) {
+	public void set(Context context) {
 		contextMap.put(context.getId(), context);
 		scheduler.schedule(new AsyncCallbackExpireTask(context), expireTime, TimeUnit.SECONDS);
 	}
 
 	@Override
-	public Optional<LogicContext> remove(String contextId) {
+	public Optional<Context> remove(String contextId) {
 		return Optional.ofNullable(contextMap.remove(contextId));
 	}
 

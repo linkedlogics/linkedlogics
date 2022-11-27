@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import dev.linkedlogics.model.process.SingleLogicDefinition.SingleLogicBuilder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public abstract class BaseLogicDefinition implements Cloneable {
 	protected RetryLogicDefinition retry;
 	protected DelayedLogicDefinition delayed;
 	protected ErrorLogicDefinition error;
+	protected TimeoutLogicDefinition timeout;
 	
 	protected BaseLogicDefinition parentLogic;
 	protected BaseLogicDefinition adjacentLogic;
@@ -85,6 +87,11 @@ public abstract class BaseLogicDefinition implements Cloneable {
 		
 		public T handle(ErrorLogicDefinition error) {
 			this.logic.setError(error);
+			return (T) this;
+		}
+		
+		public T timeout(int timeout) {
+			this.logic.setTimeout(new TimeoutLogicDefinition(timeout));
 			return (T) this;
 		}
 		

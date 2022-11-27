@@ -1,15 +1,17 @@
 package dev.linkedlogics.service.task;
 
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 import dev.linkedlogics.exception.AsyncTimeoutException;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.handler.logic.ErrorHandler;
 import dev.linkedlogics.service.handler.logic.ProcessHandler;
+import dev.linkedlogics.service.handler.logic.PublishHandler;
+import dev.linkedlogics.service.handler.logic.ValidHandler;
 
 public class AsyncCallbackExpireTask extends LinkedLogicsTask {
 	
-	public AsyncCallbackExpireTask(LogicContext context) {
-		super(context, new ErrorHandler(new ProcessHandler()));
+	public AsyncCallbackExpireTask(Context context) {
+		super(context, new ValidHandler(new ErrorHandler(new ProcessHandler(new PublishHandler()))));
 	}
 	
 	@Override

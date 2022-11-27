@@ -1,12 +1,14 @@
 package dev.linkedlogics.service.task;
 
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 import dev.linkedlogics.service.handler.logic.ErrorHandler;
 import dev.linkedlogics.service.handler.logic.ProcessHandler;
+import dev.linkedlogics.service.handler.logic.PublishHandler;
+import dev.linkedlogics.service.handler.logic.ValidHandler;
 
 public class RetryTask extends LinkedLogicsTask {
-	public RetryTask(LogicContext context) {
-		super(context, new ProcessHandler());
+	public RetryTask(Context context) {
+		super(context, new ValidHandler(new ProcessHandler(new PublishHandler())));
 	}
 	
 	@Override

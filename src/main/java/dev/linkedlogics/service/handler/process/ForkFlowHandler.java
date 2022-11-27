@@ -4,12 +4,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.linkedlogics.context.Context;
-import dev.linkedlogics.context.LogicContext;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.task.StartTask;
@@ -35,11 +32,7 @@ public class ForkFlowHandler extends ProcessFlowHandler {
 					context.getJoinMap().put(candidate.get().getFork().getKey().get(), forkContext.getId());
 				}
 				
-				LogicContext logicContext = new LogicContext();
-				logicContext.setId(forkContext.getId());
-				logicContext.setLogicId(null);
-				logicContext.setApplication(context.getApplication());
-				ServiceLocator.getInstance().getProcessorService().process(new StartTask(logicContext));
+				ServiceLocator.getInstance().getProcessorService().process(new StartTask(forkContext));
 				return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 			}
 			return super.handle(candidate, candidatePosition, context);
@@ -59,6 +52,8 @@ public class ForkFlowHandler extends ProcessFlowHandler {
 		forked.setKey(parent.getKey());
 		forked.setStartPosition(candidatePosition);
 		forked.setEndPosition(adjacentLogicPosition(candidatePosition));
+		forked.setLogicId(null);
+		forked.setApplication(parent.getApplication());
 		return forked;
 	}
 	

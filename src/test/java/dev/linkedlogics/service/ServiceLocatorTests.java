@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import dev.linkedlogics.LinkedLogics;
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 import lombok.Getter;
 
 public class ServiceLocatorTests {
@@ -71,7 +71,7 @@ public class ServiceLocatorTests {
 	public static class PublisherA implements PublisherService {
 
 		@Override
-		public void  publish(LogicContext context) {
+		public void  publish(Context context) {
 
 		}
 	}
@@ -79,7 +79,7 @@ public class ServiceLocatorTests {
 	public static class PublisherB implements PublisherService {
 		
 		@Override
-		public void publish(LogicContext context) {
+		public void publish(Context context) {
 
 		}
 	}
@@ -87,7 +87,7 @@ public class ServiceLocatorTests {
 	public static class ConsumerA implements ConsumerService {
 
 		@Override
-		public void consume(LogicContext context) {
+		public void consume(Context context) {
 
 		}
 	}
@@ -108,12 +108,12 @@ public class ServiceLocatorTests {
 		}
 
 		@Override
-		public void consume(LogicContext context) {
+		public void consume(Context context) {
 			
 		}
 
 		@Override
-		public void publish(LogicContext context) {
+		public void publish(Context context) {
 			
 		}
 	}

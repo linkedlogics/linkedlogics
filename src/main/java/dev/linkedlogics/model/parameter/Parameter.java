@@ -7,7 +7,7 @@ import java.lang.reflect.Type;
 import java.util.Optional;
 
 import dev.linkedlogics.annotation.Input;
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 import dev.linkedlogics.exception.MissingInputParameterError;
 import lombok.Getter;
 
@@ -26,7 +26,7 @@ public abstract class Parameter {
 		this.returned = returned;
 	}
 
-	public Object getParameterValue(LogicContext context) {
+	public Object getParameterValue(Context context) {
 		Object value = getValue(context);
 		if (value == null && isRequired()) {
 			throw new MissingInputParameterError(getName());
@@ -39,7 +39,7 @@ public abstract class Parameter {
 		return value;
 	}
 
-	protected abstract Object getValue(LogicContext context);
+	protected abstract Object getValue(Context context);
 
 	public static Parameter[] initParameters(Method method) {
 		Parameter[] parameters = new Parameter[method.getParameterCount()];

@@ -3,7 +3,7 @@ package dev.linkedlogics.service.local;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import dev.linkedlogics.config.LinkedLogicsConfiguration;
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 import dev.linkedlogics.service.ConsumerService;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.task.ProcessorTask;
@@ -11,7 +11,7 @@ import dev.linkedlogics.service.task.ProcessorTask;
 public class LocalConsumerService implements ConsumerService, Runnable {
 	private Thread consumer;
 	private boolean isRunning;
-	private ArrayBlockingQueue<LogicContext> queue;
+	private ArrayBlockingQueue<Context> queue;
 	
 	@Override
 	public void start() {
@@ -36,14 +36,14 @@ public class LocalConsumerService implements ConsumerService, Runnable {
 		
 		while (isRunning) {
 			try {
-				LogicContext context = queue.take();
+				Context context = queue.take();
 				ServiceLocator.getInstance().getProcessorService().process(new ProcessorTask(context));
 			} catch (InterruptedException e) {}
 		}
 	}
 
 	@Override
-	public void consume(LogicContext context) {
+	public void consume(Context context) {
 		queue.offer(context);
 	}
 }

@@ -1,8 +1,8 @@
 package dev.linkedlogics.service.handler.logic;
 
 import dev.linkedlogics.LinkedLogics;
+import dev.linkedlogics.context.Context;
 import dev.linkedlogics.context.ContextError;
-import dev.linkedlogics.context.LogicContext;
 import dev.linkedlogics.service.ServiceLocator;
 
 public class MetricsHandler extends LogicHandler {
@@ -17,7 +17,7 @@ public class MetricsHandler extends LogicHandler {
 	}
 
 	@Override
-	public void handle(LogicContext context, Object result) {
+	public void handle(Context context, Object result) {
 		String key = getKey(context, null);
 		long value = getValue(context);
 		ServiceLocator.getInstance().getMetricsService().set(key, value, context.getExecutedAt());
@@ -25,14 +25,14 @@ public class MetricsHandler extends LogicHandler {
 	}
 
 	@Override
-	public void handleError(LogicContext context, Throwable error) {
+	public void handleError(Context context, Throwable error) {
 		String key = getKey(context, error);
 		long value = getValue(context);
 		ServiceLocator.getInstance().getMetricsService().set(key, value, context.getExecutedAt());
 		super.handleError(context, error);
 	}
 	
-	private String getKey(LogicContext context, Throwable exception) {
+	private String getKey(Context context, Throwable exception) {
 		StringBuilder key = new StringBuilder();
 		key.append(LinkedLogics.getApplicationName());
 		key.append(DELIMITER);
@@ -46,7 +46,7 @@ public class MetricsHandler extends LogicHandler {
 		return key.toString();
 	}
 	
-	private long getValue(LogicContext context) {
+	private long getValue(Context context) {
 		return context.getExecutedIn();
 	}
 }

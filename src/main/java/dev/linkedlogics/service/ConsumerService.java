@@ -1,8 +1,8 @@
 package dev.linkedlogics.service;
 
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 
 public interface ConsumerService extends LinkedLogicsService {
 	
-	void consume(LogicContext context);
+	void consume(Context context);
 }

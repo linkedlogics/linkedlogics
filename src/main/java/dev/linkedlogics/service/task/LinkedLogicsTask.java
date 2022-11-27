@@ -1,6 +1,6 @@
 package dev.linkedlogics.service.task;
 
-import dev.linkedlogics.context.LogicContext;
+import dev.linkedlogics.context.Context;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.handler.logic.ErrorHandler;
 import dev.linkedlogics.service.handler.logic.LogicHandler;
@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public abstract class LinkedLogicsTask implements Runnable {
-	protected LogicContext context;
+	protected Context context;
 	protected LogicHandler handler;
 	
 	@Override
