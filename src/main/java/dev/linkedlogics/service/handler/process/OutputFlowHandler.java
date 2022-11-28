@@ -27,9 +27,9 @@ public class OutputFlowHandler extends ProcessFlowHandler {
 				context.getOutput().entrySet().forEach(e -> context.getParams().put(e.getKey(), e.getValue()));
 			}
 			
-			if (!candidate.get().getOutputMap().isEmpty()) {
+			if (!candidate.get().getOutputs().isEmpty()) {
 				final EvaluatorService evaluator = ServiceLocator.getInstance().getEvaluatorService();
-				candidate.get().getOutputMap().entrySet().stream().forEach(e -> {
+				candidate.get().getOutputs().entrySet().stream().forEach(e -> {
 					if (e.getValue() instanceof ExpressionLogicDefinition) {
 						context.getParams().put(e.getKey(), evaluator.evaluate((ExpressionLogicDefinition) e.getValue(), context.getParams()));
 					} else {

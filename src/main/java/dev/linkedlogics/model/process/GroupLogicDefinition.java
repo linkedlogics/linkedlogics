@@ -63,8 +63,8 @@ public class GroupLogicDefinition extends BaseLogicDefinition {
 		@Override
 		public GroupLogicDefinition build() {
 			this.getLogic().getLogics().forEach(l -> {
-				this.getLogic().getInputMap().entrySet().forEach(e -> {
-					l.getInputMap().putIfAbsent(e.getKey(), e.getValue());
+				this.getLogic().getInputs().entrySet().forEach(e -> {
+					l.getInputs().putIfAbsent(e.getKey(), e.getValue());
 				});
 			});
 			return super.build();

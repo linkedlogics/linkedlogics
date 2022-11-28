@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import dev.linkedlogics.model.process.SingleLogicDefinition.SingleLogicBuilder;
-import lombok.AccessLevel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,17 +14,19 @@ import lombok.Setter;
 public abstract class BaseLogicDefinition implements Cloneable {
 	protected String position;
 	protected boolean isDisabled;
-	protected Map<String, Object> inputMap = new HashMap<>();
-	protected Map<String, Object> outputMap = new HashMap<>();
+	protected Map<String, Object> inputs = new HashMap<>();
+	protected Map<String, Object> outputs = new HashMap<>();
 	protected ForkLogicDefinition fork;
 	protected JoinLogicDefinition join;
 	protected boolean forced;
 	protected RetryLogicDefinition retry;
-	protected DelayedLogicDefinition delayed;
+	protected DelayLogicDefinition delay;
 	protected ErrorLogicDefinition error;
 	protected TimeoutLogicDefinition timeout;
 	
+	@JsonIgnore
 	protected BaseLogicDefinition parentLogic;
+	@JsonIgnore
 	protected BaseLogicDefinition adjacentLogic;
 	
 	public final BaseLogicDefinition cloneLogic() {
@@ -34,10 +36,10 @@ public abstract class BaseLogicDefinition implements Cloneable {
 		clone.setJoin(join != null ? join.cloneLogic() : null);
 		clone.setForced(isForced());
 		clone.setRetry(retry != null ? retry.cloneLogic() : null);
-		clone.setDelayed(delayed != null ? delayed.cloneLogic() : null);
+		clone.setDelay(delay != null ? delay.cloneLogic() : null);
 		clone.setError(error != null ? (ErrorLogicDefinition) error.cloneLogic() : null);
-		clone.getInputMap().putAll(getInputMap());
-		clone.getOutputMap().putAll(getOutputMap());
+		clone.getInputs().putAll(getInputs());
+		clone.getOutputs().putAll(getOutputs());
 		return clone;
 	}
 	
@@ -61,12 +63,12 @@ public abstract class BaseLogicDefinition implements Cloneable {
 		}
 		
 		public T input(String key, Object value) {
-			this.logic.getInputMap().put(key, value);
+			this.logic.getInputs().put(key, value);
 			return (T) this;
 		}
 		
 		public T inputs(Map<String, Object> inputs) {
-			this.logic.getInputMap().putAll(inputs);
+			this.logic.getInputs().putAll(inputs);
 			return (T) this;
 		}
 		
@@ -81,7 +83,7 @@ public abstract class BaseLogicDefinition implements Cloneable {
 		}
 		
 		public T delayed(int delay) {
-			this.logic.setDelayed(new DelayedLogicDefinition(delay));
+			this.logic.setDelay(new DelayLogicDefinition(delay));
 			return (T) this;
 		}
 		

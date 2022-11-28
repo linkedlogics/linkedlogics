@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RetryLogicDefinition {
 	private int maxRetries;
-	private int delay;
+	private int seconds;
 	private Set<Integer> errorCodeSet = new HashSet<>();
 	private Set<String> errorMessageSet = new HashSet<>();
 	private boolean exclude;
@@ -19,7 +19,7 @@ public class RetryLogicDefinition {
 	public RetryLogicDefinition cloneLogic() {
 		RetryLogicDefinition clone = new RetryLogicDefinition();
 		clone.setMaxRetries(getMaxRetries());
-		clone.setDelay(getDelay());
+		clone.setSeconds(getSeconds());
 		clone.setErrorCodeSet(getErrorCodeSet());
 		clone.setErrorMessageSet(getErrorMessageSet());
 		clone.setExclude(isExclude());
@@ -33,7 +33,7 @@ public class RetryLogicDefinition {
 		public RetryLogicBuilder(int maxRetries, int delay) {
 			logic = new RetryLogicDefinition();
 			logic.setMaxRetries(maxRetries);
-			logic.setDelay(delay);
+			logic.setSeconds(delay);
 		}
 		
 		public RetryLogicBuilder errorCodeSet(Integer... errorCodes) {

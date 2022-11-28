@@ -1,7 +1,6 @@
 package dev.linkedlogics.model.process;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class JoinLogicDefinition {

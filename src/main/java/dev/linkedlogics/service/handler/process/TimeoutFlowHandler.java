@@ -19,8 +19,8 @@ public class TimeoutFlowHandler extends ProcessFlowHandler {
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
 		if (candidate.isPresent() && 
 				candidate.get().getTimeout() != null && 
-					candidate.get().getTimeout().getDelay() > 0) {
-			OffsetDateTime expiresAt = OffsetDateTime.now().plusSeconds(candidate.get().getTimeout().getDelay());
+					candidate.get().getTimeout().getSeconds() > 0) {
+			OffsetDateTime expiresAt = OffsetDateTime.now().plusSeconds(candidate.get().getTimeout().getSeconds());
 			context.setExpiresAt(expiresAt);
 		}
 		

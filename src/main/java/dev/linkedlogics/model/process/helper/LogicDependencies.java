@@ -14,8 +14,8 @@ public class LogicDependencies {
 		.forEach(p -> {
 			p.setLogics(ServiceLocator.getInstance().getProcessService().getProcess(p.getProcessId(), p.getVersion()).get().cloneLogics());
 			p.getLogics().forEach(l -> {
-				p.getInputMap().entrySet().forEach(e -> {
-					l.getInputMap().putIfAbsent(e.getKey(), e.getValue());
+				p.getInputs().entrySet().forEach(e -> {
+					l.getInputs().putIfAbsent(e.getKey(), e.getValue());
 				});
 			});
 			LogicPositioner.setPositions(definition);

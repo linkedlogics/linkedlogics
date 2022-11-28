@@ -20,7 +20,7 @@ public class SingleLogicDefinition extends BaseLogicDefinition {
 		SingleLogicDefinition clone = new SingleLogicDefinition();
 		clone.setLogicId(getLogicId());
 		clone.setLogicVersion(getLogicVersion());
-		clone.getInputMap().putAll(getInputMap());
+		clone.getInputs().putAll(getInputs());
 		return clone;
 	}
 	
@@ -75,12 +75,12 @@ public class SingleLogicDefinition extends BaseLogicDefinition {
 		}
 		
 		public SingleLogicBuilder output(String key, Object value) {
-			this.getLogic().getOutputMap().put(key, value);
+			this.getLogic().getOutputs().put(key, value);
 			return this;
 		}
 		
 		public SingleLogicBuilder output(Map<String, Object> inputs) {
-			this.getLogic().getOutputMap().putAll(inputs);
+			this.getLogic().getOutputs().putAll(inputs);
 			return this;
 		}
 	}

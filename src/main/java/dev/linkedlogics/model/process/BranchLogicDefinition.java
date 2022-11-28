@@ -43,10 +43,10 @@ public class BranchLogicDefinition extends BaseLogicDefinition {
 
 		@Override
 		public BranchLogicDefinition build() {
-			for (Entry<String, Object> entry : this.getLogic().getInputMap().entrySet()) {
-				this.getLogic().getLeftLogic().getInputMap().putIfAbsent(entry.getKey(), entry.getValue());
+			for (Entry<String, Object> entry : this.getLogic().getInputs().entrySet()) {
+				this.getLogic().getLeftLogic().getInputs().putIfAbsent(entry.getKey(), entry.getValue());
 				if (this.getLogic().getRightLogic() != null) {
-					this.getLogic().getRightLogic().getInputMap().putIfAbsent(entry.getKey(), entry.getValue());
+					this.getLogic().getRightLogic().getInputs().putIfAbsent(entry.getKey(), entry.getValue());
 				}
 			}
 			return super.build();

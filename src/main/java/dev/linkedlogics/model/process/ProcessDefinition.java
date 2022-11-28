@@ -7,8 +7,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import dev.linkedlogics.model.process.helper.LogicPositioner;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,6 +23,7 @@ public class ProcessDefinition implements Comparable<ProcessDefinition> {
 	private Map<String, Object> inputs = new HashMap<>();
 	
 	private List<BaseLogicDefinition> logics = new ArrayList<BaseLogicDefinition>();
+	@JsonIgnore
 	private Map<String, BaseLogicDefinition> positions;
 	
 	public Optional<BaseLogicDefinition> getLogicByPosition(String position) {

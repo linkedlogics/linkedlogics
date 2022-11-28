@@ -12,7 +12,6 @@ public class VerifyLogicDefinition extends BaseLogicDefinition {
 	private int errorCode = -1;
 	private String errorMessage;
 	
-	
 	public boolean isVerified(Context context) {
 		return (Boolean) ServiceLocator.getInstance().getEvaluatorService().evaluate(expression, context.getParams());
 	}

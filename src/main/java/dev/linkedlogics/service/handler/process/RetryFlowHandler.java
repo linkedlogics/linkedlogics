@@ -34,9 +34,9 @@ public class RetryFlowHandler extends ProcessFlowHandler {
 						context.getRetries().put(candidatePosition, retries + 1);
 						context.setError(null);
 						
-						if (candidate.get().getRetry().getDelay() > 0) {
+						if (candidate.get().getRetry().getSeconds() > 0) {
 							context.setStatus(Status.SCHEDULED);
-							OffsetDateTime scheduledAt = OffsetDateTime.now().plusSeconds(candidate.get().getRetry().getDelay());
+							OffsetDateTime scheduledAt = OffsetDateTime.now().plusSeconds(candidate.get().getRetry().getSeconds());
 							Schedule schedule = new Schedule(context.getId(), null, candidatePosition, scheduledAt, SchedulerService.ScheduleType.RETRY); 
 							ServiceLocator.getInstance().getSchedulerService().schedule(schedule);
 							return HandlerResult.noCandidate();

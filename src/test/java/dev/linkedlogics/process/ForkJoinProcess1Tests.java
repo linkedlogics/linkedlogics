@@ -56,13 +56,13 @@ public class ForkJoinProcess1Tests {
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
 				.add(logic("CREATE")
-						.input("key", "key1").input("value", "v1").input("delayed", 1000L).fork("F1")
+						.input("key", "key1").input("value", "v1").input("delay", 1000L).fork("F1")
 						.build())
 				.add(logic("CREATE")
-						.input("key", "key2").input("value", "v2").input("delayed", 1500L).fork("F2")
+						.input("key", "key2").input("value", "v2").input("delay", 1500L).fork("F2")
 						.build())
 				.add(logic("CREATE")
-						.input("key", "key3").input("value", "v3").input("delayed", 2000L).fork("F3")
+						.input("key", "key3").input("value", "v3").input("delay", 2000L).fork("F3")
 						.build())
 				.add(logic("CONCAT")
 						.input("val1", expr("key1")).input("val2", expr("key2")).input("val3", expr("key3")).join("F1", "F2", "F3")
@@ -93,14 +93,14 @@ public class ForkJoinProcess1Tests {
 
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
-				.add(logic("CREATE").input("key", "key1").input("value", "v1").input("delayed", 1000L).fork("F1").build())
-				.add(group(logic("CREATE").input("key", "key21").input("value", "v21").input("delayed", 750L).build(),
-						   logic("CREATE").input("key", "key22").input("value", "v22").input("delayed", 750L).build(),
-						   logic("CREATE").input("key", "key23").input("value", "v23").input("delayed", 500L).build())
+				.add(logic("CREATE").input("key", "key1").input("value", "v1").input("delay", 1000L).fork("F1").build())
+				.add(group(logic("CREATE").input("key", "key21").input("value", "v21").input("delay", 750L).build(),
+						   logic("CREATE").input("key", "key22").input("value", "v22").input("delay", 750L).build(),
+						   logic("CREATE").input("key", "key23").input("value", "v23").input("delay", 500L).build())
 						.fork("F2")
 						.build())
 				.add(logic("CREATE")
-						.input("key", "key3").input("value", "v3").input("delayed", 1500L).fork("F3")
+						.input("key", "key3").input("value", "v3").input("delay", 1500L).fork("F3")
 						.build())
 				.add(logic("CONCAT")
 						.input("val1", expr("key1")).input("val2", "null").input("val3", expr("key3")).join("F1", "F3")
@@ -132,13 +132,13 @@ public class ForkJoinProcess1Tests {
 	public static ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
 				.add(logic("CREATE")
-						.input("key", "key1").input("value", "v1").input("delayed", 1000L).fork()
+						.input("key", "key1").input("value", "v1").input("delay", 1000L).fork()
 						.build())
 				.add(logic("CREATE")
-						.input("key", "key2").input("value", "v2").input("delayed", 1500L).fork()
+						.input("key", "key2").input("value", "v2").input("delay", 1500L).fork()
 						.build())
 				.add(logic("CREATE")
-						.input("key", "key3").input("value", "v3").input("delayed", 2000L).fork()
+						.input("key", "key3").input("value", "v3").input("delay", 2000L).fork()
 						.build())
 				.add(logic("CONCAT")
 						.input("val1", "key1").input("val2", "key2").input("val3", "key3")
@@ -147,7 +147,7 @@ public class ForkJoinProcess1Tests {
 	}
 	
 	@Logic(id = "CREATE", returnMap = true)
-	public static Map<String, String> create(@Input("key") String key, @Input("value") String value, @Input("delayed") long delay) {
+	public static Map<String, String> create(@Input("key") String key, @Input("value") String value, @Input("delay") long delay) {
 		try {
 			Thread.sleep(delay);
 		} catch (InterruptedException e) {}

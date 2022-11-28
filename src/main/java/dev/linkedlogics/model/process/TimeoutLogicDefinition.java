@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 @Builder
 public class TimeoutLogicDefinition {
-	private int delay;
+	private int seconds;
 	
 	public TimeoutLogicDefinition cloneLogic() {
-		return new TimeoutLogicDefinition(getDelay());
+		return new TimeoutLogicDefinition(getSeconds());
 	}
 }

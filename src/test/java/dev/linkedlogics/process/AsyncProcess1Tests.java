@@ -56,7 +56,7 @@ public class AsyncProcess1Tests {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", 1).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
-				.add(logic("MULTIPLY_ASYNC").input("val1", 3).input("val2", 2).input("delayed", 500L).build())
+				.add(logic("MULTIPLY_ASYNC").input("val1", 3).input("val2", 2).input("delay", 500L).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", 4).build())
 				.build();
@@ -78,7 +78,7 @@ public class AsyncProcess1Tests {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", 1).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
-				.add(logic("MULTIPLY_ASYNC").input("val1", 3).input("val2", 2).input("delayed", 6000L).build())
+				.add(logic("MULTIPLY_ASYNC").input("val1", 3).input("val2", 2).input("delay", 6000L).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", 4).build())
 				.build();
@@ -99,7 +99,7 @@ public class AsyncProcess1Tests {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", 1).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
-				.add(logic("MULTIPLY_ERROR").input("val1", 3).input("val2", 2).input("delayed", 500L).build())
+				.add(logic("MULTIPLY_ERROR").input("val1", 3).input("val2", 2).input("delay", 500L).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", 4).forced().build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", 6).build())
@@ -112,7 +112,7 @@ public class AsyncProcess1Tests {
 	}
 
 	@Logic(id = "MULTIPLY_ASYNC", returnAsync = true, returnAs = "multiply_result")
-	public static void multiply(@Input("val1") Integer value1, @Input("val2") Integer value2, @Input("delayed") Long delay) {
+	public static void multiply(@Input("val1") Integer value1, @Input("val2") Integer value2, @Input("delay") Long delay) {
 		String contextId = LinkedLogics.getContextId();
 		new Thread(new Runnable() {
 			@Override
@@ -126,7 +126,7 @@ public class AsyncProcess1Tests {
 	}
 
 	@Logic(id = "MULTIPLY_ERROR", returnAsync = true, returnAs = "multiply_result")
-	public static void multiplyError(@Input("val1") Integer value1, @Input("val2") Integer value2, @Input("delayed") Long delay) {
+	public static void multiplyError(@Input("val1") Integer value1, @Input("val2") Integer value2, @Input("delay") Long delay) {
 		String contextId = LinkedLogics.getContextId();
 		new Thread(new Runnable() {
 			@Override

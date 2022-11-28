@@ -10,25 +10,25 @@ import dev.linkedlogics.service.SchedulerService;
 import dev.linkedlogics.service.SchedulerService.Schedule;
 import dev.linkedlogics.service.ServiceLocator;
 
-public class DelayedFlowHandler extends ProcessFlowHandler {
-	public DelayedFlowHandler() {
+public class DelayFlowHandler extends ProcessFlowHandler {
+	public DelayFlowHandler() {
 
 	}
 	
-	public DelayedFlowHandler(ProcessFlowHandler handler) {
+	public DelayFlowHandler(ProcessFlowHandler handler) {
 		super(handler);
 	}
 
 	@Override
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
-		if (candidate.isPresent() && candidate.get().getDelayed() != null && candidate.get().getDelayed().getDelay() > 0) {
+		if (candidate.isPresent() && candidate.get().getDelay() != null && candidate.get().getDelay().getSeconds() > 0) {
 			
 			if (context.getStatus() == Status.SCHEDULED) {
 				context.setStatus(Status.STARTED);
 				return super.handle(candidate, candidatePosition, context);
 			} else {
 				context.setStatus(Status.SCHEDULED);
-				OffsetDateTime scheduledAt = OffsetDateTime.now().plusSeconds(candidate.get().getDelayed().getDelay());
+				OffsetDateTime scheduledAt = OffsetDateTime.now().plusSeconds(candidate.get().getDelay().getSeconds());
 				Schedule schedule = new Schedule(context.getId(), null, candidatePosition, scheduledAt, SchedulerService.ScheduleType.DELAY); 
 				ServiceLocator.getInstance().getSchedulerService().schedule(schedule);
 				return HandlerResult.noCandidate();

@@ -26,7 +26,7 @@ public abstract class LogicPositioner {
 
 		process.getLogics().forEach(l -> {
 			process.getInputs().entrySet().forEach(e -> {
-				l.getInputMap().putIfAbsent(e.getKey(), e.getValue());
+				l.getInputs().putIfAbsent(e.getKey(), e.getValue());
 			});
 		});
 	}
