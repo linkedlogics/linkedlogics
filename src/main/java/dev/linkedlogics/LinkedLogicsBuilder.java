@@ -8,6 +8,7 @@ import dev.linkedlogics.model.process.ErrorLogicDefinition;
 import dev.linkedlogics.model.process.ErrorLogicDefinition.ErrorLogicBuilder;
 import dev.linkedlogics.model.process.ExpressionLogicDefinition;
 import dev.linkedlogics.model.process.GroupLogicDefinition.GroupLogicBuilder;
+import dev.linkedlogics.model.process.JumpLogicDefinition.JumpLogicBuilder;
 import dev.linkedlogics.model.process.ProcessDefinition.ProcessBuilder;
 import dev.linkedlogics.model.process.ProcessLogicDefinition.ProcessLogicBuilder;
 import dev.linkedlogics.model.process.RetryLogicDefinition;
@@ -81,5 +82,9 @@ public class LinkedLogicsBuilder {
 	
 	public static ExpressionLogicDefinition expr(String expression) {
 		return new ExpressionLogicDefinition.ExpressionLogicDefinitionBuilder(expression).build();
+	}
+	
+	public static JumpLogicBuilder jump(String label) {
+		return new JumpLogicBuilder(label);
 	}
 }

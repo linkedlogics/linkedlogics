@@ -23,6 +23,7 @@ public abstract class BaseLogicDefinition implements Cloneable {
 	protected DelayLogicDefinition delay;
 	protected ErrorLogicDefinition error;
 	protected TimeoutLogicDefinition timeout;
+	protected LabelLogicDefinition label;
 	
 	@JsonIgnore
 	protected BaseLogicDefinition parentLogic;
@@ -94,6 +95,11 @@ public abstract class BaseLogicDefinition implements Cloneable {
 		
 		public T timeout(int timeout) {
 			this.logic.setTimeout(new TimeoutLogicDefinition(timeout));
+			return (T) this;
+		}
+		
+		public T label(String label) {
+			this.logic.setLabel(new LabelLogicDefinition(label));
 			return (T) this;
 		}
 		

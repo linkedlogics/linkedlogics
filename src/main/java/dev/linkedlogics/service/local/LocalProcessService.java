@@ -1,5 +1,6 @@
 package dev.linkedlogics.service.local;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -55,6 +56,8 @@ public class LocalProcessService implements ProcessService {
 		.map(m -> {
 			try {
 				return (ProcessDefinition) m.invoke(null);
+			} catch (InvocationTargetException e) {
+				throw new RuntimeException(e.getCause());
 			} catch (Throwable e) {
 				throw new RuntimeException(e);
 			}
