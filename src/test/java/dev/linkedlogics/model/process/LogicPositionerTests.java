@@ -1,11 +1,11 @@
 package dev.linkedlogics.model.process;
 
-import static dev.linkedlogics.LinkedLogicsBuilder.createProcess;
-import static dev.linkedlogics.LinkedLogicsBuilder.logic;
-import static dev.linkedlogics.LinkedLogicsBuilder.group;
 import static dev.linkedlogics.LinkedLogicsBuilder.branch;
+import static dev.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static dev.linkedlogics.LinkedLogicsBuilder.error;
 import static dev.linkedlogics.LinkedLogicsBuilder.expr;
+import static dev.linkedlogics.LinkedLogicsBuilder.group;
+import static dev.linkedlogics.LinkedLogicsBuilder.logic;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
@@ -14,7 +14,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import dev.linkedlogics.LinkedLogics;
-import dev.linkedlogics.annotation.ProcessChain;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.local.LocalServiceConfigurer;
 
@@ -85,7 +84,6 @@ public class LogicPositionerTests {
 	}
 	
 	public static class ProcessA {
-		@ProcessChain
 		public ProcessDefinition createProcessA0() {
 			return createProcess(PROCESS_A, 0)
 					.add(logic(LOGIC_1).build())
@@ -94,7 +92,6 @@ public class LogicPositionerTests {
 					.build();
 		}
 		
-		@ProcessChain
 		public ProcessDefinition createProcessA1() {
 			return createProcess(PROCESS_A, 1)
 					.add(group(
@@ -108,7 +105,6 @@ public class LogicPositionerTests {
 					.build();
 		}
 		
-		@ProcessChain
 		public ProcessDefinition createProcessA2() {
 			return createProcess(PROCESS_A, 2)
 					.add(group(
@@ -122,7 +118,6 @@ public class LogicPositionerTests {
 					.build();
 		}
 		
-		@ProcessChain
 		public ProcessDefinition createProcessA3() {
 			return createProcess(PROCESS_A, 3)
 					.add(logic(LOGIC_1).compensate(logic(LOGIC_2).build()).build())
@@ -130,7 +125,6 @@ public class LogicPositionerTests {
 					.build();
 		}
 		
-		@ProcessChain
 		public ProcessDefinition createProcessA4() {
 			return createProcess(PROCESS_A, 4)
 					.add(group(

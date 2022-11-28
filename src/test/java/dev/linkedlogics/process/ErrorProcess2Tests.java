@@ -1,32 +1,28 @@
 package dev.linkedlogics.process;
 
 import static dev.linkedlogics.LinkedLogicsBuilder.createProcess;
+import static dev.linkedlogics.LinkedLogicsBuilder.error;
 import static dev.linkedlogics.LinkedLogicsBuilder.expr;
 import static dev.linkedlogics.LinkedLogicsBuilder.group;
 import static dev.linkedlogics.LinkedLogicsBuilder.logic;
-import static dev.linkedlogics.LinkedLogicsBuilder.verify;
-import static dev.linkedlogics.LinkedLogicsBuilder.error;
-import static dev.linkedlogics.process.ProcessTestHelper.waitUntil;
+import static dev.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import dev.linkedlogics.LinkedLogics;
 import dev.linkedlogics.annotation.Input;
 import dev.linkedlogics.annotation.Logic;
-import dev.linkedlogics.annotation.ProcessChain;
-import dev.linkedlogics.context.Status;
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.context.ContextError.ErrorType;
+import dev.linkedlogics.context.Status;
 import dev.linkedlogics.exception.LogicException;
 import dev.linkedlogics.model.process.ProcessDefinition;
 import dev.linkedlogics.service.ContextService;
@@ -64,7 +60,7 @@ public class ErrorProcess2Tests {
 	}
 
 
-	@ProcessChain
+
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", 1).build())
@@ -84,7 +80,7 @@ public class ErrorProcess2Tests {
 		assertThat(ctx.getParams().get("list")).asList().contains();
 	}
 
-	@ProcessChain
+
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", 1).retry(3, 0).build())
@@ -106,7 +102,7 @@ public class ErrorProcess2Tests {
 		assertThat(ctx.getParams().get("list")).asList().contains(1, 2);
 	}
 
-	@ProcessChain
+
 	public static ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
 				.add(logic("INSERT_SAFE").input("list", expr("list")).input("val", 1).retry(3, 0).build())
@@ -126,7 +122,7 @@ public class ErrorProcess2Tests {
 		assertThat(ctx.getParams().get("list")).asList().contains(2);
 	}
 
-	@ProcessChain
+
 	public static ProcessDefinition scenario4() {
 		return createProcess("SIMPLE_SCENARIO_4", 0)
 				.add(group(logic("INSERT").input("list", expr("list")).input("val", 2).build(),
@@ -148,7 +144,7 @@ public class ErrorProcess2Tests {
 		assertThat(ctx.getParams().get("list")).asList().contains(2, 4);
 	}
 
-	@ProcessChain
+
 	public static ProcessDefinition scenario5() {
 		return createProcess("SIMPLE_SCENARIO_5", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
@@ -168,7 +164,7 @@ public class ErrorProcess2Tests {
 		assertThat(ctx.getParams().get("list")).asList().contains(2);
 	}
 
-	@ProcessChain
+
 	public static ProcessDefinition scenario6() {
 		return createProcess("SIMPLE_SCENARIO_6", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
@@ -189,7 +185,7 @@ public class ErrorProcess2Tests {
 		assertThat(ctx.getParams().get("list")).asList().contains(2, 4);
 	}
 
-	@ProcessChain
+
 	public static ProcessDefinition scenario7() {
 		return createProcess("SIMPLE_SCENARIO_7", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())

@@ -3,7 +3,7 @@ package dev.linkedlogics.process;
 import static dev.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static dev.linkedlogics.LinkedLogicsBuilder.expr;
 import static dev.linkedlogics.LinkedLogicsBuilder.logic;
-import static dev.linkedlogics.process.ProcessTestHelper.waitUntil;
+import static dev.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import dev.linkedlogics.LinkedLogics;
 import dev.linkedlogics.annotation.Input;
 import dev.linkedlogics.annotation.Logic;
-import dev.linkedlogics.annotation.ProcessChain;
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.context.Status;
 import dev.linkedlogics.model.process.ProcessDefinition;

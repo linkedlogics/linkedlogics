@@ -5,7 +5,7 @@ import static dev.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static dev.linkedlogics.LinkedLogicsBuilder.expr;
 import static dev.linkedlogics.LinkedLogicsBuilder.logic;
 import static dev.linkedlogics.LinkedLogicsBuilder.process;
-import static dev.linkedlogics.process.ProcessTestHelper.waitUntil;
+import static dev.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import dev.linkedlogics.LinkedLogics;
 import dev.linkedlogics.annotation.Input;
 import dev.linkedlogics.annotation.Logic;
-import dev.linkedlogics.annotation.ProcessChain;
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.context.Status;
 import dev.linkedlogics.model.process.ProcessDefinition;
@@ -66,7 +65,7 @@ public class SimpleProcess4Tests {
 		assertThat(ctx.getParams().get("list")).asList().contains(28);
 	}
 	
-	@ProcessChain
+
 	public static ProcessDefinition scenario2v0() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
 				.add(logic("MULTIPLY").input("val1", expr("val")).input("val2", 2).build())
@@ -74,7 +73,7 @@ public class SimpleProcess4Tests {
 				.build();
 	}
 
-	@ProcessChain
+
 	public static ProcessDefinition scenario2v1() {
 		return createProcess("SIMPLE_SCENARIO_2", 1)
 				.add(logic("MULTIPLY").input("val1", expr("val")).input("val2", 4).build())
@@ -82,7 +81,7 @@ public class SimpleProcess4Tests {
 				.build();
 	}
 
-	@ProcessChain
+
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
 				.add(branch(expr("val > 5"), 

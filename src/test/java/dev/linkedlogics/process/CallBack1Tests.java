@@ -3,12 +3,10 @@ package dev.linkedlogics.process;
 import static dev.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static dev.linkedlogics.LinkedLogicsBuilder.expr;
 import static dev.linkedlogics.LinkedLogicsBuilder.logic;
-import static dev.linkedlogics.process.ProcessTestHelper.waitUntil;
+import static dev.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -18,7 +16,6 @@ import dev.linkedlogics.LinkedLogics;
 import dev.linkedlogics.LinkedLogicsCallback;
 import dev.linkedlogics.annotation.Input;
 import dev.linkedlogics.annotation.Logic;
-import dev.linkedlogics.annotation.ProcessChain;
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.context.ContextError;
 import dev.linkedlogics.context.Status;
@@ -65,8 +62,6 @@ public class CallBack1Tests {
 		assertThat(result.get()).isTrue();
 	}
 
-
-	@ProcessChain
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
 				.add(logic("STRING_UPPER").input("s", expr("s")).returnAs("s").build())

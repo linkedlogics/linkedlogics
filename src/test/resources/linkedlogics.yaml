@@ -7,3 +7,5 @@ linkedlogics:
 services:
   callback:
     expire-time: 1
+  process:
+    timeout: 30

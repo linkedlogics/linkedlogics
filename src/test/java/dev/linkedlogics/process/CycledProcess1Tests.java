@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import dev.linkedlogics.LinkedLogics;
 import dev.linkedlogics.annotation.Input;
 import dev.linkedlogics.annotation.Logic;
-import dev.linkedlogics.annotation.ProcessChain;
 import dev.linkedlogics.exception.MissingLogicError;
 import dev.linkedlogics.model.process.ProcessDefinition;
 import dev.linkedlogics.service.local.LocalServiceConfigurer;
@@ -48,7 +47,6 @@ public class CycledProcess1Tests {
 		}).isInstanceOf(MissingLogicError.class);
 	}
 	
-	@ProcessChain
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
@@ -58,7 +56,6 @@ public class CycledProcess1Tests {
 				.build();
 	}
 	
-	@ProcessChain
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v4").build())

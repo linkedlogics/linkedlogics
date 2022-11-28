@@ -2,8 +2,9 @@ package dev.linkedlogics.process;
 
 import static dev.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static dev.linkedlogics.LinkedLogicsBuilder.expr;
+import static dev.linkedlogics.LinkedLogicsBuilder.group;
 import static dev.linkedlogics.LinkedLogicsBuilder.logic;
-import static dev.linkedlogics.process.ProcessTestHelper.waitUntil;
+import static dev.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
@@ -16,11 +17,8 @@ import org.junit.jupiter.api.Test;
 import dev.linkedlogics.LinkedLogics;
 import dev.linkedlogics.annotation.Input;
 import dev.linkedlogics.annotation.Logic;
-import dev.linkedlogics.annotation.ProcessChain;
 import dev.linkedlogics.context.Context;
-import dev.linkedlogics.context.ContextError.ErrorType;
 import dev.linkedlogics.context.Status;
-import dev.linkedlogics.exception.LogicException;
 import dev.linkedlogics.model.process.ProcessDefinition;
 import dev.linkedlogics.service.ContextService;
 import dev.linkedlogics.service.ServiceLocator;
@@ -53,7 +51,6 @@ public class TimeoutProcess1Tests {
 	}
 
 
-	@ProcessChain
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", 1).build())
@@ -79,7 +76,6 @@ public class TimeoutProcess1Tests {
 	}
 
 
-	@ProcessChain
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
@@ -103,12 +99,64 @@ public class TimeoutProcess1Tests {
 	}
 
 
-	@ProcessChain
 	public static ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
 				.add(logic("MULTIPLY_LONG").input("val1", 3).input("val2", 2).input("delayed", 1000L).timeout(5).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", 4).build())
+				.build();
+	}
+	
+	@Test
+	public void testScenario4() {
+		long start = System.currentTimeMillis();
+		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_4", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		assertThat(waitUntil(contextId, Status.FAILED, 2000)).isTrue();
+		long finish = System.currentTimeMillis();
+		assertThat(finish - start).isGreaterThan(500);
+		assertThat(finish - start).isLessThan(1500);
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
+		assertThat(ctx.getParams().get("list")).asList().contains(2, 6, 8);
+	}
+
+
+	public static ProcessDefinition scenario4() {
+		return createProcess("SIMPLE_SCENARIO_4", 0)
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
+				.add(group(logic("MULTIPLY_LONG").input("val1", 3).input("val2", 2).input("delayed", 2000).build(),
+						logic("INSERT").input("list", expr("list")).input("val", 4).build(),
+						logic("INSERT").input("list", expr("list")).input("val", 6).forced().build()).timeout(1).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 8).forced().build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 10).build())
+				.build();
+	}
+	
+	@Test
+	public void testScenario5() {
+		long start = System.currentTimeMillis();
+		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_5", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		assertThat(waitUntil(contextId, Status.FAILED, 2000)).isTrue();
+		long finish = System.currentTimeMillis();
+		assertThat(finish - start).isGreaterThan(500);
+		assertThat(finish - start).isLessThan(1500);
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
+		assertThat(ctx.getParams().get("list")).asList().contains(6, 8);
+	}
+
+
+	public static ProcessDefinition scenario5() {
+		return createProcess("SIMPLE_SCENARIO_5", 0)
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2)
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", 2).build()).build())
+				.add(group(logic("MULTIPLY_LONG").input("val1", 3).input("val2", 2).input("delayed", 2000).build(),
+						logic("INSERT").input("list", expr("list")).input("val", 4).build(),
+						logic("INSERT").input("list", expr("list")).input("val", 6).forced().build()).timeout(1).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 8).forced().build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 10).build())
 				.build();
 	}
 	
@@ -141,5 +189,10 @@ public class TimeoutProcess1Tests {
 			return true;
 		}
 		return false;
+	}
+	
+	@Logic(id = "REMOVE", returnAs = "remove_result")
+	public static boolean remove(@Input(value = "list", returned = true) List<Integer> list, @Input("val") Integer value) {
+		return list.remove(value);
 	}
 }
