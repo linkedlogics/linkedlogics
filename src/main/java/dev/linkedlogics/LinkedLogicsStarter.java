@@ -4,7 +4,7 @@ import java.util.Map;
 
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.exception.MissingLogicError;
-import dev.linkedlogics.model.process.ProcessDefinition;
+import dev.linkedlogics.model.ProcessDefinition;
 import dev.linkedlogics.model.process.ProcessLogicDefinition;
 import dev.linkedlogics.model.process.helper.LogicFinder;
 import dev.linkedlogics.service.ServiceLocator;

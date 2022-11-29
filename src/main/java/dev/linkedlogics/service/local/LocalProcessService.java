@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import dev.linkedlogics.exception.AlreadyExistingError;
-import dev.linkedlogics.model.process.ProcessDefinition;
+import dev.linkedlogics.model.ProcessDefinition;
 import dev.linkedlogics.model.process.helper.LogicDependencies;
 import dev.linkedlogics.service.ProcessService;
 

@@ -22,7 +22,7 @@ import dev.linkedlogics.annotation.Input;
 import dev.linkedlogics.annotation.Logic;
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.context.Status;
-import dev.linkedlogics.model.process.ProcessDefinition;
+import dev.linkedlogics.model.ProcessDefinition;
 import dev.linkedlogics.service.ContextService;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.local.LocalServiceConfigurer;
@@ -57,6 +57,7 @@ public class ErrorProcess3Tests {
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v1")
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v1").build())
 						.build())
+				.add(verify(expr("true")).code(-99).message("success").build())
 				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v2")
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v2").build())	
 						.build(),

@@ -24,7 +24,7 @@ import dev.linkedlogics.context.Context;
 import dev.linkedlogics.context.ContextError.ErrorType;
 import dev.linkedlogics.context.Status;
 import dev.linkedlogics.exception.LogicException;
-import dev.linkedlogics.model.process.ProcessDefinition;
+import dev.linkedlogics.model.ProcessDefinition;
 import dev.linkedlogics.service.ContextService;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.local.LocalServiceConfigurer;

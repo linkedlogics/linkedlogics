@@ -3,11 +3,11 @@ package dev.linkedlogics.model.process.helper;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.linkedlogics.model.ProcessDefinition;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
 import dev.linkedlogics.model.process.BranchLogicDefinition;
 import dev.linkedlogics.model.process.ErrorLogicDefinition;
 import dev.linkedlogics.model.process.GroupLogicDefinition;
-import dev.linkedlogics.model.process.ProcessDefinition;
 import dev.linkedlogics.model.process.SingleLogicDefinition;
 
 public class LogicFinder {

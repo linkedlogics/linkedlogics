@@ -2,6 +2,7 @@ package dev.linkedlogics;
 
 import java.util.Set;
 
+import dev.linkedlogics.model.ProcessDefinition.ProcessBuilder;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
 import dev.linkedlogics.model.process.BranchLogicDefinition.BranchLogicBuilder;
 import dev.linkedlogics.model.process.ErrorLogicDefinition;
@@ -11,7 +12,6 @@ import dev.linkedlogics.model.process.ExpressionLogicDefinition;
 import dev.linkedlogics.model.process.FailLogicDefinition.FailLogicBuilder;
 import dev.linkedlogics.model.process.GroupLogicDefinition.GroupLogicBuilder;
 import dev.linkedlogics.model.process.JumpLogicDefinition.JumpLogicBuilder;
-import dev.linkedlogics.model.process.ProcessDefinition.ProcessBuilder;
 import dev.linkedlogics.model.process.ProcessLogicDefinition.ProcessLogicBuilder;
 import dev.linkedlogics.model.process.RetryLogicDefinition;
 import dev.linkedlogics.model.process.SavepointLogicDefinition.SavepointLogicBuilder;

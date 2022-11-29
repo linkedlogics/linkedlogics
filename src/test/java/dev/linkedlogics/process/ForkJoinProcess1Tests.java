@@ -17,7 +17,7 @@ import dev.linkedlogics.LinkedLogics;
 import dev.linkedlogics.annotation.Input;
 import dev.linkedlogics.annotation.Logic;
 import dev.linkedlogics.context.Status;
-import dev.linkedlogics.model.process.ProcessDefinition;
+import dev.linkedlogics.model.ProcessDefinition;
 import dev.linkedlogics.service.ContextService;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.local.LocalServiceConfigurer;

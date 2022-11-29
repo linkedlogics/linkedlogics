@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.context.Status;
+import dev.linkedlogics.model.ProcessDefinition;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
-import dev.linkedlogics.model.process.ProcessDefinition;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.handler.process.BranchFlowHandler;
 import dev.linkedlogics.service.handler.process.CleanupFlowHandler;

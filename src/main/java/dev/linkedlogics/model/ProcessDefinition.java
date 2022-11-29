@@ -1,4 +1,4 @@
-package dev.linkedlogics.model.process;
+package dev.linkedlogics.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import dev.linkedlogics.model.process.BaseLogicDefinition;
 import dev.linkedlogics.model.process.helper.LogicPositioner;
 import lombok.Getter;
 import lombok.Setter;

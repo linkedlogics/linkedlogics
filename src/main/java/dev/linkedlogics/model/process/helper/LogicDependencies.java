@@ -1,6 +1,6 @@
 package dev.linkedlogics.model.process.helper;
 
-import dev.linkedlogics.model.process.ProcessDefinition;
+import dev.linkedlogics.model.ProcessDefinition;
 import dev.linkedlogics.model.process.ProcessLogicDefinition;
 import dev.linkedlogics.service.ServiceLocator;
 

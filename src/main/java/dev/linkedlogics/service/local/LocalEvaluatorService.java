@@ -11,7 +11,9 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import dev.linkedlogics.model.process.ExpressionLogicDefinition;
 import dev.linkedlogics.service.EvaluatorService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class LocalEvaluatorService implements EvaluatorService {
 	private ExpressionParser parser;
 	
@@ -25,10 +27,8 @@ public class LocalEvaluatorService implements EvaluatorService {
 		context.addPropertyAccessor(new MapAccessor());
 	    try {
 			return parser.parseExpression(expression.getExpression()).getValue(context);
-		} catch (EvaluationException e) {
-			System.err.println(e.getLocalizedMessage());
-		} catch (ParseException e) {
-			System.err.println(e.getLocalizedMessage());
+		} catch (EvaluationException|ParseException e) {
+			log.error(e.getLocalizedMessage(), e);
 		}
 	    return null;
 	}
