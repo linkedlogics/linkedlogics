@@ -6,7 +6,9 @@ import dev.linkedlogics.model.process.BaseLogicDefinition;
 import dev.linkedlogics.model.process.BranchLogicDefinition.BranchLogicBuilder;
 import dev.linkedlogics.model.process.ErrorLogicDefinition;
 import dev.linkedlogics.model.process.ErrorLogicDefinition.ErrorLogicBuilder;
+import dev.linkedlogics.model.process.ExitLogicDefinition.ExitLogicBuilder;
 import dev.linkedlogics.model.process.ExpressionLogicDefinition;
+import dev.linkedlogics.model.process.FailLogicDefinition.FailLogicBuilder;
 import dev.linkedlogics.model.process.GroupLogicDefinition.GroupLogicBuilder;
 import dev.linkedlogics.model.process.JumpLogicDefinition.JumpLogicBuilder;
 import dev.linkedlogics.model.process.ProcessDefinition.ProcessBuilder;
@@ -86,5 +88,13 @@ public class LinkedLogicsBuilder {
 	
 	public static JumpLogicBuilder jump(String label) {
 		return new JumpLogicBuilder(label);
+	}
+	
+	public static ExitLogicBuilder exit() {
+		return new ExitLogicBuilder();
+	}
+	
+	public static FailLogicBuilder fail() {
+		return new FailLogicBuilder();
 	}
 }
