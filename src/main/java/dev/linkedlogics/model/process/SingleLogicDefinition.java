@@ -2,6 +2,7 @@ package dev.linkedlogics.model.process;
 
 import java.util.Map;
 
+import dev.linkedlogics.model.ProcessLogicTypes;
 import dev.linkedlogics.service.LogicService;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,6 +16,10 @@ public class SingleLogicDefinition extends BaseLogicDefinition {
 	private String application;
 	private String returnAs;
 	private BaseLogicDefinition compensationLogic;
+	
+	public SingleLogicDefinition() {
+		super(ProcessLogicTypes.LOGIC);
+	}
 	
 	public SingleLogicDefinition clone() {
 		SingleLogicDefinition clone = new SingleLogicDefinition();

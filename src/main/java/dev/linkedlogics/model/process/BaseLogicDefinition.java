@@ -6,24 +6,30 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public abstract class BaseLogicDefinition implements Cloneable {
+public abstract class BaseLogicDefinition extends TypedLogicDefinition implements Cloneable {
+	@JsonIgnore
 	protected String position;
-	protected boolean isDisabled;
+	protected Boolean disabled;
 	protected Map<String, Object> inputs = new HashMap<>();
 	protected Map<String, Object> outputs = new HashMap<>();
 	protected ForkLogicDefinition fork;
 	protected JoinLogicDefinition join;
-	protected boolean forced;
+	protected Boolean forced;
 	protected RetryLogicDefinition retry;
 	protected DelayLogicDefinition delay;
 	protected ErrorLogicDefinition error;
 	protected TimeoutLogicDefinition timeout;
 	protected LabelLogicDefinition label;
+	
+	public BaseLogicDefinition(String type) {
+		super(type);
+	}
 	
 	@JsonIgnore
 	protected BaseLogicDefinition parentLogic;
@@ -32,10 +38,10 @@ public abstract class BaseLogicDefinition implements Cloneable {
 	
 	public final BaseLogicDefinition cloneLogic() {
 		BaseLogicDefinition clone = clone();
-		clone.setDisabled(isDisabled);
+		clone.setDisabled(getDisabled());
 		clone.setFork(fork != null ? fork.cloneLogic() : null);
 		clone.setJoin(join != null ? join.cloneLogic() : null);
-		clone.setForced(isForced());
+		clone.setForced(getForced());
 		clone.setRetry(retry != null ? retry.cloneLogic() : null);
 		clone.setDelay(delay != null ? delay.cloneLogic() : null);
 		clone.setError(error != null ? (ErrorLogicDefinition) error.cloneLogic() : null);

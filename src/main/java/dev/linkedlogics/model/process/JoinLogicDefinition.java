@@ -1,12 +1,14 @@
 package dev.linkedlogics.model.process;
 
+import dev.linkedlogics.model.ProcessLogicTypes;
 import lombok.Getter;
 
 @Getter
-public class JoinLogicDefinition {
+public class JoinLogicDefinition extends TypedLogicDefinition {
 	private String[] key;
 	
 	public JoinLogicDefinition(String[] key) {
+		super(ProcessLogicTypes.JOIN);
 		this.key = key;
 	}
 	

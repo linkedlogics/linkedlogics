@@ -23,11 +23,7 @@ public class TimeoutHandler extends LogicHandler {
 		if (context.isPresent()) {
 			if (context.get().getLogicPosition().startsWith(logicContext.getLogicPosition()) && context.get().getStatus() != Status.FINISHED && context.get().getStatus() != Status.FAILED) {
 				super.handleError(logicContext, new LogicTimeoutException(logicContext.getLogicId()));
-			} else {
-				super.handle(logicContext, result);
 			}
-		} else {
-			super.handle(logicContext, result);
 		}
 	}
 }

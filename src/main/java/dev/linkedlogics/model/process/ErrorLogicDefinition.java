@@ -3,6 +3,7 @@ package dev.linkedlogics.model.process;
 import java.util.HashSet;
 import java.util.Set;
 
+import dev.linkedlogics.model.ProcessLogicTypes;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,10 @@ public class ErrorLogicDefinition extends BaseLogicDefinition {
 	private boolean throwAgain;
 	private Integer throwErrorCode;
 	private String throwErrorMessage;
+	
+	public ErrorLogicDefinition() {
+		super(ProcessLogicTypes.ERROR);
+	}
 	
 	public ErrorLogicDefinition clone() {
 		ErrorLogicDefinition clone = new ErrorLogicDefinition();
@@ -32,13 +37,13 @@ public class ErrorLogicDefinition extends BaseLogicDefinition {
 			super(new ErrorLogicDefinition());
 		}
 		
-		public ErrorLogicBuilder errorCodeSet(Set<Integer> errorCodeSet) {
-			this.getLogic().setErrorCodeSet(errorCodeSet);
+		public ErrorLogicBuilder errorCodeSet(Integer... errorCodes) {
+			this.getLogic().setErrorCodeSet(Set.of(errorCodes));
 			return this;
 		}
 		
-		public ErrorLogicBuilder errorMessageSet(Set<String> errorMessageSet) {
-			this.getLogic().setErrorMessageSet(errorMessageSet);
+		public ErrorLogicBuilder errorMessageSet(String... errorMessages) {
+			this.getLogic().setErrorMessageSet(Set.of(errorMessages));
 			return this;
 		}
 		

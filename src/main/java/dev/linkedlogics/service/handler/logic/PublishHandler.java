@@ -90,7 +90,7 @@ public class PublishHandler extends LogicHandler {
 	
 	private void timeoutContext(Context context) {	
 		if (context.getExpiresAt() == null || context.getExpiresAt().isBefore(OffsetDateTime.now())) {
-			int timeout = (Integer) LinkedLogicsConfiguration.getConfigOrDefault("services.process.timeout", 30);
+			int timeout = (Integer) LinkedLogicsConfiguration.getConfigOrDefault("services.process.timeout", 60);
 			context.setExpiresAt(OffsetDateTime.now().plusSeconds(timeout));
 		}
 		

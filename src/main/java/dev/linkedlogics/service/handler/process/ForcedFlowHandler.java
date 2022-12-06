@@ -17,7 +17,7 @@ public class ForcedFlowHandler extends ProcessFlowHandler {
 	@Override
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
 		if (candidate.isPresent() && context.getError() != null) {
-			if (candidate.get().isForced()) {
+			if (candidate.get().getForced() != null && candidate.get().getForced()) {
 				return super.handle(candidate, candidatePosition, context);
 			} else {
 				return HandlerResult.nextCandidate(candidatePosition);

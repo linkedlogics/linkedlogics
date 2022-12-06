@@ -2,6 +2,7 @@ package dev.linkedlogics.model.process;
 
 import java.util.stream.Collectors;
 
+import dev.linkedlogics.model.ProcessLogicTypes;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +13,10 @@ import lombok.Setter;
 public class ProcessLogicDefinition extends GroupLogicDefinition {
 	private String processId;
 	private int version;
+	
+	public ProcessLogicDefinition() {
+		super(ProcessLogicTypes.PROCESS);
+	}
 
 	public ProcessLogicDefinition clone() {
 		ProcessLogicDefinition clone = new ProcessLogicDefinition(getProcessId(), getVersion());

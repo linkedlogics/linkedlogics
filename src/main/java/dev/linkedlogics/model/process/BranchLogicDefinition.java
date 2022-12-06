@@ -3,6 +3,7 @@ package dev.linkedlogics.model.process;
 import java.util.Map.Entry;
 
 import dev.linkedlogics.context.Context;
+import dev.linkedlogics.model.ProcessLogicTypes;
 import dev.linkedlogics.service.ServiceLocator;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,9 @@ public class BranchLogicDefinition extends BaseLogicDefinition {
 	private BaseLogicDefinition leftLogic;
 	private BaseLogicDefinition rightLogic;
 	
+	public BranchLogicDefinition() {
+		super(ProcessLogicTypes.BRANCH);
+	}
 	
 	public boolean isSatisfied(Context context) {
 		return (Boolean) ServiceLocator.getInstance().getEvaluatorService().evaluate(expression, context.getParams());

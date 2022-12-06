@@ -3,18 +3,21 @@ package dev.linkedlogics.model.process;
 import java.util.HashSet;
 import java.util.Set;
 
+import dev.linkedlogics.model.ProcessLogicTypes;
 import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-public class RetryLogicDefinition {
+public class RetryLogicDefinition extends TypedLogicDefinition {
 	private int maxRetries;
 	private int seconds;
 	private Set<Integer> errorCodeSet = new HashSet<>();
 	private Set<String> errorMessageSet = new HashSet<>();
 	private boolean exclude;
+	
+	public RetryLogicDefinition() {
+		super(ProcessLogicTypes.RETRY);
+	}
 	
 	public RetryLogicDefinition cloneLogic() {
 		RetryLogicDefinition clone = new RetryLogicDefinition();

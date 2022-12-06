@@ -99,13 +99,13 @@ public class ErrorProcess3Tests {
 								.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v4").build())
 								.build(),
 								verify(expr("false")).code(-200).message("failure").build())
-						.handle(error(-200).errorMessageSet(Set.of("error")).throwAgain(-500, "another error").build())
+						.handle(error(-200).errorMessageSet("error").throwAgain(-500, "another error").build())
 						.build(),
 						logic("INSERT").input("list", expr("list")).input("val", "v5")
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v5").build())
 						.build()
 						)
-						.handle(error(-500).errorMessageSet(Set.of("error")).build())
+						.handle(error(-500).errorMessageSet("error").build())
 						.build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v6").build())
 				.build();
@@ -163,7 +163,7 @@ public class ErrorProcess3Tests {
 						.build(),
 						verify(expr("false")).code(-100).message("failure").build())
 						.build())
-				.add(error().errorCodeSet(Set.of(-200)).build())
+				.add(error().errorCodeSet(-200).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v4").build())
 				.build();
 	}

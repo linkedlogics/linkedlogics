@@ -1,6 +1,7 @@
 package dev.linkedlogics.model.process;
 
 import dev.linkedlogics.context.Context;
+import dev.linkedlogics.model.ProcessLogicTypes;
 import dev.linkedlogics.service.ServiceLocator;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,10 @@ public class VerifyLogicDefinition extends BaseLogicDefinition {
 	private ExpressionLogicDefinition expression;
 	private int errorCode = -1;
 	private String errorMessage;
+	
+	public VerifyLogicDefinition() {
+		super(ProcessLogicTypes.VERIFY);
+	}
 	
 	public boolean isVerified(Context context) {
 		return (Boolean) ServiceLocator.getInstance().getEvaluatorService().evaluate(expression, context.getParams());

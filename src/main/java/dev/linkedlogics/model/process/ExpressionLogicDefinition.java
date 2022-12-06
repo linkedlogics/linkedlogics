@@ -1,12 +1,14 @@
 package dev.linkedlogics.model.process;
 
+import dev.linkedlogics.model.ProcessLogicTypes;
 import lombok.Getter;
 
 @Getter
-public class ExpressionLogicDefinition {
+public class ExpressionLogicDefinition extends TypedLogicDefinition {
 	private String expression;
 	
 	public ExpressionLogicDefinition(String expression) {
+		super(ProcessLogicTypes.EXPR);
 		this.expression = expression;
 	}
 	

@@ -17,7 +17,7 @@ public class DisabledFlowHandler extends ProcessFlowHandler {
 	@Override
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
 		if (candidate.isPresent()) {
-			if (candidate.get().isDisabled()) {
+			if (candidate.get().getDisabled() != null && candidate.get().getDisabled()) {
 				return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 			} else {
 				return super.handle(candidate, candidatePosition, context);

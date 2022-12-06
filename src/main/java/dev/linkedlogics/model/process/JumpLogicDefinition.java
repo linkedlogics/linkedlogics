@@ -1,5 +1,6 @@
 package dev.linkedlogics.model.process;
 
+import dev.linkedlogics.model.ProcessLogicTypes;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ public class JumpLogicDefinition extends BaseLogicDefinition {
 	private String targetPosition;
 	
 	public JumpLogicDefinition(String targetLabel) {
+		super(ProcessLogicTypes.JUMP);
 		this.targetLabel = targetLabel;
 	}
 	

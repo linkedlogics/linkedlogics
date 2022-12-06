@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import dev.linkedlogics.model.process.SingleLogicDefinition.SingleLogicBuilder;
+import dev.linkedlogics.model.ProcessLogicTypes;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +13,14 @@ import lombok.Setter;
 @Getter
 public class GroupLogicDefinition extends BaseLogicDefinition {
 	protected List<BaseLogicDefinition> logics = new LinkedList<BaseLogicDefinition>();
+	
+	public GroupLogicDefinition() {
+		super(ProcessLogicTypes.GROUP);
+	}
+	
+	public GroupLogicDefinition(String type) {
+		super(type);
+	}
 	
 	public GroupLogicDefinition clone() {
 		GroupLogicDefinition clone = new GroupLogicDefinition();

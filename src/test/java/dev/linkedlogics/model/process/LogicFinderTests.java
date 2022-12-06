@@ -68,10 +68,10 @@ public class LogicFinderTests {
 							group(logic(LOGIC_1).compensate(logic(LOGIC_2).build()).build(),
 									logic(LOGIC_1).compensate(logic(LOGIC_2).build()).build(),
 									verify(expr("false")).code(-200).message("failure").build())
-								.handle(error(-200).errorMessageSet(Set.of("error")).throwAgain(-500, "another error").build())
+								.handle(error(-200).errorMessageSet("error").throwAgain(-500, "another error").build())
 								.build(),
 							logic(LOGIC_1).compensate(logic(LOGIC_2).build()).build())
-						.handle(error(-500).errorMessageSet(Set.of("error")).build())
+						.handle(error(-500).errorMessageSet("error").build())
 						.build())
 					.add(branch(expr("list.size() < 2"), 
 							logic(LOGIC_1).build(), 

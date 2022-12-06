@@ -63,11 +63,11 @@ public class LinkedLogicsBuilder {
 	}
 	
 	public static ErrorLogicDefinition.ErrorLogicBuilder error(Integer... errorCodes) {
-		return new ErrorLogicBuilder().errorCodeSet(Set.of(errorCodes));
+		return new ErrorLogicBuilder().errorCodeSet(errorCodes);
 	}
 	
 	public static ErrorLogicDefinition.ErrorLogicBuilder error(String... errorMessages) {
-		return new ErrorLogicBuilder().errorMessageSet(Set.of(errorMessages));
+		return new ErrorLogicBuilder().errorMessageSet(errorMessages);
 	}
 	
 	public static ErrorLogicDefinition.ErrorLogicBuilder error() {

@@ -1,5 +1,6 @@
 package dev.linkedlogics.model.process;
 
+import dev.linkedlogics.model.ProcessLogicTypes;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,10 @@ import lombok.Setter;
 public class FailLogicDefinition extends BaseLogicDefinition {
 	private Integer errorCode;
 	private String errorMessage;
+	
+	public FailLogicDefinition() {
+		super(ProcessLogicTypes.FAIL);
+	}
 	
 	public FailLogicDefinition clone() {
 		FailLogicDefinition clone = new FailLogicDefinition();

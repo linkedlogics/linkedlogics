@@ -202,7 +202,7 @@ public class ErrorProcess1Tests {
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3").build())
 						.build(),
 						verify(expr("false")).code(-100).message("failure").build())
-						.handle(error(-200).errorMessageSet(Set.of("fail")).build())
+						.handle(error(-200).errorMessageSet("fail").build())
 						.build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v4").build())
 				.build();
@@ -231,7 +231,7 @@ public class ErrorProcess1Tests {
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3").build())
 						.build(),
 						verify(expr("false")).code(-100).message("failure").build())
-						.handle(error(-200).errorMessageSet(Set.of("error")).build())
+						.handle(error(-200).errorMessageSet("error").build())
 						.build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v4").build())
 				.build();
@@ -263,13 +263,13 @@ public class ErrorProcess1Tests {
 								.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v4").build())
 								.build(),
 								verify(expr("false")).code(-200).message("failure").build())
-						.handle(error(-100).errorMessageSet(Set.of("error")).build())
+						.handle(error(-100).errorMessageSet("error").build())
 						.build(),
 						logic("INSERT").input("list", expr("list")).input("val", "v5")
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v5").build())
 						.build()
 						)
-						.handle(error(-200).errorMessageSet(Set.of("error")).build())
+						.handle(error(-200).errorMessageSet("error").build())
 						.build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v6").build())
 				.build();
@@ -301,13 +301,13 @@ public class ErrorProcess1Tests {
 								.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v4").build())
 								.build(),
 								verify(expr("false")).code(-200).message("failure").build())
-						.handle(error(-100).errorMessageSet(Set.of("error")).build())
+						.handle(error(-100).errorMessageSet("error").build())
 						.build(),
 						logic("INSERT").input("list", expr("list")).input("val", "v5")
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v5").build())
 						.build()
 						)
-						.handle(error(-200).errorMessageSet(Set.of("error")).errorLogic(logic("INSERT").input("list", expr("list")).input("val", "v6").build()).build())
+						.handle(error(-200).errorMessageSet("error").errorLogic(logic("INSERT").input("list", expr("list")).input("val", "v6").build()).build())
 						.build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v7").build())
 				.build();
@@ -339,13 +339,13 @@ public class ErrorProcess1Tests {
 								.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v4").build())
 								.build(),
 								verify(expr("false")).code(-200).message("failure").build())
-						.handle(error(-100).errorMessageSet(Set.of("error")).build())
+						.handle(error(-100).errorMessageSet("error").build())
 						.build(),
 						logic("INSERT").input("list", expr("list")).input("val", "v5")
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v5").build())
 						.build()
 						)
-						.handle(error(-200).errorMessageSet(Set.of("error")).errorLogic(logic("INSERT").input("list", expr("list")).input("val", "v6").disabled().build()).build())
+						.handle(error(-200).errorMessageSet("error").errorLogic(logic("INSERT").input("list", expr("list")).input("val", "v6").disabled().build()).build())
 						.build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v7").build())
 				.build();
