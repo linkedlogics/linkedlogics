@@ -81,6 +81,8 @@ public class PublishHandler extends LogicHandler {
 				ServiceLocator.getInstance().getProcessorService().process(new StartTask(Context.fromTrigger(context, t)));
 			});
 		}
+		
+		ServiceLocator.getInstance().getLoggerService().logContext(context);
 	}
 	
 	private void pauseContext(Context context) {

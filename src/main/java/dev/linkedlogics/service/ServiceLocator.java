@@ -79,6 +79,10 @@ public class ServiceLocator {
 		return getService(MetricsService.class);
 	}
 	
+	public LoggerService getLoggerService() {
+		return getService(LoggerService.class);
+	}
+	
 	public void shutdown() {
 		services.values().stream().collect(Collectors.toSet()).stream().forEach(s -> s.stop());
 	}
