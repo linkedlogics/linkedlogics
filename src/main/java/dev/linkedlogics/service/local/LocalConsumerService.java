@@ -1,13 +1,19 @@
 package dev.linkedlogics.service.local;
 
+import java.util.Optional;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import dev.linkedlogics.config.LinkedLogicsConfiguration;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import dev.linkedlogics.LinkedLogics;
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.service.ConsumerService;
+import dev.linkedlogics.service.QueueService;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.task.ProcessorTask;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class LocalConsumerService implements ConsumerService, Runnable {
 	private Thread consumer;
 	private boolean isRunning;
@@ -15,9 +21,6 @@ public class LocalConsumerService implements ConsumerService, Runnable {
 	
 	@Override
 	public void start() {
-		int queueSize = (Integer) LinkedLogicsConfiguration.getConfigOrDefault("services.consumer.queue-size", 1000);
-		queue = new ArrayBlockingQueue<>(queueSize);
-		
 		consumer = new Thread(this);
 		consumer.start();
 	}
@@ -36,14 +39,24 @@ public class LocalConsumerService implements ConsumerService, Runnable {
 		
 		while (isRunning) {
 			try {
-				Context context = queue.take();
-				ServiceLocator.getInstance().getProcessorService().process(new ProcessorTask(context));
+				QueueService queueService = ServiceLocator.getInstance().getQueueService();
+				Optional<String> message = queueService.poll(LinkedLogics.getApplicationName());
+				if (message.isPresent()) {
+					ObjectMapper mapper = ServiceLocator.getInstance().getMapperService().getMapper();
+					try {
+						consume(mapper.readValue(message.get(), Context.class));
+					} catch (Exception e) {
+						log.error(e.getLocalizedMessage(), e);
+					}
+				} else {
+					Thread.sleep(1);
+				}
 			} catch (InterruptedException e) {}
 		}
 	}
 
 	@Override
 	public void consume(Context context) {
-		queue.offer(context);
+		ServiceLocator.getInstance().getProcessorService().process(new ProcessorTask(context));
 	}
 }

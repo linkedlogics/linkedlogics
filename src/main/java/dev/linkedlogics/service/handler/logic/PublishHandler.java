@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dev.linkedlogics.LinkedLogics;
 import dev.linkedlogics.config.LinkedLogicsConfiguration;
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.context.Status;
@@ -64,7 +65,11 @@ public class PublishHandler extends LogicHandler {
 		
 		timeoutContext(context);
 		ServiceLocator.getInstance().getContextService().set(context);
-		ServiceLocator.getInstance().getPublisherService().publish(Context.forPublish(context));
+		if (context.getApplication() != null && !context.getApplication().equals(LinkedLogics.getApplicationName())) {
+			ServiceLocator.getInstance().getPublisherService().publish(Context.forPublish(context));
+		} else {
+			ServiceLocator.getInstance().getConsumerService().consume(Context.forPublish(context));
+		}
 	}
 
 	private void finishContext(Context context) {
