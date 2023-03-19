@@ -83,6 +83,14 @@ public class ServiceLocator {
 		return getService(LoggerService.class);
 	}
 	
+	public QueueService getQueueService() {
+		return getService(QueueService.class);
+	}
+	
+	public TopicService getTopicService() {
+		return getService(TopicService.class);
+	}
+	
 	public void shutdown() {
 		services.values().stream().collect(Collectors.toSet()).stream().forEach(s -> s.stop());
 	}
