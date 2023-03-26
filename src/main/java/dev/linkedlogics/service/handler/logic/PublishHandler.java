@@ -22,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class PublishHandler extends LogicHandler {
+	private boolean localBypass = Boolean.valueOf(LinkedLogicsConfiguration.getConfigOrDefault(LinkedLogicsConfiguration.LINKEDLOGICS, "services.processor.bypass", "true").toString());
+	
 	public PublishHandler() {
 
 	}
@@ -65,10 +67,11 @@ public class PublishHandler extends LogicHandler {
 		
 		timeoutContext(context);
 		ServiceLocator.getInstance().getContextService().set(context);
-		if (context.getApplication() != null && !context.getApplication().equals(LinkedLogics.getApplicationName())) {
-			ServiceLocator.getInstance().getPublisherService().publish(Context.forPublish(context));
-		} else {
+
+		if (context.getApplication() == null || (localBypass && context.getApplication().equals(LinkedLogics.getApplicationName()))) {
 			ServiceLocator.getInstance().getConsumerService().consume(Context.forPublish(context));
+		} else {
+			ServiceLocator.getInstance().getPublisherService().publish(Context.forPublish(context));
 		}
 	}
 
@@ -97,7 +100,7 @@ public class PublishHandler extends LogicHandler {
 	
 	private void timeoutContext(Context context) {	
 		if (context.getExpiresAt() == null || context.getExpiresAt().isBefore(OffsetDateTime.now())) {
-			int timeout = (Integer) LinkedLogicsConfiguration.getConfigOrDefault("services.process.timeout", 60);
+			int timeout = (Integer) LinkedLogicsConfiguration.getConfigOrDefault("services.process.timeout", 600);
 			context.setExpiresAt(OffsetDateTime.now().plusSeconds(timeout));
 		}
 		
