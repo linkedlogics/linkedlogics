@@ -1,7 +1,6 @@
 package dev.linkedlogics.service.local;
 
 import java.util.Optional;
-import java.util.concurrent.ArrayBlockingQueue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -17,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 public class LocalConsumerService implements ConsumerService, Runnable {
 	private Thread consumer;
 	private boolean isRunning;
-	private ArrayBlockingQueue<Context> queue;
 	
 	@Override
 	public void start() {
