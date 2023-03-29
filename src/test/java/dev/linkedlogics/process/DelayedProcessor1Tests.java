@@ -33,6 +33,7 @@ public class DelayedProcessor1Tests {
 		LinkedLogics.configure(new LocalServiceConfigurer());
 		LinkedLogics.registerLogic(DelayedProcessor1Tests.class);
 		LinkedLogics.registerProcess(DelayedProcessor1Tests.class);
+		LinkedLogics.launch();
 		contextService = ServiceLocator.getInstance().getContextService();
 	}
 

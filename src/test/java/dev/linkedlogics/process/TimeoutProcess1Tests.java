@@ -33,6 +33,7 @@ public class TimeoutProcess1Tests {
 		LinkedLogics.configure(new LocalServiceConfigurer());
 		LinkedLogics.registerLogic(TimeoutProcess1Tests.class);
 		LinkedLogics.registerProcess(TimeoutProcess1Tests.class);
+		LinkedLogics.launch();
 		contextService = ServiceLocator.getInstance().getContextService();
 	}
 

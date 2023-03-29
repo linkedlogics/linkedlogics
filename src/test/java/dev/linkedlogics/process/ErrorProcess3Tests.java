@@ -36,6 +36,7 @@ public class ErrorProcess3Tests {
 		LinkedLogics.configure(new LocalServiceConfigurer());
 		LinkedLogics.registerLogic(ErrorProcess3Tests.class);
 		LinkedLogics.registerProcess(ErrorProcess3Tests.class);
+		LinkedLogics.launch();
 		contextService = ServiceLocator.getInstance().getContextService();
 	}
 

@@ -31,6 +31,7 @@ public class ForkJoinProcess1Tests {
 		LinkedLogics.configure(new LocalServiceConfigurer());
 		LinkedLogics.registerLogic(ForkJoinProcess1Tests.class);
 		LinkedLogics.registerProcess(ForkJoinProcess1Tests.class);
+		LinkedLogics.launch();
 		contextService = ServiceLocator.getInstance().getContextService();
 	}
 	

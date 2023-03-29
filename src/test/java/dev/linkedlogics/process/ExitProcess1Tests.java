@@ -34,6 +34,7 @@ public class ExitProcess1Tests {
 		LinkedLogics.configure(new LocalServiceConfigurer());
 		LinkedLogics.registerLogic(ExitProcess1Tests.class);
 		LinkedLogics.registerProcess(ExitProcess1Tests.class);
+		LinkedLogics.launch();
 		contextService = ServiceLocator.getInstance().getContextService();
 	}
 

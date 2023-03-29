@@ -33,6 +33,7 @@ public class CompensateProcess1Tests {
 		LinkedLogics.configure(new LocalServiceConfigurer());
 		LinkedLogics.registerLogic(CompensateProcess1Tests.class);
 		LinkedLogics.registerProcess(CompensateProcess1Tests.class);
+		LinkedLogics.launch();
 		contextService = ServiceLocator.getInstance().getContextService();
 	}
 

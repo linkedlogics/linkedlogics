@@ -27,6 +27,7 @@ public class CycledProcess1Tests {
 		LinkedLogics.configure(new LocalServiceConfigurer());
 		LinkedLogics.registerLogic(CycledProcess1Tests.class);
 		LinkedLogics.registerProcess(CycledProcess1Tests.class);
+		LinkedLogics.launch();
 	}
 	
 	@Test

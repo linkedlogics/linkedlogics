@@ -124,17 +124,4 @@ public class OfferActivateLogics {
 		private String type;
 		private String msisdn;
 	}
-	
-	public static void main(String[] args) {
-		LinkedLogics.configure(new LocalServiceConfigurer());
-		LinkedLogics.registerLogic(OfferActivateLogics.class);
-		LinkedLogics.registerProcess(OfferActivateLogics.class);
-		
-		LinkedLogics.start(ACTIVATE_OFFER, Map.of("msisdn", "994702011365", "hour", HOUR));
-		
-		try {
-			Thread.sleep(10000);
-			System.exit(0);
-		} catch (InterruptedException e) {}
-	}
 }

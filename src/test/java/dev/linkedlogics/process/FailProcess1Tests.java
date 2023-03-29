@@ -37,6 +37,7 @@ public class FailProcess1Tests {
 		LinkedLogics.configure(new LocalServiceConfigurer());
 		LinkedLogics.registerLogic(FailProcess1Tests.class);
 		LinkedLogics.registerProcess(FailProcess1Tests.class);
+		LinkedLogics.launch();
 		contextService = ServiceLocator.getInstance().getContextService();
 	}
 

@@ -35,6 +35,7 @@ public class ServiceLocatorTests {
 		configurer.configure(service);
 		
 		ServiceLocator.getInstance().configure(configurer);
+		ServiceLocator.getInstance().start();
 		ServiceLocator.getInstance().shutdown();
 		
 		verify(service, times(1)).start();
@@ -49,6 +50,7 @@ public class ServiceLocatorTests {
 		configurer.configure(service);
 		
 		ServiceLocator.getInstance().configure(configurer);
+		ServiceLocator.getInstance().start();
 		ServiceLocator.getInstance().shutdown();
 		
 		assertThat(service.getStartCounter()).isEqualTo(1);

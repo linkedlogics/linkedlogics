@@ -37,6 +37,7 @@ public class InputProcess1Tests {
 		LinkedLogics.configure(new LocalServiceConfigurer());
 		LinkedLogics.registerLogic(InputProcess1Tests.class);
 		LinkedLogics.registerProcess(InputProcess1Tests.class);
+		LinkedLogics.launch();
 		contextService = ServiceLocator.getInstance().getContextService();
 		ServiceLocator.getInstance().getMapperService();
 	}

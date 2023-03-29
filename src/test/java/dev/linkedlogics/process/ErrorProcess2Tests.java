@@ -40,6 +40,7 @@ public class ErrorProcess2Tests {
 		LinkedLogics.configure(new LocalServiceConfigurer());
 		LinkedLogics.registerLogic(ErrorProcess2Tests.class);
 		LinkedLogics.registerProcess(ErrorProcess2Tests.class);
+		LinkedLogics.launch();
 		contextService = ServiceLocator.getInstance().getContextService();
 	}
 

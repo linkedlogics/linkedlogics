@@ -23,6 +23,7 @@ public class JumpProcess2Tests {
 	public static void setUp() {
 		LinkedLogics.configure(new LocalServiceConfigurer());
 		LinkedLogics.registerLogic(JumpProcess2Tests.class);
+		LinkedLogics.launch();
 	}
 
 	@Test

@@ -34,6 +34,7 @@ public class AsyncProcess1Tests {
 		LinkedLogics.configure(new LocalServiceConfigurer());
 		LinkedLogics.registerLogic(AsyncProcess1Tests.class);
 		LinkedLogics.registerProcess(AsyncProcess1Tests.class);
+		LinkedLogics.launch();
 		contextService = ServiceLocator.getInstance().getContextService();
 	}
 

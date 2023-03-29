@@ -8,4 +8,8 @@ public interface LinkedLogicsService {
 	default void stop() {
 		
 	}
+	
+	default int order() {
+		return 0;
+	}
 }

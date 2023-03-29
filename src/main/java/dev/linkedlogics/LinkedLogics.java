@@ -28,6 +28,10 @@ public class LinkedLogics {
 		ServiceLocator.getInstance().shutdown();
 	}
 	
+	public static void launch() {
+		ServiceLocator.getInstance().start();
+	}
+	
 	public static String start(String processId, int version, Map<String, Object> params) {
 		return LinkedLogicsStarter.start(processId, version, params, null);
 	}

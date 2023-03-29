@@ -34,6 +34,7 @@ public class CallBack1Tests {
 		LinkedLogics.configure(new LocalServiceConfigurer());
 		LinkedLogics.registerLogic(CallBack1Tests.class);
 		LinkedLogics.registerProcess(CallBack1Tests.class);
+		LinkedLogics.launch();
 		contextService = ServiceLocator.getInstance().getContextService();
 	}
 

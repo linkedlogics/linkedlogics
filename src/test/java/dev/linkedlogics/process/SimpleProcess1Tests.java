@@ -33,6 +33,7 @@ public class SimpleProcess1Tests {
 		LinkedLogics.configure(new LocalServiceConfigurer());
 		LinkedLogics.registerLogic(SimpleProcess1Tests.class);
 		LinkedLogics.registerProcess(SimpleProcess1Tests.class);
+		LinkedLogics.launch();
 		contextService = ServiceLocator.getInstance().getContextService();
 	}
 

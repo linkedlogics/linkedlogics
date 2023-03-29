@@ -34,6 +34,7 @@ public class JumpProcess1Tests {
 		LinkedLogics.configure(new LocalServiceConfigurer());
 		LinkedLogics.registerLogic(JumpProcess1Tests.class);
 		LinkedLogics.registerProcess(JumpProcess1Tests.class);
+		LinkedLogics.launch();
 		contextService = ServiceLocator.getInstance().getContextService();
 	}
 
