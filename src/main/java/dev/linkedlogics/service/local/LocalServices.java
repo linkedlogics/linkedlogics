@@ -5,7 +5,7 @@ import java.util.List;
 import dev.linkedlogics.service.LinkedLogicsService;
 import dev.linkedlogics.service.ServiceProvider;
 
-public class LocalServices implements ServiceProvider {
+public class LocalServices extends ServiceProvider {
 
 	@Override
 	public List<LinkedLogicsService> getStoringServices() {

@@ -4,6 +4,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ServiceLocator {
 	private static final ServiceLocator INSTANCE = new ServiceLocator();
 	
@@ -92,6 +95,7 @@ public class ServiceLocator {
 	}
 	
 	public void start() {
+		log.info("Launching Linked Logics");
 		services.values().stream().distinct().sorted(Comparator.comparing(LinkedLogicsService::order)).forEach(s -> s.start());
 	}
 }

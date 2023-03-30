@@ -3,32 +3,32 @@ package dev.linkedlogics.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public interface ServiceProvider {
-	default List<LinkedLogicsService> getStoringServices() {
+public class ServiceProvider {
+	public List<LinkedLogicsService> getStoringServices() {
 		return List.of();
 	}
 	
-	default List<LinkedLogicsService> getMessagingServices() {
+	public List<LinkedLogicsService> getMessagingServices() {
 		return List.of();
 	}
 	
-	default List<LinkedLogicsService> getSchedulingServices() {
+	public List<LinkedLogicsService> getSchedulingServices() {
 		return List.of();
 	}
 	
-	default List<LinkedLogicsService> getProcessingServices() {
+	public List<LinkedLogicsService> getProcessingServices() {
 		return List.of();
 	}
 	
-	default List<LinkedLogicsService> getMonitoringServices() {
+	public List<LinkedLogicsService> getMonitoringServices() {
 		return List.of();
 	}
 	
-	default List<LinkedLogicsService> getEvaluatingServices() {
+	public List<LinkedLogicsService> getEvaluatingServices() {
 		return List.of();
 	}
 	
-	default List<LinkedLogicsService> getServices() {
+	public List<LinkedLogicsService> getServices() {
 		return List.of(getStoringServices(),
 						getMessagingServices(),
 						getSchedulingServices(),
