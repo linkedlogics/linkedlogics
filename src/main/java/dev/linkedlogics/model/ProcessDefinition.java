@@ -23,6 +23,7 @@ public class ProcessDefinition implements Comparable<ProcessDefinition> {
 	private String id;
 	private int version = LATEST_VERSION;
 	private Map<String, Object> inputs = new HashMap<>();
+	private boolean archived;
 	
 	private List<BaseLogicDefinition> logics = new ArrayList<BaseLogicDefinition>();
 	@JsonIgnore
@@ -58,6 +59,11 @@ public class ProcessDefinition implements Comparable<ProcessDefinition> {
 		
 		public ProcessBuilder version(int version) {
 			this.process.setVersion(version);
+			return this;
+		}
+		
+		public ProcessBuilder archived() {
+			this.process.setArchived(true);
 			return this;
 		}
 		

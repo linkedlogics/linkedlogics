@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.concurrent.ConcurrentHashMap;
 
 import dev.linkedlogics.model.ProcessDefinition;
 import dev.linkedlogics.model.ProcessDefinitionReader;
@@ -17,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class LocalProcessService implements ProcessService {
-	protected final Map<String, ProcessDefinition> definitions = new HashMap<>();
+	protected final Map<String, ProcessDefinition> definitions = new ConcurrentHashMap<>();
 	
 	@Override
 	public Optional<ProcessDefinition> getProcess(String processId) {
@@ -71,15 +72,18 @@ public class LocalProcessService implements ProcessService {
 		}).forEach(this::addProcess);
 	}
 	
-	protected void addProcess(ProcessDefinition definition) {
-		ProcessDefinition validatedDefinition = new ProcessDefinitionReader(new ProcessDefinitionWriter(definition).write()).read();
+	protected void addProcess(ProcessDefinition process) {
+		if (process.isArchived()) {
+			log.info(String.format("process %s:%d is archived", process.getId(), process.getVersion()));
+		}
+		
+		ProcessDefinition validatedDefinition = new ProcessDefinitionReader(new ProcessDefinitionWriter(process).write()).read();
 		
 		if (definitions.containsKey(getProcessKey(validatedDefinition))) {
 			log.warn("process {}:{} was overwritten");
 		}
 		
 		definitions.put(getProcessKey(validatedDefinition), validatedDefinition);
-		
 		definitions.values()
 			.stream()
 			.sorted((p1, p2) -> p1.compareTo(p2))

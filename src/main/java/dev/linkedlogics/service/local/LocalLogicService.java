@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.concurrent.ConcurrentHashMap;
 
 import dev.linkedlogics.annotation.Logic;
 import dev.linkedlogics.exception.AlreadyExistingError;
@@ -13,7 +14,7 @@ import dev.linkedlogics.model.LogicDefinition;
 import dev.linkedlogics.service.LogicService;
 
 public class LocalLogicService implements LogicService {
-	private final Map<String, LogicDefinition> definitions = new HashMap<>();
+	private final Map<String, LogicDefinition> definitions = new ConcurrentHashMap<>();
 
 	@Override
 	public Optional<LogicDefinition> getLogic(String logicId) {
