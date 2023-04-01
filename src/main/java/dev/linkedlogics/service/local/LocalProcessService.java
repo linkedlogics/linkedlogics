@@ -6,16 +6,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalInt;
 
-import dev.linkedlogics.exception.AlreadyExistingError;
 import dev.linkedlogics.model.ProcessDefinition;
 import dev.linkedlogics.model.ProcessDefinitionReader;
 import dev.linkedlogics.model.ProcessDefinitionWriter;
 import dev.linkedlogics.model.process.helper.LogicDependencies;
 import dev.linkedlogics.service.ProcessService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class LocalProcessService implements ProcessService {
-	protected final Map<String, Map<Integer, ProcessDefinition>> definitions = new HashMap<>();
+	protected final Map<String, ProcessDefinition> definitions = new HashMap<>();
 	
 	@Override
 	public Optional<ProcessDefinition> getProcess(String processId) {
@@ -25,9 +27,12 @@ public class LocalProcessService implements ProcessService {
 	@Override
 	public Optional<ProcessDefinition> getProcess(String processId, int version) {
 		if (version == LATEST_VERSION) {
-			return Optional.ofNullable(definitions.get(processId)).map(m -> m.get(m.keySet().stream().mapToInt(i -> i).max().getAsInt()));
+			OptionalInt latestVersion = definitions.values().stream().filter(p -> p.getId().equals(processId)).map(p -> p.getVersion()).mapToInt(i -> i).max();
+			if (latestVersion.isPresent()) {
+				return Optional.ofNullable(definitions.get(getProcessKey(processId, latestVersion.getAsInt())));
+			}
 		}
-		return Optional.ofNullable(definitions.get(processId)).map(m -> m.get(version));
+		return Optional.ofNullable(definitions.get(getProcessKey(processId, version)));
 	}
 	
 	@Override
@@ -69,24 +74,23 @@ public class LocalProcessService implements ProcessService {
 	protected void addProcess(ProcessDefinition definition) {
 		ProcessDefinition validatedDefinition = new ProcessDefinitionReader(new ProcessDefinitionWriter(definition).write()).read();
 		
-		if (!definitions.containsKey(validatedDefinition.getId())) {
-			definitions.put(validatedDefinition.getId(), new HashMap<>() {{
-				put(validatedDefinition.getVersion(), validatedDefinition);
-			}});
-		} else {
-			Map<Integer, ProcessDefinition> versionMap = definitions.get(validatedDefinition.getId());
-			
-			if (!versionMap.containsKey(validatedDefinition.getVersion())) {
-				versionMap.put(validatedDefinition.getVersion(), validatedDefinition);
-			} else {
-				throw new AlreadyExistingError(validatedDefinition.getId(), validatedDefinition.getVersion(), "PROCESS");	
-			}
+		if (definitions.containsKey(getProcessKey(validatedDefinition))) {
+			log.warn("process {}:{} was overwritten");
 		}
+		
+		definitions.put(getProcessKey(validatedDefinition), validatedDefinition);
 		
 		definitions.values()
 			.stream()
-			.flatMap(m -> m.values().stream())
 			.sorted((p1, p2) -> p1.compareTo(p2))
 			.forEach(LogicDependencies::setDependencies);
+	}
+	
+	protected String getProcessKey(ProcessDefinition process) {
+		return String.format("%s:%d", process.getId(), process.getVersion());
+	}
+	
+	protected String getProcessKey(String processId, int version) {
+		return String.format("%s:%d", processId, version);
 	}
 }

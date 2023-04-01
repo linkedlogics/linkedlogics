@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 import dev.linkedlogics.annotation.Logic;
 import dev.linkedlogics.exception.AlreadyExistingError;
@@ -12,8 +13,8 @@ import dev.linkedlogics.model.LogicDefinition;
 import dev.linkedlogics.service.LogicService;
 
 public class LocalLogicService implements LogicService {
-	private final Map<String, Map<Integer, LogicDefinition>> definitions = new HashMap<>();
-	
+	private final Map<String, LogicDefinition> definitions = new HashMap<>();
+
 	@Override
 	public Optional<LogicDefinition> getLogic(String logicId) {
 		return getLogic(logicId, LATEST_VERSION);
@@ -22,11 +23,14 @@ public class LocalLogicService implements LogicService {
 	@Override
 	public Optional<LogicDefinition> getLogic(String logicId, int version) {
 		if (version == LATEST_VERSION) {
-			return Optional.ofNullable(definitions.get(logicId)).map(m -> m.get(m.keySet().stream().mapToInt(i -> i).max().getAsInt()));
+			OptionalInt latestVersion = definitions.values().stream().filter(p -> p.getId().equals(logicId)).map(p -> p.getVersion()).mapToInt(i -> i).max();
+			if (latestVersion.isPresent()) {
+				return Optional.ofNullable(definitions.get(getLogicKey(logicId, latestVersion.getAsInt())));
+			}
 		}
-		return Optional.ofNullable(definitions.get(logicId)).map(m -> m.get(version));
+		return Optional.ofNullable(definitions.get(getLogicKey(logicId, version)));
 	}
-	
+
 	@Override
 	public void register(Object logics) {
 		if (logics.getClass().equals(Class.class)) {
@@ -50,20 +54,20 @@ public class LocalLogicService implements LogicService {
 		.map(m -> new LogicDefinition(m.getAnnotation(Logic.class), m, null))
 		.forEach(this::addLogic);
 	}
-	
+
 	protected void addLogic(LogicDefinition definition) throws AlreadyExistingError {
-		if (!definitions.containsKey(definition.getId())) {
-			definitions.put(definition.getId(), new HashMap<>() {{
-				put(definition.getVersion(), definition);
-			}});
-		} else {
-			Map<Integer, LogicDefinition> versionMap = definitions.get(definition.getId());
-			
-			if (!versionMap.containsKey(definition.getVersion())) {
-				versionMap.put(definition.getVersion(), definition);
-			} else {
-				throw new AlreadyExistingError(definition.getId(), definition.getVersion(), "LOGIC");	
-			}
+		if (definitions.containsKey(getLogicKey(definition))) {
+			throw new AlreadyExistingError(definition.getId(), definition.getVersion(), "LOGIC");	
 		}
+
+		definitions.put(getLogicKey(definition), definition);
+	}
+
+	protected String getLogicKey(LogicDefinition logic) {
+		return String.format("%s:%d", logic.getId(), logic.getVersion());
+	}
+
+	protected String getLogicKey(String logicId, int version) {
+		return String.format("%s:%d", logicId, version);
 	}
 }

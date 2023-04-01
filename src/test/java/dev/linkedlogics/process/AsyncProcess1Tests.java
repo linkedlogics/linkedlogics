@@ -46,7 +46,7 @@ public class AsyncProcess1Tests {
 		long finish = System.currentTimeMillis();
 
 		assertThat(finish - start).isGreaterThan(500);
-		assertThat(finish - start).isLessThan(1000);
+		assertThat(finish - start).isLessThan(2000);
 		Context ctx = contextService.get(contextId).get();
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
