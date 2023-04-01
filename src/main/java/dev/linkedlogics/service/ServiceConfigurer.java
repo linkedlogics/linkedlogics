@@ -1,8 +1,9 @@
 package dev.linkedlogics.service;
 
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class ServiceConfigurer {
@@ -23,6 +24,17 @@ public class ServiceConfigurer {
 	}
 	
 	public Stream<Class<?>> getLinkedInterfaces(LinkedLogicsService service) {
-		return Arrays.stream(service.getClass().getInterfaces()).filter(i -> LinkedLogicsService.class.isAssignableFrom(i));
+		return getAllInterfaces(service.getClass()).stream().filter(i -> LinkedLogicsService.class.isAssignableFrom(i));
+	}
+	
+	public static Set<Class<?>> getAllInterfaces(Class<?> clazz) {
+		Set<Class<?>> interfaces = new HashSet<>();
+		for (Class<?> i : clazz.getInterfaces()) {
+			interfaces.add(i);
+		}
+		if (clazz.getSuperclass() != null) {
+			interfaces.addAll(getAllInterfaces(clazz.getSuperclass()));
+		}
+		return interfaces;
 	}
 }

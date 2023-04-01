@@ -54,6 +54,11 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
 }
 
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    archiveClassifier.set('sources')
+}
+
 publishing {
     publications {
         maven(MavenPublication) {
@@ -62,7 +67,10 @@ publishing {
             version = "$version"
 
             from components.java
-        
+            
+            // Add a new artifact for sources
+            artifact(sourcesJar)
+            
             pom {
                 name = 'LinkedLogics'
                 description = 'Linked-Logics Framework'
@@ -88,6 +96,8 @@ publishing {
             }
         }
     }
+    
+    repositories {
+        mavenLocal()
+    }
 }
-
-
