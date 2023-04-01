@@ -28,14 +28,14 @@ public class ErrorFlowHandler extends ProcessFlowHandler {
 				} else {
 					return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 				}
-			} else if (candidate.get() instanceof ErrorLogicDefinition && matches(context.getError(), (ErrorLogicDefinition) candidate.get())) {
-				setError(context, (ErrorLogicDefinition) candidate.get());
-				
-				if (((ErrorLogicDefinition) candidate.get()).getErrorLogic() != null) {
-					return HandlerResult.nextCandidate(((ErrorLogicDefinition) candidate.get()).getErrorLogic().getPosition());
-				} else {
-					return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
-				}
+//			} else if (candidate.get() instanceof ErrorLogicDefinition && matches(context.getError(), (ErrorLogicDefinition) candidate.get())) {
+//				setError(context, (ErrorLogicDefinition) candidate.get());
+//				
+//				if (((ErrorLogicDefinition) candidate.get()).getErrorLogic() != null) {
+//					return HandlerResult.nextCandidate(((ErrorLogicDefinition) candidate.get()).getErrorLogic().getPosition());
+//				} else {
+//					return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
+//				}
 			} else {
 				return super.handle(candidate, candidatePosition, context);
 			}

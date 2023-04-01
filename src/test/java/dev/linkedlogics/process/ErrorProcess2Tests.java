@@ -169,7 +169,7 @@ public class ErrorProcess2Tests {
 	public static ProcessDefinition scenario6() {
 		return createProcess("SIMPLE_SCENARIO_6", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 3).handle(error(-100).build()).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 3).handle(error().withCodes(-100).build()).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", 4).build())
 				.build();
 	}
@@ -190,7 +190,7 @@ public class ErrorProcess2Tests {
 	public static ProcessDefinition scenario7() {
 		return createProcess("SIMPLE_SCENARIO_7", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 3).handle(error(-100).build()).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 3).handle(error().withCodes(-100).build()).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", 4).forced().build())
 				.build();
 	}

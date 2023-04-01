@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ErrorLogicDefinition extends BaseLogicDefinition {
+public class ErrorLogicDefinition extends TypedLogicDefinition {
 	private BaseLogicDefinition errorLogic;
 	private Set<Integer> errorCodeSet = new HashSet<>();
 	private Set<String> errorMessageSet = new HashSet<>();
@@ -21,7 +21,7 @@ public class ErrorLogicDefinition extends BaseLogicDefinition {
 		super(ProcessLogicTypes.ERROR);
 	}
 	
-	public ErrorLogicDefinition clone() {
+	public ErrorLogicDefinition cloneLogic() {
 		ErrorLogicDefinition clone = new ErrorLogicDefinition();
 		clone.setErrorCodeSet(new HashSet<>(getErrorCodeSet()));
 		clone.setErrorMessageSet(new HashSet<>(getErrorMessageSet()));
@@ -32,9 +32,12 @@ public class ErrorLogicDefinition extends BaseLogicDefinition {
 		return clone;
 	}
 	
-	public static class ErrorLogicBuilder extends LogicBuilder<ErrorLogicBuilder, ErrorLogicDefinition> {
+	@Getter
+	public static class ErrorLogicBuilder {
+		private ErrorLogicDefinition logic;
+		
 		public ErrorLogicBuilder() {
-			super(new ErrorLogicDefinition());
+			logic = new ErrorLogicDefinition();
 		}
 		
 		public ErrorLogicBuilder withCodes(Integer... errorCodes) {
@@ -66,6 +69,10 @@ public class ErrorLogicDefinition extends BaseLogicDefinition {
 			this.getLogic().setThrowErrorCode(errorCode);
 			this.getLogic().setThrowErrorMessage(errorMessage);
 			return this;
+		}
+		
+		public ErrorLogicDefinition build() {
+			return logic;
 		}
 	}
 }

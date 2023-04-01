@@ -23,8 +23,8 @@ import org.junit.jupiter.api.Test;
 
 import dev.linkedlogics.LinkedLogics;
 import dev.linkedlogics.model.ProcessDefinition;
-import dev.linkedlogics.model.process.builder.ProcessDefinitionReader;
-import dev.linkedlogics.model.process.builder.ProcessDefinitionWriter;
+import dev.linkedlogics.model.ProcessDefinitionReader;
+import dev.linkedlogics.model.ProcessDefinitionWriter;
 import dev.linkedlogics.process.SimpleProcess1Tests;
 import dev.linkedlogics.service.ContextService;
 import dev.linkedlogics.service.ServiceLocator;

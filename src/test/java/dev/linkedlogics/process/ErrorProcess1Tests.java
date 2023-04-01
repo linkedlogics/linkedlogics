@@ -145,8 +145,7 @@ public class ErrorProcess1Tests {
 						logic("INSERT").input("list", expr("list")).input("val", "v3")
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3").build())
 						.build(),
-						verify(expr("false")).elseFailWithCode(-100).andMessage("failure").build())
-						.handle(error(-100).build())
+						verify(expr("false")).elseFailWithCode(-100).andMessage("failure").build()).handle(error().withCodes(-100).build())
 						.build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v4").build())
 				.build();
@@ -265,7 +264,7 @@ public class ErrorProcess1Tests {
 								.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v4").build())
 								.build(),
 								verify(expr("false")).elseFailWithCode(-200).andMessage("failure").build())
-						.handle(error(-100).orMessages("error").build())
+						.handle(error().withCodes(-100).orMessages("error").build())
 						.build(),
 						logic("INSERT").input("list", expr("list")).input("val", "v5")
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v5").build())
@@ -303,7 +302,7 @@ public class ErrorProcess1Tests {
 								.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v4").build())
 								.build(),
 								verify(expr("false")).elseFailWithCode(-200).andMessage("failure").build())
-						.handle(error(-100).orMessages("error").build())
+						.handle(error().withCodes(-100).orMessages("error").build())
 						.build(),
 						logic("INSERT").input("list", expr("list")).input("val", "v5")
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v5").build())
@@ -341,7 +340,7 @@ public class ErrorProcess1Tests {
 								.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v4").build())
 								.build(),
 								verify(expr("false")).elseFailWithCode(-200).andMessage("failure").build())
-						.handle(error(-100).orMessages("error").build())
+						.handle(error().withCodes(-100).orMessages("error").build())
 						.build(),
 						logic("INSERT").input("list", expr("list")).input("val", "v5")
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v5").build())

@@ -67,7 +67,7 @@ public class ErrorProcess3Tests {
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3").build())
 						.build(),
 						verify(when("false")).elseFailWithCode(-100).andMessage("failure").build())
-						.handle(error(-100).throwAgain().build())
+						.handle(error().withCodes(-100).throwAgain().build())
 						.build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v4").build())
 				.build();
@@ -136,8 +136,7 @@ public class ErrorProcess3Tests {
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3").build())
 						.build(),
 						verify(when("false")).elseFailWithCode(-100).andMessage("failure").build())
-						.build())
-				.add(error().build())
+						.handle(error().build()).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v4").build())
 				.build();
 	}
@@ -164,8 +163,7 @@ public class ErrorProcess3Tests {
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3").build())
 						.build(),
 						verify(when("false")).elseFailWithCode(-100).andMessage("failure").build())
-						.build())
-				.add(error().withCodes(-200).build())
+						.handle(error().withCodes(-200).build()).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v4").build())
 				.build();
 	}

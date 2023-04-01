@@ -37,12 +37,13 @@ public class LogicFinder {
 				if (single.getCompensationLogic() != null) {
 					traverse(List.of(single.getCompensationLogic()), foundList, logicDefinitionClass);
 				}
-			} else if (l instanceof ErrorLogicDefinition) {
-				ErrorLogicDefinition error = (ErrorLogicDefinition) l;
-				if (error.getErrorLogic() != null) {
-					traverse(List.of(error.getErrorLogic()), foundList, logicDefinitionClass);
-				}
-			}
+			} 
+//			else if (l instanceof ErrorLogicDefinition) {
+//				ErrorLogicDefinition error = (ErrorLogicDefinition) l;
+//				if (error.getErrorLogic() != null) {
+//					traverse(List.of(error.getErrorLogic()), foundList, logicDefinitionClass);
+//				}
+//			}
 			
 			if (l.getError() != null && l.getError().getErrorLogic() != null) {
 				traverse(List.of(l.getError().getErrorLogic()), foundList, logicDefinitionClass);

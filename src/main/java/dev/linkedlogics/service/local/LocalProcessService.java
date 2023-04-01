@@ -9,11 +9,13 @@ import java.util.Optional;
 
 import dev.linkedlogics.exception.AlreadyExistingError;
 import dev.linkedlogics.model.ProcessDefinition;
+import dev.linkedlogics.model.ProcessDefinitionReader;
+import dev.linkedlogics.model.ProcessDefinitionWriter;
 import dev.linkedlogics.model.process.helper.LogicDependencies;
 import dev.linkedlogics.service.ProcessService;
 
 public class LocalProcessService implements ProcessService {
-	private final Map<String, Map<Integer, ProcessDefinition>> definitions = new HashMap<>();
+	protected final Map<String, Map<Integer, ProcessDefinition>> definitions = new HashMap<>();
 	
 	@Override
 	public Optional<ProcessDefinition> getProcess(String processId) {
@@ -65,17 +67,19 @@ public class LocalProcessService implements ProcessService {
 	}
 	
 	protected void addProcess(ProcessDefinition definition) {
-		if (!definitions.containsKey(definition.getId())) {
-			definitions.put(definition.getId(), new HashMap<>() {{
-				put(definition.getVersion(), definition);
+		ProcessDefinition validatedDefinition = new ProcessDefinitionReader(new ProcessDefinitionWriter(definition).write()).read();
+		
+		if (!definitions.containsKey(validatedDefinition.getId())) {
+			definitions.put(validatedDefinition.getId(), new HashMap<>() {{
+				put(validatedDefinition.getVersion(), validatedDefinition);
 			}});
 		} else {
-			Map<Integer, ProcessDefinition> versionMap = definitions.get(definition.getId());
+			Map<Integer, ProcessDefinition> versionMap = definitions.get(validatedDefinition.getId());
 			
-			if (!versionMap.containsKey(definition.getVersion())) {
-				versionMap.put(definition.getVersion(), definition);
+			if (!versionMap.containsKey(validatedDefinition.getVersion())) {
+				versionMap.put(validatedDefinition.getVersion(), validatedDefinition);
 			} else {
-				throw new AlreadyExistingError(definition.getId(), definition.getVersion(), "PROCESS");	
+				throw new AlreadyExistingError(validatedDefinition.getId(), validatedDefinition.getVersion(), "PROCESS");	
 			}
 		}
 		

@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'dev.linkedlogics'
-version = '1.0.0-SNAPSHOT'
+version = '1.0.0'
 sourceCompatibility = '11'
 
 configurations {
@@ -59,7 +59,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'dev.linkedlogics'
             artifactId = 'linkedlogics'
-            version = '1.0.0-SNAPSHOT'
+            version = "$version"
 
             from components.java
         

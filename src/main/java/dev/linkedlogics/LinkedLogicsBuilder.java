@@ -62,14 +62,14 @@ public class LinkedLogicsBuilder {
 		return new SavepointLogicBuilder();
 	}
 	
-	public static ErrorLogicDefinition.ErrorLogicBuilder error(Integer... errorCodes) {
-		return new ErrorLogicBuilder().withCodes(errorCodes);
+	public static ErrorLogicDefinition.ErrorLogicBuilder handle(ErrorLogicBuilder error) {
+		return error;
 	}
 	
-	public static ErrorLogicDefinition.ErrorLogicBuilder error(String... errorMessages) {
-		return new ErrorLogicBuilder().withMessages(errorMessages);
-	}
-	
+//	public static ErrorLogicDefinition.ErrorLogicBuilder error(String... errorMessages) {
+//		return new ErrorLogicBuilder().withMessages(errorMessages);
+//	}
+//	
 	public static ErrorLogicDefinition.ErrorLogicBuilder error() {
 		return new ErrorLogicBuilder();
 	}

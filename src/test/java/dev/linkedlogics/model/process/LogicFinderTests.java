@@ -8,11 +8,11 @@ import static dev.linkedlogics.LinkedLogicsBuilder.group;
 import static dev.linkedlogics.LinkedLogicsBuilder.logic;
 import static dev.linkedlogics.LinkedLogicsBuilder.process;
 import static dev.linkedlogics.LinkedLogicsBuilder.verify;
+import static dev.linkedlogics.LinkedLogicsBuilder.when;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -53,7 +53,6 @@ public class LogicFinderTests {
 			Arguments.of(PROCESS_A, BranchLogicDefinition.class, 3),
 			Arguments.of(PROCESS_A, VerifyLogicDefinition.class, 2),
 			Arguments.of(PROCESS_A, GroupLogicDefinition.class, 3),
-			Arguments.of(PROCESS_A, ErrorLogicDefinition.class, 2),
 			Arguments.of(PROCESS_B, ProcessLogicDefinition.class, 10)
 		);
 	}
@@ -79,9 +78,7 @@ public class LogicFinderTests {
 									logic(LOGIC_1).build(), 
 									group(logic(LOGIC_1).build()).build()).build()).build())
 					.add(logic(LOGIC_1).build())
-					.add(error().build())
-					.add(verify(expr("false")).code(-200).message("failure").build())
-					.add(error().usingLogic(branch(expr("list.size() < 2"),logic(LOGIC_1).build()).build()).build())
+					.add(verify(when("false")).elseFailWithCode(-200).andMessage("failure").handle(error().usingLogic(branch(expr("list.size() < 2"),logic(LOGIC_1).build()).build()).build()).build())
 					.build();
 		}
 		
@@ -100,9 +97,7 @@ public class LogicFinderTests {
 									process(PROCESS_A, 0).build(), 
 									group(process(PROCESS_A, 0).build()).build()).build()).build())
 					.add(process(PROCESS_A, 0).build())
-					.add(error().build())
-					.add(verify(expr("false")).elseFailWithCode(-200).andMessage("failure").build())
-					.add(error().usingLogic(process(PROCESS_A, 0).build()).build())
+					.add(verify(expr("false")).elseFailWithCode(-200).andMessage("failure").handle(error().usingLogic(process(PROCESS_A, 0).build()).build()).build())
 					.build();
 		}
 	}

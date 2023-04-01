@@ -1,6 +1,7 @@
 package dev.linkedlogics.model.process;
 
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import dev.linkedlogics.model.ProcessLogicTypes;
 import dev.linkedlogics.service.LogicService;
@@ -79,14 +80,25 @@ public class SingleLogicDefinition extends BaseLogicDefinition {
 			return this;
 		}
 		
-		public SingleLogicBuilder output(String key, Object value) {
-			this.getLogic().getOutputs().put(key, value);
-			return this;
-		}
+//		public SingleLogicBuilder output(String key, Object value) {
+//			this.getLogic().getOutputs().put(key, value);
+//			return this;
+//		}
+//		
+//		public SingleLogicBuilder output(Map<String, Object> inputs) {
+//			this.getLogic().getOutputs().putAll(inputs);
+//			return this;
+//		}
 		
-		public SingleLogicBuilder output(Map<String, Object> inputs) {
-			this.getLogic().getOutputs().putAll(inputs);
-			return this;
+		public SingleLogicBuilder outputs(Object... outputs) {
+			if (outputs.length % 2 == 0) {
+				IntStream.range(0, outputs.length / 2).forEach(i -> {
+					this.logic.getOutputs().put((String) outputs[i * 2], outputs[i * 2 + 1]);
+				});
+				return this;
+			} else {
+				throw new IllegalArgumentException("parameters size must be even");
+			}
 		}
 	}
 	

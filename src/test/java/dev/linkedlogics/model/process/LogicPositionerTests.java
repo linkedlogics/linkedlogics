@@ -131,7 +131,7 @@ public class LogicPositionerTests {
 					.add(group(
 								logic(LOGIC_1).build(), 
 								logic(LOGIC_2).build())
-						.handle(error(-1).usingLogic(logic(LOGIC_3).build()).build())
+						.handle(error().withCodes(-1).usingLogic(logic(LOGIC_3).build()).build())
 						.build())
 					.add(group(
 								logic(LOGIC_2).build(), 

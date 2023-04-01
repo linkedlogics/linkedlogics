@@ -45,7 +45,7 @@ public abstract class BaseLogicDefinition extends TypedLogicDefinition implement
 		clone.setForced(getForced());
 		clone.setRetry(retry != null ? retry.cloneLogic() : null);
 		clone.setDelay(delay != null ? delay.cloneLogic() : null);
-		clone.setError(error != null ? (ErrorLogicDefinition) error.cloneLogic() : null);
+		clone.setError(error != null ? error.cloneLogic() : null);
 		clone.getInputs().putAll(getInputs());
 		clone.getOutputs().putAll(getOutputs());
 		return clone;

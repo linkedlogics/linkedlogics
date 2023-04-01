@@ -194,7 +194,7 @@ public class SimpleProcess1Tests {
 	public static ProcessDefinition scenariol7() {
 		return createProcess("SIMPLE_SCENARIO_7", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").output("out", "o2").build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").outputs("out", "o2").build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").build())
 				.build();
 	}
