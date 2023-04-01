@@ -58,7 +58,7 @@ public class FailProcess1Tests {
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").build())
 				.add(branch(expr("list.size() < 2"), 
 						logic("INSERT").input("list", expr("list")).input("val", "v3").build(), 
-						fail().code(-5).build()).build())
+						fail().withCode(-5).build()).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v5").build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v6").build())
 				.build();

@@ -3,6 +3,7 @@ package dev.linkedlogics.process;
 import static dev.linkedlogics.LinkedLogicsBuilder.branch;
 import static dev.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static dev.linkedlogics.LinkedLogicsBuilder.expr;
+import static dev.linkedlogics.LinkedLogicsBuilder.when;
 import static dev.linkedlogics.LinkedLogicsBuilder.group;
 import static dev.linkedlogics.LinkedLogicsBuilder.logic;
 import static dev.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
@@ -55,7 +56,7 @@ public class SimpleProcess2Tests {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").build())
-				.add(branch(expr("list.size() < 2"), 
+				.add(branch(when("list.size() < 2"), 
 						logic("INSERT").input("list", expr("list")).input("val", "v3").build(), 
 						logic("INSERT").input("list", expr("list")).input("val", "v4").build()).build())
 				.build();

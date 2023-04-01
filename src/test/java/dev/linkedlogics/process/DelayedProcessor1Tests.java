@@ -2,7 +2,9 @@ package dev.linkedlogics.process;
 
 import static dev.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static dev.linkedlogics.LinkedLogicsBuilder.expr;
+import static dev.linkedlogics.LinkedLogicsBuilder.var;
 import static dev.linkedlogics.LinkedLogicsBuilder.group;
+import static dev.linkedlogics.LinkedLogicsBuilder.seconds;
 import static dev.linkedlogics.LinkedLogicsBuilder.logic;
 import static dev.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,9 +56,9 @@ public class DelayedProcessor1Tests {
 
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").delayed(3).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").build())
+				.add(logic("INSERT").input("list", var("list")).input("val", "v1").build())
+				.add(logic("INSERT").input("list", var("list")).input("val", "v2").delayed(seconds(3)).build())
+				.add(logic("INSERT").input("list", var("list")).input("val", "v3").build())
 				.build();
 	}
 	

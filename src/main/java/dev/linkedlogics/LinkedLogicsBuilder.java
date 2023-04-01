@@ -63,11 +63,11 @@ public class LinkedLogicsBuilder {
 	}
 	
 	public static ErrorLogicDefinition.ErrorLogicBuilder error(Integer... errorCodes) {
-		return new ErrorLogicBuilder().errorCodeSet(errorCodes);
+		return new ErrorLogicBuilder().withCodes(errorCodes);
 	}
 	
 	public static ErrorLogicDefinition.ErrorLogicBuilder error(String... errorMessages) {
-		return new ErrorLogicBuilder().errorMessageSet(errorMessages);
+		return new ErrorLogicBuilder().withMessages(errorMessages);
 	}
 	
 	public static ErrorLogicDefinition.ErrorLogicBuilder error() {
@@ -75,7 +75,7 @@ public class LinkedLogicsBuilder {
 	}
 	
 	public static ErrorLogicDefinition.ErrorLogicBuilder error(BaseLogicDefinition errorLogic) {
-		return new ErrorLogicBuilder().errorLogic(errorLogic);
+		return new ErrorLogicBuilder().usingLogic(errorLogic);
 	}
 	
 	public static RetryLogicDefinition.RetryLogicBuilder retry(int maxRetries, int delay) {
@@ -84,6 +84,22 @@ public class LinkedLogicsBuilder {
 	
 	public static ExpressionLogicDefinition expr(String expression) {
 		return new ExpressionLogicDefinition.ExpressionLogicDefinitionBuilder(expression).build();
+	}
+	
+	public static ExpressionLogicDefinition when(String expression) {
+		return expr(expression);
+	}
+	
+	public static ExpressionLogicDefinition var(String expression) {
+		return expr(expression);
+	}
+	
+	public static Integer max(Integer i) {
+		return i;
+	}
+	
+	public static Integer seconds(Integer s) {
+		return s;
 	}
 	
 	public static JumpLogicBuilder jump(String label) {

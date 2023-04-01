@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -73,9 +74,15 @@ public class ProcessDefinition implements Comparable<ProcessDefinition> {
 			return this;
 		}
 		
-		public ProcessBuilder inputs(Map<String, Object> inputs) {
-			this.process.getInputs().putAll(inputs);
-			return this;
+		public ProcessBuilder inputs(Object... inputs) {
+			if (inputs.length % 2 == 0) {
+				IntStream.range(0, inputs.length / 2).forEach(i -> {
+					this.process.getInputs().put((String) inputs[i * 2], inputs[i * 2 + 1]);
+				});
+				return this;
+			} else {
+				throw new IllegalArgumentException("parameters size must be even");
+			}
 		}
 		
 		public ProcessDefinition build() {

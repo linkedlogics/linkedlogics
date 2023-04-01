@@ -131,7 +131,7 @@ public class RetryProcess1Tests {
 		return createProcess("SIMPLE_SCENARIO_4", 0)
 				.add(group(logic("INSERT").input("list", expr("list")).input("val", 2).build(),
 						logic("INSERT").input("list", expr("list")).input("val", 1).build())
-						.retry(retry(3, 1).errorCodeSet(-1).exclude().build())
+						.retry(retry(3, 1).excludeCodes(-1).build())
 						.build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", 3).build())
 				.build();

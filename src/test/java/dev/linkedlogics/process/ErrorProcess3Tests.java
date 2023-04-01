@@ -3,6 +3,7 @@ package dev.linkedlogics.process;
 import static dev.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static dev.linkedlogics.LinkedLogicsBuilder.error;
 import static dev.linkedlogics.LinkedLogicsBuilder.expr;
+import static dev.linkedlogics.LinkedLogicsBuilder.when;
 import static dev.linkedlogics.LinkedLogicsBuilder.group;
 import static dev.linkedlogics.LinkedLogicsBuilder.logic;
 import static dev.linkedlogics.LinkedLogicsBuilder.verify;
@@ -58,14 +59,14 @@ public class ErrorProcess3Tests {
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v1")
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v1").build())
 						.build())
-				.add(verify(expr("true")).code(-99).message("success").build())
+				.add(verify(when("true")).elseFailWithCode(-99).andMessage("success").build())
 				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v2")
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v2").build())	
 						.build(),
 						logic("INSERT").input("list", expr("list")).input("val", "v3")
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3").build())
 						.build(),
-						verify(expr("false")).code(-100).message("failure").build())
+						verify(when("false")).elseFailWithCode(-100).andMessage("failure").build())
 						.handle(error(-100).throwAgain().build())
 						.build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v4").build())
@@ -99,14 +100,14 @@ public class ErrorProcess3Tests {
 								logic("INSERT").input("list", expr("list")).input("val", "v4")
 								.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v4").build())
 								.build(),
-								verify(expr("false")).code(-200).message("failure").build())
-						.handle(error(-200).errorMessageSet("error").throwAgain(-500, "another error").build())
+								verify(when("false")).elseFailWithCode(-200).andMessage("failure").build())
+						.handle(error().withCodes(-200).orMessages("error").throwAgain(-500, "another error").build())
 						.build(),
 						logic("INSERT").input("list", expr("list")).input("val", "v5")
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v5").build())
 						.build()
 						)
-						.handle(error(-500).errorMessageSet("error").build())
+						.handle(error().withCodes(-500).orMessages("error").build())
 						.build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v6").build())
 				.build();
@@ -134,7 +135,7 @@ public class ErrorProcess3Tests {
 						logic("INSERT").input("list", expr("list")).input("val", "v3")
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3").build())
 						.build(),
-						verify(expr("false")).code(-100).message("failure").build())
+						verify(when("false")).elseFailWithCode(-100).andMessage("failure").build())
 						.build())
 				.add(error().build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v4").build())
@@ -162,9 +163,9 @@ public class ErrorProcess3Tests {
 						logic("INSERT").input("list", expr("list")).input("val", "v3")
 						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3").build())
 						.build(),
-						verify(expr("false")).code(-100).message("failure").build())
+						verify(when("false")).elseFailWithCode(-100).andMessage("failure").build())
 						.build())
-				.add(error().errorCodeSet(-200).build())
+				.add(error().withCodes(-200).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v4").build())
 				.build();
 	}

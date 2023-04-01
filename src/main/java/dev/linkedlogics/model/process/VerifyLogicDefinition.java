@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 public class VerifyLogicDefinition extends BaseLogicDefinition {
 	private ExpressionLogicDefinition expression;
-	private int errorCode = -1;
+	private Integer errorCode = -1;
 	private String errorMessage;
 	
 	public VerifyLogicDefinition() {
@@ -34,12 +34,34 @@ public class VerifyLogicDefinition extends BaseLogicDefinition {
 			super(new VerifyLogicDefinition());
 			getLogic().setExpression(expression);
 		}
+		
+		public VerifyLogicBuilder elseFailWithCode(int errorCode) {
+			this.getLogic().setErrorCode(errorCode);
+			return this;
+		}
 
+		public VerifyLogicBuilder andCode(int errorCode) {
+			this.getLogic().setErrorCode(errorCode);
+			return this;
+		}
+		
+		@Deprecated
 		public VerifyLogicBuilder code(int errorCode) {
 			this.getLogic().setErrorCode(errorCode);
 			return this;
 		}
 		
+		public VerifyLogicBuilder elseFailWithMessage(String errorMessage) {
+			this.getLogic().setErrorMessage(errorMessage);
+			return this;
+		}
+		
+		public VerifyLogicBuilder andMessage(String errorMessage) {
+			this.getLogic().setErrorMessage(errorMessage);
+			return this;
+		}
+		
+		@Deprecated
 		public VerifyLogicBuilder message(String errorMessage) {
 			this.getLogic().setErrorMessage(errorMessage);
 			return this;

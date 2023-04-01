@@ -24,14 +24,18 @@ public class FailLogicDefinition extends BaseLogicDefinition {
 			super(new FailLogicDefinition());
 		}
 		
-		public FailLogicBuilder code(int errorCode) {
+		public FailLogicBuilder withCode(int errorCode) {
 			this.getLogic().setErrorCode(errorCode);
 			return this;
 		}
 		
-		public FailLogicBuilder message(String errorMessage) {
+		public FailLogicBuilder withMessage(String errorMessage) {
 			this.getLogic().setErrorMessage(errorMessage);
 			return this;
+		}
+		
+		public FailLogicBuilder andMessage(String errorMessage) {
+			return withMessage(errorMessage);
 		}
 	}
 }

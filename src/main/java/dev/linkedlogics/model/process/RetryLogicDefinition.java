@@ -39,23 +39,20 @@ public class RetryLogicDefinition extends TypedLogicDefinition {
 			logic.setSeconds(delay);
 		}
 		
-		public RetryLogicBuilder errorCodeSet(Integer... errorCodes) {
-			this.getLogic().setErrorCodeSet(Set.of(errorCodes));
-			return this;
-		}
-		
-		public RetryLogicBuilder errorMessageSet(String... errorMessages) {
+		public RetryLogicBuilder andMessages(String... errorMessages) {
 			this.getLogic().setErrorMessageSet(Set.of(errorMessages));
 			return this;
 		}
 		
-		public RetryLogicBuilder include() {
+		public RetryLogicBuilder includeCodes(Integer... errorCodes) {
 			this.getLogic().setExclude(false);
+			this.getLogic().setErrorCodeSet(Set.of(errorCodes));
 			return this;
 		}
 		
-		public RetryLogicBuilder exclude() {
+		public RetryLogicBuilder excludeCodes(Integer... errorCodes) {
 			this.getLogic().setExclude(true);
+			this.getLogic().setErrorCodeSet(Set.of(errorCodes));
 			return this;
 		}
 		

@@ -37,17 +37,21 @@ public class ErrorLogicDefinition extends BaseLogicDefinition {
 			super(new ErrorLogicDefinition());
 		}
 		
-		public ErrorLogicBuilder errorCodeSet(Integer... errorCodes) {
+		public ErrorLogicBuilder withCodes(Integer... errorCodes) {
 			this.getLogic().setErrorCodeSet(Set.of(errorCodes));
 			return this;
 		}
 		
-		public ErrorLogicBuilder errorMessageSet(String... errorMessages) {
+		public ErrorLogicBuilder withMessages(String... errorMessages) {
 			this.getLogic().setErrorMessageSet(Set.of(errorMessages));
 			return this;
 		}
 		
-		public ErrorLogicBuilder errorLogic(BaseLogicDefinition errorLogic) {
+		public ErrorLogicBuilder orMessages(String... errorMessages) {
+			return withMessages(errorMessages);
+		}
+		
+		public ErrorLogicBuilder usingLogic(BaseLogicDefinition errorLogic) {
 			this.getLogic().setErrorLogic(errorLogic);
 			return this;
 		}

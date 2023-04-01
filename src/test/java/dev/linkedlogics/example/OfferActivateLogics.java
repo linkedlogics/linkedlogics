@@ -45,7 +45,7 @@ public class OfferActivateLogics {
 				.add(branch(checkNotTime(), sendFailNotification("NOT_TIME")).build())
 				.add(activateOffer("OFFER_1")
 						.compensate(deactivateOffer("OFFER_1"))
-						.handle(error().errorLogic(sendFailNotification("NO_BALANCE")).build()).build())
+						.handle(error().usingLogic(sendFailNotification("NO_BALANCE")).build()).build())
 				.add(sendSuccessNotification("SUCCESS"))
 						.add(verify(expr("false")).disabled().build())
 				.add(activateOffer("OFFER_2").delayed(5).build())

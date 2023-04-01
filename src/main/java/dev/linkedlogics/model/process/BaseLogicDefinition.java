@@ -3,6 +3,7 @@ package dev.linkedlogics.model.process;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,12 +16,12 @@ import lombok.Setter;
 public abstract class BaseLogicDefinition extends TypedLogicDefinition implements Cloneable {
 	@JsonIgnore
 	protected String position;
-	protected Boolean disabled;
+	protected Boolean disabled = Boolean.FALSE;
 	protected Map<String, Object> inputs = new HashMap<>();
 	protected Map<String, Object> outputs = new HashMap<>();
 	protected ForkLogicDefinition fork;
 	protected JoinLogicDefinition join;
-	protected Boolean forced;
+	protected Boolean forced = Boolean.FALSE;
 	protected RetryLogicDefinition retry;
 	protected DelayLogicDefinition delay;
 	protected ErrorLogicDefinition error;
@@ -74,9 +75,15 @@ public abstract class BaseLogicDefinition extends TypedLogicDefinition implement
 			return (T) this;
 		}
 		
-		public T inputs(Map<String, Object> inputs) {
-			this.logic.getInputs().putAll(inputs);
-			return (T) this;
+		public T inputs(Object... inputs) {
+			if (inputs.length % 2 == 0) {
+				IntStream.range(0, inputs.length / 2).forEach(i -> {
+					this.logic.getInputs().put((String) inputs[i * 2], inputs[i * 2 + 1]);
+				});
+				return (T) this;
+			} else {
+				throw new IllegalArgumentException("parameters size must be even");
+			}
 		}
 		
 		public T join(String... join) {

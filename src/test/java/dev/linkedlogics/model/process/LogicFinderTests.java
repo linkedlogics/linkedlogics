@@ -68,10 +68,10 @@ public class LogicFinderTests {
 							group(logic(LOGIC_1).compensate(logic(LOGIC_2).build()).build(),
 									logic(LOGIC_1).compensate(logic(LOGIC_2).build()).build(),
 									verify(expr("false")).code(-200).message("failure").build())
-								.handle(error(-200).errorMessageSet("error").throwAgain(-500, "another error").build())
+								.handle(error().withCodes(-200).orMessages("error").throwAgain(-500, "another error").build())
 								.build(),
 							logic(LOGIC_1).compensate(logic(LOGIC_2).build()).build())
-						.handle(error(-500).errorMessageSet("error").build())
+						.handle(error().withCodes(-500).orMessages("error").build())
 						.build())
 					.add(branch(expr("list.size() < 2"), 
 							logic(LOGIC_1).build(), 
@@ -81,7 +81,7 @@ public class LogicFinderTests {
 					.add(logic(LOGIC_1).build())
 					.add(error().build())
 					.add(verify(expr("false")).code(-200).message("failure").build())
-					.add(error().errorLogic(branch(expr("list.size() < 2"),logic(LOGIC_1).build()).build()).build())
+					.add(error().usingLogic(branch(expr("list.size() < 2"),logic(LOGIC_1).build()).build()).build())
 					.build();
 		}
 		
@@ -101,8 +101,8 @@ public class LogicFinderTests {
 									group(process(PROCESS_A, 0).build()).build()).build()).build())
 					.add(process(PROCESS_A, 0).build())
 					.add(error().build())
-					.add(verify(expr("false")).code(-200).message("failure").build())
-					.add(error().errorLogic(process(PROCESS_A, 0).build()).build())
+					.add(verify(expr("false")).elseFailWithCode(-200).andMessage("failure").build())
+					.add(error().usingLogic(process(PROCESS_A, 0).build()).build())
 					.build();
 		}
 	}
