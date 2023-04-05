@@ -4,6 +4,7 @@ import static dev.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static dev.linkedlogics.LinkedLogicsBuilder.error;
 import static dev.linkedlogics.LinkedLogicsBuilder.expr;
 import static dev.linkedlogics.LinkedLogicsBuilder.group;
+import static dev.linkedlogics.LinkedLogicsBuilder.verify;
 import static dev.linkedlogics.LinkedLogicsBuilder.logic;
 import static dev.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -192,6 +193,26 @@ public class ErrorProcess2Tests {
 				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", 3).handle(error().withCodes(-100).build()).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", 4).forced().build())
+				.build();
+	}
+	
+	@Test
+	public void testScenario8() {
+		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_8", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
+
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
+		assertThat(ctx.getParams().get("list")).asList().contains(2, 6);
+	}
+
+
+	public static ProcessDefinition scenario8() {
+		return createProcess("SIMPLE_SCENARIO_8", 0)
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
+				.add(verify(expr("false")).handle(error().usingLogic(logic("INSERT").input("list", expr("list")).input("val", 6).build()).throwAgain().build()).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 4).build())
 				.build();
 	}
 

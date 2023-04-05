@@ -75,6 +75,7 @@ public class LocalProcessService implements ProcessService {
 	protected void addProcess(ProcessDefinition process) {
 		if (process.isArchived()) {
 			log.info(String.format("process %s:%d is archived", process.getId(), process.getVersion()));
+			return;
 		}
 		
 		ProcessDefinition validatedDefinition = new ProcessDefinitionReader(new ProcessDefinitionWriter(process).write()).read();
