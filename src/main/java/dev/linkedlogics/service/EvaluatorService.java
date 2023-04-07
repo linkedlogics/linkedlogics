@@ -2,9 +2,11 @@ package dev.linkedlogics.service;
 
 import java.util.Map;
 
-import dev.linkedlogics.model.process.ExpressionLogicDefinition;
-
 public interface EvaluatorService extends LinkedLogicsService {
 
-	Object evaluate(ExpressionLogicDefinition expression, Map<String, Object> params);
+	Object evaluate(String expression, String id, Map<String, Object> params);
+	
+	default Object evaluate(String expression, Map<String, Object> params) {
+		return evaluate(expression, expression, params);
+	}
 }

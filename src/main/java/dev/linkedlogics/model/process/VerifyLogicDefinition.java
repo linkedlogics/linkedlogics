@@ -18,7 +18,7 @@ public class VerifyLogicDefinition extends BaseLogicDefinition {
 	}
 	
 	public boolean isVerified(Context context) {
-		return (Boolean) ServiceLocator.getInstance().getEvaluatorService().evaluate(expression, context.getParams());
+		return (Boolean) ServiceLocator.getInstance().getEvaluatorService().evaluate(expression.getExpression(), context.getParams());
 	}
 	
 	public VerifyLogicDefinition clone() {

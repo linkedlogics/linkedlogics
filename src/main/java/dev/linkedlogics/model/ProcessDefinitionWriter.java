@@ -39,9 +39,11 @@ public class ProcessDefinitionWriter {
 	}
 
 	private void write(StringBuilder builder, ProcessDefinition process) {
-		builder.append("return createProcess(\"").append(process.getId()).append("\", ").append(process.getVersion()).append(")\n");
+		builder.append("return createProcess(\"").append(process.getId()).append("\", ").append(process.getVersion()).append(")");
 		builder.append(TAB);
-		write(builder, process.getInputs(), true);
+		if (process.getInputs() != null && !process.getInputs().isEmpty()) {
+			write(builder.append("\n"), process.getInputs(), true);
+		}
 
 		process.getLogics().forEach(l -> {
 			builder.append(LINE).append(TAB).append(".add(");

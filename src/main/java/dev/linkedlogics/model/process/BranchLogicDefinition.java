@@ -20,7 +20,7 @@ public class BranchLogicDefinition extends BaseLogicDefinition {
 	}
 	
 	public boolean isSatisfied(Context context) {
-		return (Boolean) ServiceLocator.getInstance().getEvaluatorService().evaluate(expression, context.getParams());
+		return (Boolean) ServiceLocator.getInstance().getEvaluatorService().evaluate(expression.getExpression(), context.getParams());
 	}
 	
 	public BranchLogicDefinition clone() {

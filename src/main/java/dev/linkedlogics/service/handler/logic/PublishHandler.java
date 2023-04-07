@@ -114,7 +114,7 @@ public class PublishHandler extends LogicHandler {
 		Map<String, Object> inputs = new HashMap<>();
 		logic.getInputs().entrySet().stream().forEach(e -> {
 			if (e.getValue() instanceof ExpressionLogicDefinition) {
-				inputs.put(e.getKey(), evaluator.evaluate((ExpressionLogicDefinition) e.getValue(), context.getParams()));
+				inputs.put(e.getKey(), evaluator.evaluate(((ExpressionLogicDefinition) e.getValue()).getExpression(), context.getParams()));
 			} else {
 				inputs.put(e.getKey(), e.getValue());
 			}
