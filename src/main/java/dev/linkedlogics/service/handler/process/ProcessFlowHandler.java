@@ -2,7 +2,6 @@ package dev.linkedlogics.service.handler.process;
 
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.Stack;
 import java.util.stream.Collectors;
 
 import dev.linkedlogics.context.Context;
@@ -22,23 +21,8 @@ public abstract class ProcessFlowHandler {
 		this.nextHandler = Optional.of(nextHandler);
 	}
 	
-	public static Stack<String> tabs = new Stack<>();
-	
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
-		try {
-			tabs.push("\t");
-			nextHandler.ifPresent(h -> enter(h, candidate, candidatePosition, context));
-			
-			return nextHandler.map(h -> {
-				HandlerResult result = h.handle(candidate, candidatePosition, context);
-				exit("EXIT", result);
-				return result;
-			}).orElse(HandlerResult.selectCandidate(candidate));
-		} finally {
-			try {
-				tabs.pop();
-			} catch (Exception e) { }
-		}
+		return nextHandler.map(h -> h.handle(candidate, candidatePosition, context)).orElse(HandlerResult.selectCandidate(candidate));
 	}
 	
 	public static String adjacentLogicPosition(String position) {
@@ -60,40 +44,4 @@ public abstract class ProcessFlowHandler {
 		return position.replaceAll("[^0-9]", "");
 	}
 	
-	public static boolean LOG_ENTER = false;
-	public static boolean LOG_EXIT = false;
-	public static Stack<Class<?>> HANDLERS = new Stack<>();
-	
-	public static void enter(ProcessFlowHandler handler, Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
-		if (LOG_ENTER) {
-			HANDLERS.push(handler.getClass());
-			String t = tabs.stream().collect(Collectors.joining());
-			log.info(String.format("%s > %-36s %s", t, handler.getClass().getSimpleName(), toString(candidate, candidatePosition, context)));
-		}
-	}
-	
-	public static void exit(String type, HandlerResult result) {
-		if (LOG_EXIT && !tabs.isEmpty()) {
-			String t = tabs.stream().collect(Collectors.joining());
-			log.info(String.format("%s < %-36s %-24s result=%s", t, HANDLERS.pop().getSimpleName(), type, result.toString()));
-		}
-	}
-	
-	public static String toString(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
-		StringBuilder  s = new StringBuilder();
-		
-		if (candidate != null && candidate.isPresent()) {
-			s.append("CANDIDATE [").append(candidate.get().getPosition() + "] ");
-		}
-		
-		if (candidatePosition != null) {
-			s.append("CANDIDATE_POS[").append(candidatePosition).append("]");
-		}
-
-		if (context.getError() != null) {
-			s.append(" ERROR ");
-		}
-		
-		return s.toString();
-	}
 }

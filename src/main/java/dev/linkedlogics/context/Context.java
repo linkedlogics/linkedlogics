@@ -34,6 +34,8 @@ public class Context {
 	private int logicVersion = LogicService.LATEST_VERSION;
 	private String logicPosition;
 	private String logicReturnAs;
+	private boolean logicReturnAsMap;
+	private String logicScript;
 	private String application;
 	private Map<String, Object> input = new HashMap<>();
 	private Map<String, Object> output = new HashMap<>();

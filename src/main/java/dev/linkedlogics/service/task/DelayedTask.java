@@ -4,11 +4,12 @@ import dev.linkedlogics.context.Context;
 import dev.linkedlogics.service.handler.logic.ErrorHandler;
 import dev.linkedlogics.service.handler.logic.ProcessHandler;
 import dev.linkedlogics.service.handler.logic.PublishHandler;
+import dev.linkedlogics.service.handler.logic.TrackingHandler;
 import dev.linkedlogics.service.handler.logic.ValidHandler;
 
 public class DelayedTask extends LinkedLogicsTask {
 	public DelayedTask(Context context) {
-		super(context, new ValidHandler(new ProcessHandler(new PublishHandler())));
+		super(context, new ValidHandler(new ProcessHandler(new TrackingHandler(new PublishHandler()))));
 	}
 	
 	@Override

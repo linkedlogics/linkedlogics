@@ -6,10 +6,11 @@ import dev.linkedlogics.service.handler.logic.MetricsHandler;
 import dev.linkedlogics.service.handler.logic.ProcessHandler;
 import dev.linkedlogics.service.handler.logic.PublishHandler;
 import dev.linkedlogics.service.handler.logic.TimeoutHandler;
+import dev.linkedlogics.service.handler.logic.TrackingHandler;
 
 public class TimeoutTask extends LinkedLogicsTask {
 	public TimeoutTask(Context context) {
-		super(context, new TimeoutHandler(new MetricsHandler(new ErrorHandler(new ProcessHandler(new PublishHandler())))));
+		super(context, new TimeoutHandler(new MetricsHandler(new ErrorHandler(new ProcessHandler(new TrackingHandler(new PublishHandler()))))));
 	}
 	
 	@Override

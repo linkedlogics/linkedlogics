@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.linkedlogics.context.Context;
+import dev.linkedlogics.context.ContextLog;
 import dev.linkedlogics.model.LogicDefinition;
 import dev.linkedlogics.model.parameter.CollectionParameter;
 import dev.linkedlogics.model.parameter.MapParameter;
@@ -36,8 +37,7 @@ public class InvokeHandler extends LogicHandler {
 			if (logic.isReturnAsync()) {
 				ServiceLocator.getInstance().getAsyncService().set(context);
 			}
-			
-			log.info(String.format("> %-10s%s", context.getLogicPosition(), context.getLogicId()));
+			log.debug(log(context, "executing logic").toString());
 			Object methodResult = invokeMethod(context, logic, getInvokeParams(context, logic));
 			context.setExecutedIn(Duration.between(context.getExecutedAt(), OffsetDateTime.now()).toMillis());
 			super.handle(context, methodResult);	
@@ -83,5 +83,13 @@ public class InvokeHandler extends LogicHandler {
 		});
 		
 		return result;
+	}
+	
+	private ContextLog log(Context context, String message) {
+		return ContextLog.builder(context)
+				.handler(this.getClass().getSimpleName())
+				.inputs(context.getInput())
+				.message(message)
+				.build();
 	}
 }

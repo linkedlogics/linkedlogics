@@ -1,6 +1,10 @@
 package dev.linkedlogics;
 
-import java.util.Set;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import dev.linkedlogics.model.ProcessDefinition.ProcessBuilder;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
@@ -15,6 +19,7 @@ import dev.linkedlogics.model.process.JumpLogicDefinition.JumpLogicBuilder;
 import dev.linkedlogics.model.process.ProcessLogicDefinition.ProcessLogicBuilder;
 import dev.linkedlogics.model.process.RetryLogicDefinition;
 import dev.linkedlogics.model.process.SavepointLogicDefinition.SavepointLogicBuilder;
+import dev.linkedlogics.model.process.ScriptLogicDefinition.ScriptLogicBuilder;
 import dev.linkedlogics.model.process.SingleLogicDefinition.SingleLogicBuilder;
 import dev.linkedlogics.model.process.VerifyLogicDefinition.VerifyLogicBuilder;
 import dev.linkedlogics.service.LogicService;
@@ -66,10 +71,6 @@ public class LinkedLogicsBuilder {
 		return error;
 	}
 	
-//	public static ErrorLogicDefinition.ErrorLogicBuilder error(String... errorMessages) {
-//		return new ErrorLogicBuilder().withMessages(errorMessages);
-//	}
-//	
 	public static ErrorLogicDefinition.ErrorLogicBuilder error() {
 		return new ErrorLogicBuilder();
 	}
@@ -88,6 +89,18 @@ public class LinkedLogicsBuilder {
 	
 	public static ExpressionLogicDefinition when(String expression) {
 		return expr(expression);
+	}
+	
+	public static ExpressionLogicDefinition text(String expression) {
+		return expr(expression);
+	}
+	
+	public static ExpressionLogicDefinition file(String file) {
+		try {
+			return expr(new String(Files.readAllBytes(Paths.get(LinkedLogics.class.getResource("file").toURI()))));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public static ExpressionLogicDefinition var(String expression) {
@@ -112,5 +125,9 @@ public class LinkedLogicsBuilder {
 	
 	public static FailLogicBuilder fail() {
 		return new FailLogicBuilder();
+	}
+	
+	public static ScriptLogicBuilder script(ExpressionLogicDefinition expression) {
+		return new ScriptLogicBuilder(expression);
 	}
 }

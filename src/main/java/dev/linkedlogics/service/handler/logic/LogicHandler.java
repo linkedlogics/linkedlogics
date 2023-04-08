@@ -2,10 +2,15 @@ package dev.linkedlogics.service.handler.logic;
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import dev.linkedlogics.context.Context;
+import dev.linkedlogics.context.ContextLog;
 import dev.linkedlogics.model.LogicDefinition;
 import dev.linkedlogics.service.ServiceLocator;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public abstract class LogicHandler {
 	protected Optional<LogicHandler> nextHandler;
 	

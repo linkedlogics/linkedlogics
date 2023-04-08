@@ -3,8 +3,11 @@ package dev.linkedlogics.service.handler.logic;
 import java.util.Map;
 
 import dev.linkedlogics.context.Context;
+import dev.linkedlogics.context.ContextLog;
 import dev.linkedlogics.model.LogicDefinition;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class OutputHandler extends LogicHandler {
 	
 	public OutputHandler() {
@@ -29,6 +32,20 @@ public class OutputHandler extends LogicHandler {
 			}	
 		}
 		
+		if (context.getOutput().isEmpty()) {
+			log.debug(log(context, "no output").toString());
+		} else {
+			log.debug(log(context, "setting output").toString());
+		}
+		
 		super.handle(context, null);
+	}
+	
+	private ContextLog log(Context context, String message) {
+		return ContextLog.builder(context)
+				.handler(this.getClass().getSimpleName())
+				.outputs(context.getOutput())
+				.message(message)
+				.build();
 	}
 }

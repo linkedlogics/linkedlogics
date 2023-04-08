@@ -8,15 +8,18 @@ import java.util.Map;
 import dev.linkedlogics.LinkedLogics;
 import dev.linkedlogics.config.LinkedLogicsConfiguration;
 import dev.linkedlogics.context.Context;
+import dev.linkedlogics.context.ContextLog;
 import dev.linkedlogics.context.Status;
 import dev.linkedlogics.model.process.ExpressionLogicDefinition;
+import dev.linkedlogics.model.process.ScriptLogicDefinition;
 import dev.linkedlogics.model.process.SingleLogicDefinition;
 import dev.linkedlogics.service.EvaluatorService;
 import dev.linkedlogics.service.SchedulerService;
+import dev.linkedlogics.service.SchedulerService.Schedule;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.TriggerService;
-import dev.linkedlogics.service.SchedulerService.Schedule;
 import dev.linkedlogics.service.handler.process.HandlerResult;
+import dev.linkedlogics.service.task.ScriptTask;
 import dev.linkedlogics.service.task.StartTask;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,10 +39,13 @@ public class PublishHandler extends LogicHandler {
 	public void handle(Context context, Object result) {
 		HandlerResult handlerResult = (HandlerResult) result;
 		if (handlerResult.isEndOfCandidates()) {
+			log.debug(log(context, "execution " + (context.getError() == null ? "finished" : "failed")).toString());
 			finishContext(context);
 		} else if (handlerResult.getSelectedLogic().isPresent()) {
+			log.debug(log(context, "execution continues").toString());
 			continueContext(context, handlerResult);
 		} else {
+			log.debug(log(context, "execution paused").toString());
 			pauseContext(context);
 		}
 		
@@ -52,45 +58,27 @@ public class PublishHandler extends LogicHandler {
 	}
 	
 	private void continueContext(Context context, HandlerResult handlerResult) {
-		SingleLogicDefinition logic = (SingleLogicDefinition) handlerResult.getSelectedLogic().get();
-		
-		context.setLogicId(logic.getLogicId());
-		context.setLogicVersion(logic.getLogicVersion());
-		context.setLogicPosition(logic.getPosition());
-		context.setLogicReturnAs(logic.getReturnAs());
-		context.setSubmittedAt(OffsetDateTime.now());
-		context.setApplication(logic.getApplication());
-		context.setInput(getInputs(context, logic));
-		context.setOutput(null);
-		context.setStatus(Status.STARTED);
-		context.setUpdatedAt(OffsetDateTime.now());
-		
-		timeoutContext(context);
-		ServiceLocator.getInstance().getContextService().set(context);
-
-		if (context.getApplication() == null || (localBypass && context.getApplication().equals(LinkedLogics.getApplicationName()))) {
-			ServiceLocator.getInstance().getConsumerService().consume(Context.forPublish(context));
+		if (handlerResult.getSelectedLogic().get() instanceof SingleLogicDefinition) {
+			continueLogic(context, handlerResult);
+		} else if (handlerResult.getSelectedLogic().get() instanceof ScriptLogicDefinition) {
+			continueScript(context, handlerResult);
 		} else {
-			ServiceLocator.getInstance().getPublisherService().publish(Context.forPublish(context));
+			throw new RuntimeException("logic must implement SingleLogicDefinition or ScriptLogicDefinition");
 		}
 	}
 
 	private void finishContext(Context context) {
-		log.info("context finished " + context.getId());
 		context.setStatus(context.getError() == null ? Status.FINISHED : Status.FAILED);
 		context.setFinishedAt(OffsetDateTime.now());
 		ServiceLocator.getInstance().getContextService().set(context);
 		ServiceLocator.getInstance().getCallbackService().publish(context);
 		
 		List<TriggerService.Trigger> triggers = ServiceLocator.getInstance().getTriggerService().get(context.getId());
-		log.info("finished context " + context.getId() + " > " + triggers.size());
 		if (triggers != null && !triggers.isEmpty()) {
 			triggers.stream().forEach(t -> {
 				ServiceLocator.getInstance().getProcessorService().process(new StartTask(Context.fromTrigger(context, t)));
 			});
 		}
-		
-		ServiceLocator.getInstance().getLoggerService().logContext(context);
 	}
 	
 	private void pauseContext(Context context) {
@@ -108,6 +96,49 @@ public class PublishHandler extends LogicHandler {
 		ServiceLocator.getInstance().getSchedulerService().schedule(schedule);
 		context.setExpiresAt(null);
 	}
+	
+	private void continueScript(Context context, HandlerResult handlerResult) {
+		ScriptLogicDefinition logic = (ScriptLogicDefinition) handlerResult.getSelectedLogic().get();
+		
+		context.setLogicScript(logic.getExpression().getExpression());
+		context.setLogicPosition(logic.getPosition());
+		context.setLogicReturnAs(logic.getReturnAs());
+		context.setLogicReturnAsMap(logic.isReturnAsMap());
+		context.setSubmittedAt(OffsetDateTime.now());
+		context.setOutput(new HashMap<>());
+		context.setStatus(Status.STARTED);
+		context.setUpdatedAt(OffsetDateTime.now());
+		
+		timeoutContext(context);
+		ServiceLocator.getInstance().getContextService().set(context);
+
+		ServiceLocator.getInstance().getProcessorService().process(new ScriptTask(context));
+	}
+
+	private void continueLogic(Context context, HandlerResult handlerResult) {
+		SingleLogicDefinition logic = (SingleLogicDefinition) handlerResult.getSelectedLogic().get();
+		
+		context.setLogicId(logic.getLogicId());
+		context.setLogicVersion(logic.getLogicVersion());
+		context.setLogicPosition(logic.getPosition());
+		context.setLogicReturnAs(logic.getReturnAs());
+		context.setLogicScript(null);
+		context.setSubmittedAt(OffsetDateTime.now());
+		context.setApplication(logic.getApplication());
+		context.setInput(getInputs(context, logic));
+		context.setOutput(null);
+		context.setStatus(Status.STARTED);
+		context.setUpdatedAt(OffsetDateTime.now());
+		
+		timeoutContext(context);
+		ServiceLocator.getInstance().getContextService().set(context);
+
+		if (context.getApplication() == null || (localBypass && context.getApplication().equals(LinkedLogics.getApplicationName()))) {
+			ServiceLocator.getInstance().getConsumerService().consume(Context.forPublish(context));
+		} else {
+			ServiceLocator.getInstance().getPublisherService().publish(Context.forPublish(context));
+		}
+	}
 
 	private Map<String, Object> getInputs(Context context, SingleLogicDefinition logic) {
 		final EvaluatorService evaluator = ServiceLocator.getInstance().getEvaluatorService();
@@ -120,5 +151,12 @@ public class PublishHandler extends LogicHandler {
 			}
 		});
 		return inputs;
+	}
+	
+	private ContextLog log(Context context, String message) {
+		return ContextLog.builder(context)
+				.handler(this.getClass().getSimpleName())
+				.message(message)
+				.build();
 	}
 }

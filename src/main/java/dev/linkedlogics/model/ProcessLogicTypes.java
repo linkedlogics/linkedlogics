@@ -10,6 +10,7 @@ public class ProcessLogicTypes {
 	public static final String PROCESS = "process";
 	public static final String SAVEPOINT = "savepoint";
 	public static final String LOGIC = "logic";
+	public static final String SCRIPT = "script";
 	public static final String VERIFY = "verify";
 	
 	public static final String DELAY = "delay";

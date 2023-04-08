@@ -6,12 +6,13 @@ import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.handler.logic.ErrorHandler;
 import dev.linkedlogics.service.handler.logic.ProcessHandler;
 import dev.linkedlogics.service.handler.logic.PublishHandler;
+import dev.linkedlogics.service.handler.logic.TrackingHandler;
 import dev.linkedlogics.service.handler.logic.ValidHandler;
 
 public class AsyncCallbackExpireTask extends LinkedLogicsTask {
 	
 	public AsyncCallbackExpireTask(Context context) {
-		super(context, new ValidHandler(new ErrorHandler(new ProcessHandler(new PublishHandler()))));
+		super(context, new ValidHandler(new ErrorHandler(new ProcessHandler(new TrackingHandler(new PublishHandler())))));
 	}
 	
 	@Override

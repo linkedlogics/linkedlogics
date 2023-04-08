@@ -29,7 +29,7 @@ public class LocalServices extends ServiceProvider {
 
 	@Override
 	public List<LinkedLogicsService> getMonitoringServices() {
-		return List.of(new LocalMetricsService(), new LocalLoggerService());
+		return List.of(new LocalMetricsService(), new LocalTrackerService());
 	}
 
 	@Override

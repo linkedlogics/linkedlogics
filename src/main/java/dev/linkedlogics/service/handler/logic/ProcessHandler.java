@@ -3,6 +3,7 @@
 import java.util.Optional;
 
 import dev.linkedlogics.context.Context;
+import dev.linkedlogics.context.ContextLog;
 import dev.linkedlogics.context.Status;
 import dev.linkedlogics.model.ProcessDefinition;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
@@ -55,6 +56,7 @@ public class ProcessHandler extends LogicHandler {
 			Context fullContext = maybeContext.get();
 			transfer(context, fullContext);
 			HandlerResult handlerResult = handle(fullContext);
+			log.debug(log(context, handlerResult.toString()).toString());
 			super.handle(fullContext, handlerResult);
 		} else {
 			super.handleError(context, new RuntimeException("context not found"));
@@ -70,20 +72,14 @@ public class ProcessHandler extends LogicHandler {
 		ProcessDefinition process = findProcess(context.getProcessId(), context.getProcessVersion());
 		
 		HandlerResult result = handleLastLogic(context, process);
-		int iteration = 0;
 		while (result.getSelectedLogic().isEmpty()) {
 			if (result.getNextCandidatePosition().get().equals(context.getEndPosition())) {
 				return closeContext(context);
 			}
 			
-			if (ProcessFlowHandler.LOG_ENTER) {
-				log.info("ITERATION # "+ (++iteration));
-			}
 			Optional<BaseLogicDefinition> nextLogic = process.getLogicByPosition(result.getNextCandidatePosition().get());
 			
-			ProcessFlowHandler.tabs.clear();
 			if (nextLogic.isPresent() && context.getError() != null) {
-				if (ProcessFlowHandler.LOG_ENTER) log.info("ERROR HANDLERS");
 				result = errorFlowHandler.handle(nextLogic, result.getNextCandidatePosition().get(), context);
 				
 				if (result.getNextCandidatePosition().isPresent()) {
@@ -95,7 +91,6 @@ public class ProcessHandler extends LogicHandler {
 					return result;
 				}
 			}
-			ProcessFlowHandler.tabs.clear();
 			result = nextFlowHandler.handle(nextLogic, result.getNextCandidatePosition().get(), context);
 			if (result.getNextCandidatePosition().isEmpty()) {
 				return result;
@@ -155,5 +150,12 @@ public class ProcessHandler extends LogicHandler {
 		context.setOutput(logicContext.getOutput());
 		context.setError(logicContext.getError() != null ? logicContext.getError() : context.getError());
 		context.setExecutedAt(logicContext.getExecutedAt());
+	}
+	
+	private ContextLog log(Context context, String message) {
+		return ContextLog.builder(context)
+				.handler(this.getClass().getSimpleName())
+				.message(message)
+				.build();
 	}
 }

@@ -78,8 +78,8 @@ public class ServiceLocator {
 		return getService(MetricsService.class);
 	}
 	
-	public LoggerService getLoggerService() {
-		return getService(LoggerService.class);
+	public TrackingService getTrackingService() {
+		return getService(TrackingService.class);
 	}
 	
 	public QueueService getQueueService() {

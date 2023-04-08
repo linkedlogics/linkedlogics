@@ -30,6 +30,10 @@ public class HandlerResult {
 	}
 	
 	public String toString() {
+		if (endOfCandidates) {
+			return " NO_CANDIDATES";
+		}
+		
 		if (nextCandidatePosition.isPresent()) {
 			return " NEXT[" + nextCandidatePosition.get() + "]";
 		}

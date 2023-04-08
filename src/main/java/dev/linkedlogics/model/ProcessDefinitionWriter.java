@@ -19,6 +19,7 @@ import dev.linkedlogics.model.process.LabelLogicDefinition;
 import dev.linkedlogics.model.process.ProcessLogicDefinition;
 import dev.linkedlogics.model.process.RetryLogicDefinition;
 import dev.linkedlogics.model.process.SavepointLogicDefinition;
+import dev.linkedlogics.model.process.ScriptLogicDefinition;
 import dev.linkedlogics.model.process.SingleLogicDefinition;
 import dev.linkedlogics.model.process.TimeoutLogicDefinition;
 import dev.linkedlogics.model.process.VerifyLogicDefinition;
@@ -98,6 +99,8 @@ public class ProcessDefinitionWriter {
 			write(builder, (SavepointLogicDefinition) logic);
 		} else if (logic instanceof VerifyLogicDefinition) {
 			write(builder, (VerifyLogicDefinition) logic);
+		} else if (logic instanceof ScriptLogicDefinition) {
+			write(builder, (ScriptLogicDefinition) logic);
 		} else {
 			builder.append("MISSING TYPE ").append(logic.getType());
 		}
@@ -291,6 +294,16 @@ public class ProcessDefinitionWriter {
 			builder.append(", ").append(logic.getLogicVersion());
 		}
 		builder.append(")");
+	}
+	
+	private void write(StringBuilder builder, ScriptLogicDefinition logic) {
+		String escaped = logic.getExpression().getExpression().replaceAll("\\n", "\\\\n").replaceAll("\\\"", "\\\\\"");
+		builder.append("script(text(\"").append(escaped).append("\"))");
+		if (logic.getReturnAs() != null) {
+			builder.append(".returnAs(\"").append(logic.getReturnAs()).append("\")");
+		} else if (logic.isReturnAsMap()) {
+			builder.append(".returnAsMap()");
+		}
 	}
 
 	private void write(StringBuilder builder, Map<String, Object> params, boolean isInput) {

@@ -28,13 +28,18 @@ public class ServiceProvider {
 		return List.of();
 	}
 	
+	public List<LinkedLogicsService> getTrackingServices() {
+		return List.of();
+	}
+	
 	public List<LinkedLogicsService> getServices() {
 		return List.of(getStoringServices(),
 						getMessagingServices(),
 						getSchedulingServices(),
 						getProcessingServices(),
 						getMonitoringServices(),
-						getEvaluatingServices())
+						getEvaluatingServices(),
+						getTrackingServices())
 				.stream()
 				.flatMap(l -> l.stream())
 				.collect(Collectors.toList());
