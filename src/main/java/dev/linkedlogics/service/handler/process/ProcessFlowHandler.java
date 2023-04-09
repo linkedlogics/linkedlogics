@@ -9,7 +9,6 @@ import dev.linkedlogics.context.ContextLog;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
 import dev.linkedlogics.model.process.helper.LogicPositioner;
 import dev.linkedlogics.service.handler.logic.ProcessHandler;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -31,7 +30,6 @@ public abstract class ProcessFlowHandler {
 	}
 	
 	protected Optional<ProcessFlowHandler> nextHandler;
-	@Getter
 	protected Integer order;
 	
 	public ProcessFlowHandler() {

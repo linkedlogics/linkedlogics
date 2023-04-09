@@ -1,4 +1,4 @@
-package dev.linkedlogics.service.queue;
+package dev.linkedlogics.service.common;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
