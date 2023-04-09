@@ -97,7 +97,7 @@ public class LinkedLogicsBuilder {
 	
 	public static ExpressionLogicDefinition fromFile(String file) {
 		try {
-			return expr(new String(Files.readAllBytes(Paths.get(LinkedLogics.class.getResource(file).toURI()))));
+			return expr(new String(Files.readAllBytes(Paths.get(LinkedLogics.class.getClassLoader().getResource(file).toURI()))));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

@@ -4,6 +4,7 @@ import static dev.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static dev.linkedlogics.LinkedLogicsBuilder.expr;
 import static dev.linkedlogics.LinkedLogicsBuilder.script;
 import static dev.linkedlogics.LinkedLogicsBuilder.fromText;
+import static dev.linkedlogics.LinkedLogicsBuilder.fromFile;
 import static dev.linkedlogics.LinkedLogicsBuilder.logic;
 import static dev.linkedlogics.LinkedLogicsBuilder.var;
 import static dev.linkedlogics.LinkedLogicsBuilder.verify;
@@ -111,6 +112,28 @@ public class ScriptProcess1Tests {
 				.build();
 	}
 
+	@Test
+	public void testScenario4() {
+		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_4", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
+
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
+		assertThat(ctx.getParams().get("list")).asList().contains("John Doe", "New York", "NY");
+		assertThat(ctx.getParams().get("text")).isEqualTo("3 items");
+	}
+
+	public static ProcessDefinition scenario4() {
+		return createProcess("SIMPLE_SCENARIO_4", 0)
+				.add(script(fromFile("scripts/script.groovy")).returnAsMap().build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", var("name")).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", var("address.city")).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", var("address.state")).build())
+				.add(script(fromText("result = list.size() + ' items'")).returnAs("text").build())
+				.build();
+	}
+	
 	@Logic(id = "INSERT", version = 1)
 	public static void insert(@Input(value = "list", returned = true) List<String> list, @Input("val") String value) {
 		list.add(value);
@@ -130,5 +153,4 @@ public class ScriptProcess1Tests {
 	public static void print(@Input("list") List<String> list) {
 		System.out.println("List = " + list);
 	}
-
 }
