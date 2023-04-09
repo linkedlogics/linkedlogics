@@ -36,4 +36,11 @@ public class LocalServices extends ServiceProvider {
 	public List<LinkedLogicsService> getEvaluatingServices() {
 		return List.of(new LocalEvaluatorService());
 	}
+
+	@Override
+	public List<LinkedLogicsService> getTrackingServices() {
+		return List.of(new LocalTrackerService());
+	}
+	
+	
 }

@@ -91,13 +91,13 @@ public class LinkedLogicsBuilder {
 		return expr(expression);
 	}
 	
-	public static ExpressionLogicDefinition text(String expression) {
+	public static ExpressionLogicDefinition fromText(String expression) {
 		return expr(expression);
 	}
 	
-	public static ExpressionLogicDefinition file(String file) {
+	public static ExpressionLogicDefinition fromFile(String file) {
 		try {
-			return expr(new String(Files.readAllBytes(Paths.get(LinkedLogics.class.getResource("file").toURI()))));
+			return expr(new String(Files.readAllBytes(Paths.get(LinkedLogics.class.getResource(file).toURI()))));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

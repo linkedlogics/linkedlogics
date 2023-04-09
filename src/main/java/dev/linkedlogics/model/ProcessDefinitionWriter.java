@@ -298,7 +298,7 @@ public class ProcessDefinitionWriter {
 	
 	private void write(StringBuilder builder, ScriptLogicDefinition logic) {
 		String escaped = logic.getExpression().getExpression().replaceAll("\\n", "\\\\n").replaceAll("\\\"", "\\\\\"");
-		builder.append("script(text(\"").append(escaped).append("\"))");
+		builder.append("script(fromText(\"").append(escaped).append("\"))");
 		if (logic.getReturnAs() != null) {
 			builder.append(".returnAs(\"").append(logic.getReturnAs()).append("\")");
 		} else if (logic.isReturnAsMap()) {

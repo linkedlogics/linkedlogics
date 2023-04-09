@@ -3,7 +3,7 @@ package dev.linkedlogics.process;
 import static dev.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static dev.linkedlogics.LinkedLogicsBuilder.expr;
 import static dev.linkedlogics.LinkedLogicsBuilder.script;
-import static dev.linkedlogics.LinkedLogicsBuilder.text;
+import static dev.linkedlogics.LinkedLogicsBuilder.fromText;
 import static dev.linkedlogics.LinkedLogicsBuilder.logic;
 import static dev.linkedlogics.LinkedLogicsBuilder.var;
 import static dev.linkedlogics.LinkedLogicsBuilder.verify;
@@ -59,7 +59,7 @@ public class ScriptProcess1Tests {
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").build())
-				.add(script(text("result = list.size() + ' items'")).returnAs("text").build())
+				.add(script(fromText("result = list.size() + ' items'")).returnAs("text").build())
 				.build();
 	}
 	
@@ -80,7 +80,7 @@ public class ScriptProcess1Tests {
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").build())
-				.add(verify(when("false")).elseFailWithCode(-1).handle(error().usingLogic(script(text("result = list.size() + ' items'")).returnAs("text").build()).build()).build())
+				.add(verify(when("false")).elseFailWithCode(-1).handle(error().usingLogic(script(fromText("result = list.size() + ' items'")).returnAs("text").build()).build()).build())
 				.build();
 	}
 	
@@ -103,11 +103,11 @@ public class ScriptProcess1Tests {
 				+ "return json";
 		
 		return createProcess("SIMPLE_SCENARIO_3", 0)
-				.add(script(text(script)).returnAsMap().build())
+				.add(script(fromText(script)).returnAsMap().build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", var("name")).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", var("address.city")).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", var("address.state")).build())
-				.add(script(text("result = list.size() + ' items'")).returnAs("text").build())
+				.add(script(fromText("result = list.size() + ' items'")).returnAs("text").build())
 				.build();
 	}
 
