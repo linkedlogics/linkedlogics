@@ -67,7 +67,7 @@ public class ProcessHandler extends LogicHandler {
 			log.debug(log(context, handlerResult.toString()).toString());
 			
 			if (handlerResult.isEndOfCandidates()) {
-				fullContext.setStatus(context.getError() == null ? Status.FINISHED : Status.FAILED);
+				fullContext.setStatus(fullContext.getError() == null ? Status.FINISHED : Status.FAILED);
 				fullContext.setFinishedAt(OffsetDateTime.now());
 			}
 			super.handle(fullContext, handlerResult);
