@@ -2,7 +2,7 @@ package dev.linkedlogics.service.handler.logic;
 
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.context.ContextLog;
-import dev.linkedlogics.service.handler.process.HandlerResult;
+import dev.linkedlogics.service.ServiceLocator;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -18,17 +18,9 @@ public class TrackingHandler extends LogicHandler {
 	
 	@Override
 	public void handle(Context context, Object result) {
-		HandlerResult handlerResult = (HandlerResult) result;
 		log.debug(log(context, "tracking context").toString());
-		
-		if (handlerResult.isEndOfCandidates()) {
+		ServiceLocator.getInstance().getTrackingService().track(context);
 
-		} else if (handlerResult.getSelectedLogic().isPresent()) {
-
-		} else {
-
-		}
-		
 		super.handle(context, result);
 	}
 

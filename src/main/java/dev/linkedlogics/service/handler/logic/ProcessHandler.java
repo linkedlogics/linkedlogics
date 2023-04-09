@@ -1,5 +1,6 @@
  package dev.linkedlogics.service.handler.logic;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import dev.linkedlogics.context.Context;
@@ -64,6 +65,11 @@ public class ProcessHandler extends LogicHandler {
 			transfer(context, fullContext);
 			HandlerResult handlerResult = handle(fullContext);
 			log.debug(log(context, handlerResult.toString()).toString());
+			
+			if (handlerResult.isEndOfCandidates()) {
+				fullContext.setStatus(context.getError() == null ? Status.FINISHED : Status.FAILED);
+				fullContext.setFinishedAt(OffsetDateTime.now());
+			}
 			super.handle(fullContext, handlerResult);
 		} else {
 			super.handleError(context, new RuntimeException("context not found"));

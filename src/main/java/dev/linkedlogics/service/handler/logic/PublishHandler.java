@@ -68,8 +68,6 @@ public class PublishHandler extends LogicHandler {
 	}
 
 	private void finishContext(Context context) {
-		context.setStatus(context.getError() == null ? Status.FINISHED : Status.FAILED);
-		context.setFinishedAt(OffsetDateTime.now());
 		ServiceLocator.getInstance().getContextService().set(context);
 		ServiceLocator.getInstance().getCallbackService().publish(context);
 		
@@ -109,9 +107,7 @@ public class PublishHandler extends LogicHandler {
 		context.setStatus(Status.STARTED);
 		context.setUpdatedAt(OffsetDateTime.now());
 		
-		timeoutContext(context);
 		ServiceLocator.getInstance().getContextService().set(context);
-
 		ServiceLocator.getInstance().getProcessorService().process(new ScriptTask(context));
 	}
 
