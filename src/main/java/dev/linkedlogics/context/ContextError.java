@@ -32,4 +32,8 @@ public class ContextError {
 			return new ContextError(DEFAULT_ERROR_CODE, e.getLocalizedMessage(), ErrorType.TEMPORARY);
 		}
 	}
+	
+	public String toString() {
+		return new StringBuilder().append(code).append(" ").append(message).append(" ").append(type).toString();
+	}
 }

@@ -27,6 +27,8 @@ public class ContextLog {
 	@Builder.Default
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
 	private OffsetDateTime timestamp = OffsetDateTime.now();
+	private String step;
+	private String candidate;
 	private String handler;
 	private String contextId;
 	private String contextKey;
@@ -37,6 +39,7 @@ public class ContextLog {
 	private String logicId;
 	private Integer logicVersion;
 	private String logicPosition;
+
 	private String message;
 	private String task;
 	

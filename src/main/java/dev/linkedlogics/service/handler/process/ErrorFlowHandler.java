@@ -6,6 +6,7 @@ import dev.linkedlogics.context.Context;
 import dev.linkedlogics.context.ContextError;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
 import dev.linkedlogics.model.process.ErrorLogicDefinition;
+import dev.linkedlogics.service.handler.process.ProcessFlowHandler.Flow;
 
 public class ErrorFlowHandler extends ProcessFlowHandler {
 	public ErrorFlowHandler() {
@@ -19,27 +20,22 @@ public class ErrorFlowHandler extends ProcessFlowHandler {
 	@Override
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
 		if (candidate.isPresent() && context.getError() != null) {
-
 			if (candidate.get().getError() != null && matches(context.getError(), candidate.get().getError())) {
 				setError(context, candidate.get().getError());
 				
 				if (candidate.get().getError().getErrorLogic() != null) {
+					log(context, "error handled with logic", candidatePosition, Flow.RESET);
 					return HandlerResult.nextCandidate(candidate.get().getError().getErrorLogic().getPosition());
 				} else {
+					log(context, "error handled", candidatePosition, Flow.RESET);
 					return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 				}
-//			} else if (candidate.get() instanceof ErrorLogicDefinition && matches(context.getError(), (ErrorLogicDefinition) candidate.get())) {
-//				setError(context, (ErrorLogicDefinition) candidate.get());
-//				
-//				if (((ErrorLogicDefinition) candidate.get()).getErrorLogic() != null) {
-//					return HandlerResult.nextCandidate(((ErrorLogicDefinition) candidate.get()).getErrorLogic().getPosition());
-//				} else {
-//					return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
-//				}
 			} else {
+				log(context, "error occured", candidatePosition, Flow.CONTINUE);
 				return super.handle(candidate, candidatePosition, context);
 			}
 		} else {
+			log(context, "no error", candidatePosition, Flow.CONTINUE);
 			return super.handle(candidate, candidatePosition, context);
 		}
 	}

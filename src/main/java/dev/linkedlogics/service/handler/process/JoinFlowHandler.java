@@ -8,6 +8,7 @@ import dev.linkedlogics.context.Status;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.TriggerService;
+import dev.linkedlogics.service.handler.process.ProcessFlowHandler.Flow;
 
 public class JoinFlowHandler extends ProcessFlowHandler {
 	public JoinFlowHandler() {
@@ -31,12 +32,15 @@ public class JoinFlowHandler extends ProcessFlowHandler {
 			if (missingContextId.isPresent()) {
 				ServiceLocator.getInstance().getTriggerService().set(missingContextId.get(), new TriggerService.Trigger(context.getId(), candidatePosition));
 				context.setStatus(Status.WAITING);
+				log(context, "missing finished context " + missingContextId.get(), candidatePosition, Flow.TERMINATE);
 				return HandlerResult.noCandidate();
 			} else {
 				context.setStatus(Status.STARTED);
+				log(context, "join successful", candidatePosition, Flow.CONTINUE);
 				return super.handle(candidate, candidatePosition, context);
 			}
 		} else {
+			log(context, "no join", candidatePosition, Flow.CONTINUE);
 			return super.handle(candidate, candidatePosition, context);
 		}
 	}

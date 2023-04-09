@@ -7,6 +7,7 @@ import dev.linkedlogics.context.ContextError;
 import dev.linkedlogics.context.ContextError.ErrorType;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
 import dev.linkedlogics.model.process.FailLogicDefinition;
+import dev.linkedlogics.service.handler.process.ProcessFlowHandler.Flow;
 
 public class FailFlowHandler extends ProcessFlowHandler {
 	public FailFlowHandler() {
@@ -26,9 +27,10 @@ public class FailFlowHandler extends ProcessFlowHandler {
 			error.setMessage(fail.getErrorMessage());
 			error.setType(ErrorType.PERMANENT);
 			context.setError(error);
-
+			log(context, "failing " + error.toString(), candidatePosition, Flow.TERMINATE);
 			return HandlerResult.endOfCandidates();
 		} else {
+			log(context, "no failure", candidatePosition, Flow.CONTINUE);
 			return super.handle(candidate, candidatePosition, context);
 		}
 	}

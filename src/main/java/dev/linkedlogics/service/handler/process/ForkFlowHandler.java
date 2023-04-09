@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
 import dev.linkedlogics.service.ServiceLocator;
+import dev.linkedlogics.service.handler.process.ProcessFlowHandler.Flow;
 import dev.linkedlogics.service.task.StartTask;
 
 public class ForkFlowHandler extends ProcessFlowHandler {
@@ -31,12 +32,15 @@ public class ForkFlowHandler extends ProcessFlowHandler {
 				if (candidate.get().getFork().getKey().isPresent()) {
 					context.getJoinMap().put(candidate.get().getFork().getKey().get(), forkContext.getId());
 				}
+				log(context, "forking with id " + forkContext.getId(), candidatePosition, Flow.RESET);
 				
 				ServiceLocator.getInstance().getProcessorService().process(new StartTask(forkContext));
 				return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 			}
+			log(context, "forked execution", candidatePosition, Flow.CONTINUE);
 			return super.handle(candidate, candidatePosition, context);
 		} else {
+			log(context, "no fork", candidatePosition, Flow.CONTINUE);
 			return super.handle(candidate, candidatePosition, context);
 		}
 	}

@@ -14,7 +14,6 @@ import dev.linkedlogics.service.handler.process.CompensateFlowHandler;
 import dev.linkedlogics.service.handler.process.DelayFlowHandler;
 import dev.linkedlogics.service.handler.process.DisabledFlowHandler;
 import dev.linkedlogics.service.handler.process.EmptyCandidateFlowHandler;
-import dev.linkedlogics.service.handler.process.EmptyFlowHandler;
 import dev.linkedlogics.service.handler.process.ErrorFlowHandler;
 import dev.linkedlogics.service.handler.process.ExitFlowHandler;
 import dev.linkedlogics.service.handler.process.FailFlowHandler;
@@ -36,16 +35,24 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ProcessHandler extends LogicHandler {
 	private ProcessFlowHandler waitingFlowHandler = new SuccessFlowHandler(new OutputFlowHandler());
-	private ProcessFlowHandler lastFlowHandler = new EmptyFlowHandler(new SuccessFlowHandler(new OutputFlowHandler(new CleanupFlowHandler())));
-	private ProcessFlowHandler nextFlowHandler = new EmptyFlowHandler(new EmptyCandidateFlowHandler(new ForcedFlowHandler(new DisabledFlowHandler(new DelayFlowHandler(new VerifyFlowHandler(new SavepointFlowHandler(new JumpFlowHandler(new ExitFlowHandler(new FailFlowHandler(new TimeoutFlowHandler(new JoinFlowHandler(new ForkFlowHandler(new GroupFlowHandler(new BranchFlowHandler()))))))))))))));
-	private ProcessFlowHandler errorFlowHandler = new EmptyFlowHandler(new RetryFlowHandler(new ErrorFlowHandler(new CompensateFlowHandler())));
+	private ProcessFlowHandler lastFlowHandler = new SuccessFlowHandler(new OutputFlowHandler(new CleanupFlowHandler()));
+	private ProcessFlowHandler nextFlowHandler = new EmptyCandidateFlowHandler(new ForcedFlowHandler(new DisabledFlowHandler(new DelayFlowHandler(new VerifyFlowHandler(new SavepointFlowHandler(new JumpFlowHandler(new ExitFlowHandler(new FailFlowHandler(new TimeoutFlowHandler(new JoinFlowHandler(new ForkFlowHandler(new GroupFlowHandler(new BranchFlowHandler())))))))))))));
+	private ProcessFlowHandler errorFlowHandler = new RetryFlowHandler(new ErrorFlowHandler(new CompensateFlowHandler()));
 
 	public ProcessHandler() {
-
+		setHandlersOrder();
 	}
 	
 	public ProcessHandler(LogicHandler handler) {
 		super(handler);
+		setHandlersOrder();
+	}
+	
+	private void setHandlersOrder() {
+		waitingFlowHandler.setOrder(1);
+		lastFlowHandler.setOrder(1);
+		nextFlowHandler.setOrder(1);
+		errorFlowHandler.setOrder(1);
 	}
 
 	@Override
@@ -112,14 +119,18 @@ public class ProcessHandler extends LogicHandler {
 		HandlerResult result = null;
 		
 		if (context.getStatus() == Status.INITIAL) {
+			log.debug(log(context, "context is initial state").toString());
 			result = HandlerResult.nextCandidate(context.getStartPosition());
 		} else if (context.getStatus() == Status.WAITING) {
+			log.debug(log(context, "context is waiting state").toString());
 			result = HandlerResult.nextCandidate(context.getLogicPosition());
 			Optional<BaseLogicDefinition> nextLogic = process.getLogicByPosition(result.getNextCandidatePosition().get());
 			waitingFlowHandler.handle(nextLogic, result.getNextCandidatePosition().get(), context);
 		} else if (context.getStatus() == Status.SCHEDULED) {
+			log.debug(log(context, "context is scheduled state").toString());
 			result = HandlerResult.nextCandidate(context.getLogicPosition());
 		} else {
+			log.debug(log(context, "context is in progress").toString());
 			result = HandlerResult.nextCandidate(context.getLogicPosition());
 			while (result.getNextCandidatePosition().isPresent()) {
 				Optional<BaseLogicDefinition> nextLogic = process.getLogicByPosition(result.getNextCandidatePosition().get());

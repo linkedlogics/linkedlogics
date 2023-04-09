@@ -7,6 +7,7 @@ import dev.linkedlogics.model.process.BaseLogicDefinition;
 import dev.linkedlogics.model.process.ExpressionLogicDefinition;
 import dev.linkedlogics.service.EvaluatorService;
 import dev.linkedlogics.service.ServiceLocator;
+import dev.linkedlogics.service.handler.process.ProcessFlowHandler.Flow;
 
 public class OutputFlowHandler extends ProcessFlowHandler {
 	public OutputFlowHandler() {
@@ -24,10 +25,14 @@ public class OutputFlowHandler extends ProcessFlowHandler {
 					&& candidatePosition.equals(context.getLogicPosition())) {
 				
 			if (context.getOutput() != null) {
+				log(context, "adding outputs to context " + context.getOutput(), candidatePosition, Flow.CONTINUE);
 				context.getOutput().entrySet().forEach(e -> context.getParams().put(e.getKey(), e.getValue()));
+			} else {
+				log(context, "nothing to add", candidatePosition, Flow.CONTINUE);
 			}
 			
 			if (!candidate.get().getOutputs().isEmpty()) {
+				final StringBuilder outputs = new StringBuilder();
 				final EvaluatorService evaluator = ServiceLocator.getInstance().getEvaluatorService();
 				candidate.get().getOutputs().entrySet().stream().forEach(e -> {
 					if (e.getValue() instanceof ExpressionLogicDefinition) {
@@ -35,7 +40,10 @@ public class OutputFlowHandler extends ProcessFlowHandler {
 					} else {
 						context.getParams().put(e.getKey(), e.getValue());
 					}
+					outputs.append(",").append(e.getKey());
 				});
+				
+				log(context, "adding " + outputs.toString().substring(1) + " to context", candidatePosition, Flow.CONTINUE);
 			}
 		}
 		

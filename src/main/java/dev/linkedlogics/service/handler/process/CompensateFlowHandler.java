@@ -18,7 +18,6 @@ public class CompensateFlowHandler extends ProcessFlowHandler {
 	@Override
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
 		if (candidate.isPresent() && context.getError() != null) {
-
 			if (!context.getCompensables().isEmpty()) {
 				String lastCompensablePosition = context.getCompensables().get(context.getCompensables().size() - 1);
 				if (parentLogicPosition(lastCompensablePosition).equals(parentLogicPosition(candidatePosition))) {
@@ -26,11 +25,15 @@ public class CompensateFlowHandler extends ProcessFlowHandler {
 					if (!candidatePosition.endsWith(LogicPositioner.COMPENSATE)) {
 						includeParent(candidatePosition, context);
 					}
+					log(context, "compensating with next logic at " + lastCompensablePosition, candidatePosition, Flow.RESET);
 					return HandlerResult.nextCandidate(lastCompensablePosition);
 				}
+			} else {
+				log(context, "nothing to compensate", candidatePosition, Flow.RESET);
 			}
 			return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 		} else {
+			log(context, "no error", candidatePosition, Flow.CONTINUE);
 			return super.handle(candidate, candidatePosition, context);
 		}
 	}
