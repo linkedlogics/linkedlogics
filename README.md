@@ -8,7 +8,7 @@ Linked-Logics is a decentralized workflow execution engine for building distribu
 - It is backed by Kafka, RabbitMQ etc.
 - It has minimal framework footprint (just one single annotation `@Logic`)
 - It provides very powerfull DSL for building complex workflows
-- It supports expression language to customize workflows using SpEL
+- It supports expression language to customize workflows using Groovy, SpEL, JS etc.
 - It supports versioning of workflows and logics
 - It provides powerfull **compensation** mechanism and error handling required in **Sagas**
 - It provides standard **timeout** and **retry** mechanisms
