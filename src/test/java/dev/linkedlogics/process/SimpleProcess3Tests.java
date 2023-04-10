@@ -100,7 +100,7 @@ public class SimpleProcess3Tests {
 	public static ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", 1).build())
-				.add(branch(expr("insert_result"), logic("INSERT").input("list", expr("list")).input("val", 4).build()).build())
+				.add(branch(expr("insert_result"), logic("INSERT").input("list", expr("list")).build(), logic("INSERT").inputs("list", expr("list"), "val", "5").build()).inputs("val", 4).build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
 				.add(branch(expr("insert_result"), logic("INSERT").input("list", expr("list")).input("val", 8).build()).build())
 				.build();

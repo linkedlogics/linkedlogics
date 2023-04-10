@@ -80,15 +80,15 @@ public class SingleLogicDefinition extends BaseLogicDefinition {
 			return this;
 		}
 		
-//		public SingleLogicBuilder output(String key, Object value) {
-//			this.getLogic().getOutputs().put(key, value);
-//			return this;
-//		}
-//		
-//		public SingleLogicBuilder output(Map<String, Object> inputs) {
-//			this.getLogic().getOutputs().putAll(inputs);
-//			return this;
-//		}
+		public SingleLogicBuilder output(String key, Object value) {
+			this.getLogic().getOutputs().put(key, value);
+			return this;
+		}
+		
+		public SingleLogicBuilder outputs(Map<String, Object> outputs) {
+			this.getLogic().getOutputs().putAll(outputs);
+			return this;
+		}
 		
 		public SingleLogicBuilder outputs(Object... outputs) {
 			if (outputs.length % 2 == 0) {

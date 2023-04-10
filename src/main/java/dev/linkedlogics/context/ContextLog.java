@@ -3,9 +3,6 @@ package dev.linkedlogics.context;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
-
-import org.slf4j.MDC;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,15 +11,13 @@ import dev.linkedlogics.context.ContextError.ErrorType;
 import dev.linkedlogics.service.ServiceLocator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.Getter;
+import lombok.Setter;
 
-@NoArgsConstructor
-@Data
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
-@Slf4j
 public class ContextLog {
 	@Builder.Default
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
@@ -51,9 +46,7 @@ public class ContextLog {
 	private String errorMessage;
 	private ErrorType errorType;
 	private String errorStackTrace;
-	
 
-	
 	public static ContextLogBuilder builder(Context context) {
 		return new ContextLogBuilder()
 			.application(context.getApplication())

@@ -91,6 +91,11 @@ public class ProcessDefinition implements Comparable<ProcessDefinition> {
 			}
 		}
 		
+		public ProcessBuilder inputs(Map<String, Object> inputs) {
+			this.process.getInputs().putAll(inputs);
+			return this;
+		}
+		
 		public ProcessDefinition build() {
 			LogicPositioner.setPositions(this.process);
 			return this.process;

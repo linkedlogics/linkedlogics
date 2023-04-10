@@ -86,6 +86,11 @@ public abstract class BaseLogicDefinition extends TypedLogicDefinition implement
 			}
 		}
 		
+		public T inputs(Map<String, Object> inputs) {
+			this.logic.getInputs().putAll(inputs);
+			return (T) this;
+		}
+		
 		public T join(String... join) {
 			this.logic.setJoin(new JoinLogicDefinition(join));
 			return (T) this;

@@ -1,10 +1,10 @@
 package dev.linkedlogics.model.process;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 
 @AllArgsConstructor
-@Data
+@Getter
 public abstract class TypedLogicDefinition {
 	private String type;
 }

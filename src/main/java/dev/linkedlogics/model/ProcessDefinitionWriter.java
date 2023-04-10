@@ -84,6 +84,9 @@ public class ProcessDefinitionWriter {
 			}
 		} else if (logic instanceof BranchLogicDefinition) {
 			write(builder, (BranchLogicDefinition) logic);
+			if (logic.getInputs() != null && !logic.getInputs().isEmpty()) {
+				write(builder, logic.getInputs(), true);
+			}
 		} else if (logic instanceof ExitLogicDefinition) {
 			write(builder, (ExitLogicDefinition) logic);
 		} else if (logic instanceof FailLogicDefinition) {

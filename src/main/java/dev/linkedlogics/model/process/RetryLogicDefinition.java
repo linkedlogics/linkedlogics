@@ -4,10 +4,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import dev.linkedlogics.model.ProcessLogicTypes;
-import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class RetryLogicDefinition extends TypedLogicDefinition {
 	private int maxRetries;
 	private int seconds;

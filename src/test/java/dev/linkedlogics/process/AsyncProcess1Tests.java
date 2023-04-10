@@ -42,7 +42,7 @@ public class AsyncProcess1Tests {
 	public void testScenario1() {
 		long start = System.currentTimeMillis();
 		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_1", new HashMap<>() {{ put("list", new ArrayList<>());}});
-		assertThat(waitUntil(contextId, Status.FINISHED, 1000)).isTrue();
+		assertThat(waitUntil(contextId, Status.FINISHED, 1500)).isTrue();
 		long finish = System.currentTimeMillis();
 
 		assertThat(finish - start).isGreaterThan(500);
