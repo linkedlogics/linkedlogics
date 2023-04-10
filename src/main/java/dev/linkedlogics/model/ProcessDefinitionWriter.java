@@ -1,8 +1,12 @@
 package dev.linkedlogics.model;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import dev.linkedlogics.model.process.BaseLogicDefinition;
 import dev.linkedlogics.model.process.BranchLogicDefinition;
@@ -24,6 +28,7 @@ import dev.linkedlogics.model.process.SingleLogicDefinition;
 import dev.linkedlogics.model.process.TimeoutLogicDefinition;
 import dev.linkedlogics.model.process.VerifyLogicDefinition;
 import dev.linkedlogics.service.LogicService;
+import dev.linkedlogics.service.ServiceLocator;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -306,13 +311,17 @@ public class ProcessDefinitionWriter {
 	}
 	
 	private void write(StringBuilder builder, ScriptLogicDefinition logic) {
-		String escaped = logic.getExpression().getExpression().replaceAll("\\n", "\\\\n").replaceAll("\\\"", "\\\\\"");
+		String escaped = escape(logic.getExpression().getExpression());
 		builder.append("script(fromText(\"").append(escaped).append("\"))");
 		if (logic.getReturnAs() != null) {
 			builder.append(".returnAs(\"").append(logic.getReturnAs()).append("\")");
 		} else if (logic.isReturnAsMap()) {
 			builder.append(".returnAsMap()");
 		}
+	}
+	
+	private String escape(String expr) {
+		return expr.replaceAll("\\n", "\\\\n").replaceAll("\\\"", "\\\\\"");
 	}
 
 	private void write(StringBuilder builder, Map<String, Object> params, boolean isInput) {
@@ -327,6 +336,12 @@ public class ProcessDefinitionWriter {
 				input.append("\"").append(e.getKey()).append("\", ");
 				if (e.getValue() instanceof ExpressionLogicDefinition) {
 					input.append("expr(\"").append(((ExpressionLogicDefinition) e.getValue()).getExpression()).append("\")");
+				} else if (e.getValue() instanceof Map || e.getValue() instanceof List || e.getValue() instanceof Set) { 
+					try {
+						input.append("expr(\"(").append(escape(ServiceLocator.getInstance().getMapperService().getMapper().writeValueAsString(e))).append(")\")");
+					} catch (JsonProcessingException ex) {
+						throw new RuntimeException(ex);
+					}
 				} else if (e.getValue() instanceof String) { 
 					input.append("\"").append(e.getValue()).append("\"");
 				} else {

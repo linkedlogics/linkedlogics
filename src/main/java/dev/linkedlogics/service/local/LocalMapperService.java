@@ -12,8 +12,7 @@ public class LocalMapperService implements MapperService {
 
 	private ObjectMapper mapper;
 	
-	@Override
-	public void start() {
+	public LocalMapperService() {
 		mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		mapper.registerModule(new JavaTimeModule());

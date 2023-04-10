@@ -18,6 +18,9 @@ import static dev.linkedlogics.LinkedLogicsBuilder.verify;
 import static dev.linkedlogics.LinkedLogicsBuilder.when;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -38,6 +41,7 @@ public class ProcessReaderWriterTest {
 		LinkedLogics.configure(new LocalServiceConfigurer());
 		LinkedLogics.registerLogic(SimpleProcess1Tests.class);
 		LinkedLogics.registerProcess(SimpleProcess1Tests.class);
+		LinkedLogics.launch();
 		contextService = ServiceLocator.getInstance().getContextService();
 	}
 
@@ -46,6 +50,7 @@ public class ProcessReaderWriterTest {
 		ProcessDefinition scenario = scenario1();
 		
 		String def = new ProcessDefinitionWriter(scenario).write();
+		System.out.println(def);
 		assertThat(def).isNotNull();
 		
 		ProcessDefinition process = new ProcessDefinitionReader(def).read();
@@ -85,11 +90,19 @@ public class ProcessReaderWriterTest {
 
 
 	public static ProcessDefinition scenario1() {
-		return createProcess("SIMPLE_SCENARIO_1", 0)
+		return createProcess("SIMPLE_SCENARIO_1", 0).inputs(constants())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").build())
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").build())
 				.build();
+	}
+	
+	public static Map<String, Object> constants() {
+		return new HashMap<>() {{
+			put("CONFIG_A", Map.of("key1", "value1", "key2", "value2"));
+			put("CONFIG_B", Map.of("key1", "value1", "key2", Map.of("key21", "value21")));
+			put("CONFIG_C", Map.of("key1", Map.of("key11", "value11"), "key2", Map.of("key21", "value21")));
+		}};
 	}
 
 	public static ProcessDefinition scenario2() {
