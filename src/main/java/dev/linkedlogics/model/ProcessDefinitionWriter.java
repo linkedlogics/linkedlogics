@@ -181,7 +181,13 @@ public class ProcessDefinitionWriter {
 	}
 
 	private void write(StringBuilder builder, JumpLogicDefinition jump) {
-		builder.append("jump(\"").append(jump.getTargetLabel()).append("\")");
+		builder.append("jump(");
+		if (jump.getTargetLabel() != null) {
+			builder.append("\"").append(jump.getTargetLabel()).append("\"");
+		} else if (jump.getTargetExpr() != null) {
+			builder.append("expr(\"").append(jump.getTargetExpr().getExpression()).append("\")");
+		}
+		builder.append(")");
 	}
 
 	private void write(StringBuilder builder, SavepointLogicDefinition jump) {

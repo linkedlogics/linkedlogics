@@ -28,6 +28,8 @@ public class ProcessDefinition implements Comparable<ProcessDefinition> {
 	private List<BaseLogicDefinition> logics = new ArrayList<BaseLogicDefinition>();
 	@JsonIgnore
 	private Map<String, BaseLogicDefinition> positions;
+	@JsonIgnore
+	private Map<String, BaseLogicDefinition> labels;
 	
 	public Optional<BaseLogicDefinition> getLogicByPosition(String position) {
 		return Optional.ofNullable(positions.get(position));

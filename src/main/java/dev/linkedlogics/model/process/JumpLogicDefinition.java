@@ -2,17 +2,20 @@ package dev.linkedlogics.model.process;
 
 import dev.linkedlogics.model.ProcessLogicTypes;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class JumpLogicDefinition extends BaseLogicDefinition {
 	private String targetLabel;
-	@Setter
-	private String targetPosition;
+	private ExpressionLogicDefinition targetExpr;
 	
 	public JumpLogicDefinition(String targetLabel) {
 		super(ProcessLogicTypes.JUMP);
 		this.targetLabel = targetLabel;
+	}
+	
+	public JumpLogicDefinition(ExpressionLogicDefinition targetExpr) {
+		super(ProcessLogicTypes.JUMP);
+		this.targetExpr = targetExpr;
 	}
 	
 	public JumpLogicDefinition clone() {
@@ -23,6 +26,10 @@ public class JumpLogicDefinition extends BaseLogicDefinition {
 	public static class JumpLogicBuilder extends LogicBuilder<JumpLogicBuilder, JumpLogicDefinition> {
 		public JumpLogicBuilder(String label) {
 			super(new JumpLogicDefinition(label));
+		}
+		
+		public JumpLogicBuilder(ExpressionLogicDefinition expr) {
+			super(new JumpLogicDefinition(expr));
 		}
 	}
 }

@@ -119,6 +119,10 @@ public class LinkedLogicsBuilder {
 		return new JumpLogicBuilder(label);
 	}
 	
+	public static JumpLogicBuilder jump(ExpressionLogicDefinition expr) {
+		return new JumpLogicBuilder(expr);
+	}
+	
 	public static ExitLogicBuilder exit() {
 		return new ExitLogicBuilder();
 	}

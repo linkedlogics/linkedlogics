@@ -27,19 +27,21 @@ public abstract class LogicPositioner {
 			LogicPositioner.setPosition(process.getLogics().get(i), positions, labels, String.valueOf(i+1));
 		}
 		process.setPositions(positions);
+		process.setLabels(labels);
+		
 		process.getLogics().forEach(l -> {
 			process.getInputs().entrySet().forEach(e -> {
 				l.getInputs().putIfAbsent(e.getKey(), e.getValue());
 			});
 		});
 		
-		LogicFinder.findLogics(process, JumpLogicDefinition.class).stream().map(l -> (JumpLogicDefinition) l).forEach(j -> {
-			if (labels.containsKey(j.getTargetLabel())) {
-				j.setTargetPosition(labels.get(j.getTargetLabel()).getPosition());
-			} else {
-				throw new IllegalArgumentException(j.getTargetLabel() + " label is not found");
-			}
-		});
+//		LogicFinder.findLogics(process, JumpLogicDefinition.class).stream().map(l -> (JumpLogicDefinition) l).forEach(j -> {
+//			if (labels.containsKey(j.getTargetLabel())) {
+//				j.setTargetPosition(labels.get(j.getTargetLabel()).getPosition());
+//			} else {
+//				throw new IllegalArgumentException(j.getTargetLabel() + " label is not found");
+//			}
+//		});
 	}
 
 	private static void setPosition(BaseLogicDefinition logic, Map<String, BaseLogicDefinition> positions, Map<String, BaseLogicDefinition> labels, String position) {

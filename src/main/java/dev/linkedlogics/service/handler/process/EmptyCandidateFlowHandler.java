@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.model.process.BaseLogicDefinition;
-import dev.linkedlogics.service.handler.process.ProcessFlowHandler.Flow;
 
 public class EmptyCandidateFlowHandler extends ProcessFlowHandler {
 	public EmptyCandidateFlowHandler() {
