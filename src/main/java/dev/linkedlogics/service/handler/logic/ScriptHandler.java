@@ -2,7 +2,6 @@ package dev.linkedlogics.service.handler.logic;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 import dev.linkedlogics.context.Context;
@@ -26,11 +25,14 @@ public class ScriptHandler extends LogicHandler {
 		context.setExecutedAt(OffsetDateTime.now());
 		try {
 			log.debug(log(context, "executing script").toString());
-			Object scriptResult = runScript(context);
+			String id = String.format("%s_%d_%s", context.getProcessId(), context.getProcessVersion(), context.getLogicPosition());
 			
+			Object scriptResult = null;
 			if (context.getLogicReturnAs() != null) {
+				scriptResult = ServiceLocator.getInstance().getEvaluatorService().evaluate(context.getLogicScript(), context.getParams());
 				context.getOutput().put(context.getLogicReturnAs(), scriptResult);
 			} else if (context.isLogicReturnAsMap()) {
+				scriptResult = ServiceLocator.getInstance().getEvaluatorService().evaluateScript(context.getLogicScript(), id, context.getParams());
 				context.getOutput().putAll((Map) scriptResult);
 			}
 			
@@ -40,11 +42,6 @@ public class ScriptHandler extends LogicHandler {
 			context.setExecutedIn(Duration.between(context.getExecutedAt(), OffsetDateTime.now()).toMillis());
 			super.handleError(context, e);
 		}
-	}
-	
-	protected Object runScript(Context context) {
-		String id = new StringBuilder().append(context.getProcessId()).append("_").append(context.getProcessVersion()).append(context.getLogicPosition()).toString();
-		return ServiceLocator.getInstance().getEvaluatorService().evaluate(context.getLogicScript(), id, context.getParams());
 	}
 	
 	private ContextLog log(Context context, String message) {

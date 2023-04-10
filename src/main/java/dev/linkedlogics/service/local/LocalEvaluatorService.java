@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LocalEvaluatorService implements EvaluatorService {
 	
 	@Override
-	public Object evaluate(String expression, String id, Map<String, Object> params) {
+	public Object evaluate(String expression, Map<String, Object> params) {
 		Binding binding = new Binding();
 		params.entrySet().forEach(e -> {
 			binding.setVariable(e.getKey(), e.getValue());
