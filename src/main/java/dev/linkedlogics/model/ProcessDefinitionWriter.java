@@ -113,6 +113,14 @@ public class ProcessDefinitionWriter {
 			builder.append("MISSING TYPE ").append(logic.getType());
 		}
 
+		if (logic.getId() != null) {
+			builder.append(".id(\"").append(logic.getId()).append("\")");
+		}
+		
+		if (logic.getDesc() != null) {
+			builder.append(".desc(\"").append(logic.getDesc()).append("\")");
+		}
+		
 		if (logic.getOutputs() != null && !logic.getOutputs().isEmpty()) {
 			write(builder, logic.getOutputs(), false);
 		}

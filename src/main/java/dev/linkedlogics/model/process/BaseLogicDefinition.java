@@ -27,6 +27,8 @@ public abstract class BaseLogicDefinition extends TypedLogicDefinition implement
 	protected ErrorLogicDefinition error;
 	protected TimeoutLogicDefinition timeout;
 	protected LabelLogicDefinition label;
+	protected String id;
+	protected String desc;
 	
 	public BaseLogicDefinition(String type) {
 		super(type);
@@ -118,6 +120,16 @@ public abstract class BaseLogicDefinition extends TypedLogicDefinition implement
 		
 		public T label(String label) {
 			this.logic.setLabel(new LabelLogicDefinition(label));
+			return (T) this;
+		}
+		
+		public T id(String id) {
+			this.logic.setId(id);
+			return (T) this;
+		}
+		
+		public T desc(String desc) {
+			this.logic.setDesc(desc);
 			return (T) this;
 		}
 		
