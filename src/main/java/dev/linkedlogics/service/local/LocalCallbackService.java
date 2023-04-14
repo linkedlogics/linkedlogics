@@ -10,7 +10,9 @@ import dev.linkedlogics.LinkedLogicsCallback;
 import dev.linkedlogics.config.LinkedLogicsConfiguration;
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.service.CallbackService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class LocalCallbackService implements CallbackService {
 	private ConcurrentHashMap<String, LinkedLogicsCallback> callbackMap = new ConcurrentHashMap<>();
 	private ScheduledExecutorService scheduler;
@@ -46,5 +48,4 @@ public class LocalCallbackService implements CallbackService {
 			}
 		});
 	}
-	
 }

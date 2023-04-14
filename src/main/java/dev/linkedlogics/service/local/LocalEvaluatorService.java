@@ -1,6 +1,9 @@
 package dev.linkedlogics.service.local;
 
 import java.util.Map;
+import java.util.Optional;
+
+import org.codehaus.groovy.control.CompilationFailedException;
 
 import dev.linkedlogics.service.EvaluatorService;
 import groovy.lang.Binding;
@@ -18,5 +21,16 @@ public class LocalEvaluatorService implements EvaluatorService {
 		});
 		GroovyShell groovyShell = new GroovyShell(binding);
 		return groovyShell.evaluate(expression);
+	}
+
+	@Override
+	public Optional<String> checkSyntax(String expression) {
+		try {
+			GroovyShell groovyShell = new GroovyShell();
+			groovyShell.parse(expression);
+			return Optional.empty();
+		} catch (CompilationFailedException e) {
+			return Optional.of(e.getMessage());
+		}
 	}
 }

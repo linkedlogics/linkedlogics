@@ -12,6 +12,7 @@ import static dev.linkedlogics.LinkedLogicsBuilder.when;
 import static dev.linkedlogics.LinkedLogicsBuilder.error;
 import static dev.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -132,6 +133,19 @@ public class ScriptProcess1Tests {
 				.add(logic("INSERT").input("list", expr("list")).input("val", var("address.state")).build())
 				.add(script(fromText("result = list.size() + ' items'")).returnAs("text").build())
 				.build();
+	}
+	
+	@Test
+	public void testScenario5() {
+		assertThatThrownBy(() -> {
+			createProcess("SIMPLE_SCENARIO_5", 0)
+			.add(script(fromFile("scripts/script.groovy")).returnAsMap().build())
+			.add(logic("INSERT").input("list", expr("list")).input("val", var("name")).build())
+			.add(logic("INSERT").input("list", expr("list")).input("val", var("address.city")).build())
+			.add(logic("INSERT").input("list", expr("list")).input("val", var("address.state")).build())
+			.add(script(fromText("result = list.size() +  items'")).returnAs("text").build())
+			.build();
+		}).hasMessageContaining("syntax error");
 	}
 	
 	@Logic(id = "INSERT", version = 1)

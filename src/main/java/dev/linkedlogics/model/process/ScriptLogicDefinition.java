@@ -1,6 +1,9 @@
 package dev.linkedlogics.model.process;
 
+import java.util.Optional;
+
 import dev.linkedlogics.model.ProcessLogicTypes;
+import dev.linkedlogics.service.ServiceLocator;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,6 +36,15 @@ public class ScriptLogicDefinition extends BaseLogicDefinition {
 		public ScriptLogicBuilder returnAsMap() {
 			this.getLogic().setReturnAsMap(true);
 			return this;
+		}
+
+		@Override
+		public ScriptLogicDefinition build() {
+			ServiceLocator.getInstance().getEvaluatorService().checkSyntax(this.getLogic().getExpression().getExpression()).ifPresent(err -> {
+				throw new RuntimeException("syntax error " + (this.getLogic().getId() != null ? "at " + this.getLogic().getId() : "") + "\n" + err);
+			});
+			
+			return super.build();
 		}
 	}
 }
