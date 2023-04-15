@@ -5,8 +5,10 @@ import java.util.Map;
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.exception.MissingLogicError;
 import dev.linkedlogics.model.ProcessDefinition;
+import dev.linkedlogics.model.process.ExpressionLogicDefinition;
 import dev.linkedlogics.model.process.ProcessLogicDefinition;
 import dev.linkedlogics.model.process.helper.LogicFinder;
+import dev.linkedlogics.service.EvaluatorService;
 import dev.linkedlogics.service.ServiceLocator;
 import dev.linkedlogics.service.task.StartTask;
 
@@ -33,6 +35,16 @@ class LinkedLogicsStarter {
 				throw new MissingLogicError(l.getProcessId(), l.getVersion());
 			});
 		
+		if (!process.getInputs().isEmpty()) {
+			final EvaluatorService evaluator = ServiceLocator.getInstance().getEvaluatorService();
+			process.getInputs().entrySet().stream().forEach(e -> {
+				if (e.getValue() instanceof ExpressionLogicDefinition) {
+					context.getParams().put(e.getKey(), evaluator.evaluate(((ExpressionLogicDefinition) e.getValue()).getExpression(), context.getParams()));
+				} else {
+					context.getParams().put(e.getKey(), e.getValue());
+				}
+			});
+		}
 		ServiceLocator.getInstance().getContextService().set(context);
 		
 		if (callback != null) {

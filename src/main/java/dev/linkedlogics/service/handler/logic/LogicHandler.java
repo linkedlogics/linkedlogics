@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import dev.linkedlogics.context.Context;
 import dev.linkedlogics.model.LogicDefinition;
+import dev.linkedlogics.model.ProcessDefinition;
 import dev.linkedlogics.service.ServiceLocator;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -30,5 +31,9 @@ public abstract class LogicHandler {
 	
 	protected LogicDefinition findLogic(String logicId, int version) {
 		return ServiceLocator.getInstance().getLogicService().getLogic(logicId, version).orElseThrow(() -> new IllegalArgumentException(String.format("logic %s[%d] is not found" , logicId, version)));
+	}
+	
+	protected ProcessDefinition findProcess(String id, int version) {
+		return ServiceLocator.getInstance().getProcessService().getProcess(id, version).orElseThrow(() -> new IllegalArgumentException(String.format("process %s[%d] is not found", id, version)));
 	}
 }

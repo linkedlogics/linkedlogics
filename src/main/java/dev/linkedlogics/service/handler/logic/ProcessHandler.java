@@ -156,10 +156,6 @@ public class ProcessHandler extends LogicHandler {
 		return result;
 	}
 	
-	private ProcessDefinition findProcess(String id, int version) {
-		return ServiceLocator.getInstance().getProcessService().getProcess(id, version).orElseThrow(() -> new IllegalArgumentException(String.format("process %s[%d] is not found", id, version)));
-	}
-	
 	public void transfer(Context logicContext, Context context) {
 		context.setLogicId(logicContext.getLogicId());
 		context.setLogicVersion(logicContext.getLogicVersion());

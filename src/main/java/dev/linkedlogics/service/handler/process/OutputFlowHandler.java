@@ -23,7 +23,7 @@ public class OutputFlowHandler extends ProcessFlowHandler {
 		if (candidate.isPresent()
 				&& (context.getError() == null || (candidate.get().getForced() != null && candidate.get().getForced())) 
 					&& candidatePosition.equals(context.getLogicPosition())) {
-				
+			
 			if (context.getOutput() != null) {
 				log(context, "adding outputs to context " + context.getOutput(), candidatePosition, Flow.CONTINUE);
 				context.getOutput().entrySet().forEach(e -> context.getParams().put(e.getKey(), e.getValue()));

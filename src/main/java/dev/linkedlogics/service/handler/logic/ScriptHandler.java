@@ -26,7 +26,6 @@ public class ScriptHandler extends LogicHandler {
 		try {
 			log.debug(log(context, "executing script").toString());
 			String id = String.format("%s_%d_%s", context.getProcessId(), context.getProcessVersion(), context.getLogicPosition());
-			
 			Object scriptResult = null;
 			if (context.getLogicReturnAs() != null) {
 				scriptResult = ServiceLocator.getInstance().getEvaluatorService().evaluate(context.getLogicScript(), context.getParams());
