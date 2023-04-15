@@ -198,7 +198,7 @@ public class ProcessDefinitionWriter {
 		if (jump.getTargetLabel() != null) {
 			builder.append("\"").append(jump.getTargetLabel()).append("\"");
 		} else if (jump.getTargetExpr() != null) {
-			builder.append("expr(\"").append(jump.getTargetExpr().getExpression()).append("\")");
+			builder.append("expr(\"").append(escape(jump.getTargetExpr().getExpression())).append("\")");
 		}
 		builder.append(")");
 	}
@@ -343,10 +343,10 @@ public class ProcessDefinitionWriter {
 				StringBuilder input = new StringBuilder();
 				input.append("\"").append(e.getKey()).append("\", ");
 				if (e.getValue() instanceof ExpressionLogicDefinition) {
-					input.append("expr(\"").append(((ExpressionLogicDefinition) e.getValue()).getExpression()).append("\")");
+					input.append("expr(\"").append(escape(((ExpressionLogicDefinition) e.getValue()).getExpression())).append("\")");
 				} else if (e.getValue() instanceof Map || e.getValue() instanceof List || e.getValue() instanceof Set) { 
 					try {
-						input.append("expr(\"(").append(escape(ServiceLocator.getInstance().getMapperService().getMapper().writeValueAsString(e))).append(")\")");
+						input.append("expr(\"(").append(escape(ServiceLocator.getInstance().getMapperService().getMapper().writeValueAsString(e.getValue()))).append(")\")");
 					} catch (JsonProcessingException ex) {
 						throw new RuntimeException(ex);
 					}
