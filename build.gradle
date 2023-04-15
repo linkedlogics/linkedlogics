@@ -4,7 +4,7 @@ plugins {
     id 'maven-publish'
 }
 
-group = 'dev.linkedlogics'
+group = 'io.linkedlogics'
 version = '1.0.0'
 sourceCompatibility = '11'
 
@@ -61,7 +61,7 @@ task sourcesJar(type: Jar) {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'dev.linkedlogics'
+            groupId = 'io.linkedlogics'
             artifactId = 'linkedlogics'
             version = "$version"
 
