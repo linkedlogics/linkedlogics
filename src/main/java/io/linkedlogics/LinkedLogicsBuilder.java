@@ -84,7 +84,7 @@ public class LinkedLogicsBuilder {
 	}
 	
 	public static ExpressionLogicDefinition expr(String expression) {
-		return new ExpressionLogicDefinition.ExpressionLogicDefinitionBuilder(expression).build();
+		return new ExpressionLogicDefinition.ExpressionLogicDefinitionBuilder(expression).source(expression).build();
 	}
 	
 	public static ExpressionLogicDefinition when(String expression) {
@@ -95,16 +95,17 @@ public class LinkedLogicsBuilder {
 		return expr(expression);
 	}
 	
-	public static ExpressionLogicDefinition fromFile(String file) {
-		try {
-			return expr(new String(Files.readAllBytes(Paths.get(LinkedLogics.class.getClassLoader().getResource(file).toURI()))));
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
 	
 	public static ExpressionLogicDefinition var(String expression) {
 		return expr(expression);
+	}
+	
+	public static ExpressionLogicDefinition fromFile(String file) {
+		try {
+			return new ExpressionLogicDefinition.ExpressionLogicDefinitionBuilder(new String(Files.readAllBytes(Paths.get(LinkedLogics.class.getClassLoader().getResource(file).toURI())))).source(file).build();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public static Integer max(Integer i) {

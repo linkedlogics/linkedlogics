@@ -1,5 +1,10 @@
 package io.linkedlogics.model;
 
+import static io.linkedlogics.LinkedLogicsBuilder.createProcess;
+import static io.linkedlogics.LinkedLogicsBuilder.group;
+import static io.linkedlogics.LinkedLogicsBuilder.verify;
+import static io.linkedlogics.LinkedLogicsBuilder.when;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +13,7 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.model.process.BaseLogicDefinition;
 import io.linkedlogics.model.process.BranchLogicDefinition;
 import io.linkedlogics.model.process.DelayLogicDefinition;
@@ -29,6 +35,7 @@ import io.linkedlogics.model.process.TimeoutLogicDefinition;
 import io.linkedlogics.model.process.VerifyLogicDefinition;
 import io.linkedlogics.service.LogicService;
 import io.linkedlogics.service.ServiceLocator;
+import io.linkedlogics.service.local.LocalServiceConfigurer;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -208,7 +215,7 @@ public class ProcessDefinitionWriter {
 	}
 
 	private void write(StringBuilder builder, VerifyLogicDefinition verify) {
-		builder.append("verify(when(\"").append(verify.getExpression().getExpression()).append("\"))");
+		builder.append("verify(when(\"").append(escape(verify.getExpression().getExpression())).append("\"))");
 		if (verify.getErrorCode() != null) {
 			builder.append(".elseFailWithCode(").append(verify.getErrorCode()).append(")");
 
@@ -284,7 +291,7 @@ public class ProcessDefinitionWriter {
 	}
 
 	private void write(StringBuilder builder, BranchLogicDefinition branch) {
-		builder.append("branch(when(\"").append(branch.getExpression().getExpression()).append("\"), ");
+		builder.append("branch(when(\"").append(escape(branch.getExpression().getExpression())).append("\"), ");
 		write(builder, branch.getLeftLogic());
 		if (branch.getRightLogic() != null) {
 			builder.append(", ");
@@ -329,7 +336,7 @@ public class ProcessDefinitionWriter {
 	}
 	
 	private String escape(String expr) {
-		return expr.replaceAll("\\n", "\\\\n").replaceAll("\\\"", "\\\\\"");
+		return expr.replace("\n", "\\n").replace("\"", "\\\"").replace("$", "\\$").replace("^", "\\^");
 	}
 
 	private void write(StringBuilder builder, Map<String, Object> params, boolean isInput) {
