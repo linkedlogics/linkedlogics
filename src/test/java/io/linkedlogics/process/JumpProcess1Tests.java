@@ -83,6 +83,46 @@ public class JumpProcess1Tests {
 						logic("INSERT").input("list", expr("list")).input("val", "v33").build()).build())
 				.build();
 	}
+	
+	@Test
+	public void testScenario3() {
+		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_3", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
+
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
+		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2");
+	}
+
+	public static ProcessDefinition scenario3() {
+		return createProcess("SIMPLE_SCENARIO_3", 0)
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").label("L1").build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").build())
+				.add(jump("L1").build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").build())
+				.build();
+	}
+	
+	@Test
+	public void testScenario4() {
+		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_4", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
+
+		Context ctx = contextService.get(contextId).get();
+		assertThat(ctx.getParams().containsKey("list")).isTrue();
+		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
+		assertThat(ctx.getParams().get("list")).asList().contains("v1");
+	}
+
+	public static ProcessDefinition scenario4() {
+		return createProcess("SIMPLE_SCENARIO_4", 0)
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
+				.add(jump("L1").build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").build())
+				.build();
+	}
 
 	@Logic(id = "INSERT", version = 1)
 	public static void insert(@Input(value = "list", returned = true) List<String> list, @Input("val") String value) {

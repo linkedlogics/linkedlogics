@@ -43,14 +43,18 @@ public class JumpFlowHandler extends ProcessFlowHandler {
 				}
 				
 				ProcessDefinition process = processService.getProcess(context.getProcessId(), context.getProcessVersion()).get();
-				BaseLogicDefinition target =process.getLabels().get(targetLabel);
-				
+				BaseLogicDefinition target = process.getLabels().get(targetLabel);
+
 				if (target == null) {
-					context.setError(new ContextError(-1, "jum failed target " + targetLabel + " not found", ErrorType.PERMANENT));
+					context.setError(new ContextError(-1, "jump failed target " + targetLabel + " not found", ErrorType.PERMANENT));
 					log(context, "not verified", candidatePosition, Flow.RESET);
 					return HandlerResult.nextCandidate(candidatePosition);
+				} else if (!compareLogicPosition(candidate.get().getPosition(), target.getPosition())) {
+					context.setError(new ContextError(-1, "jump failed target " + targetLabel + " contradicts with DAG", ErrorType.PERMANENT));
+					log(context, "not a DAG", candidatePosition, Flow.RESET);
+					return HandlerResult.nextCandidate(candidatePosition);
 				}
-				
+
 				return HandlerResult.nextCandidate(target.getPosition());
 			}
 			log(context, "no jump", candidatePosition, Flow.CONTINUE);

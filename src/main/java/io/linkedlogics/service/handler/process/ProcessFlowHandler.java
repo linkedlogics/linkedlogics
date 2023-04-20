@@ -63,6 +63,27 @@ public abstract class ProcessFlowHandler {
 		return position.replaceAll("[^0-9]", "");
 	}
 	
+	public static boolean compareLogicPosition(String p1, String p2) {
+		String[] positions1 = p1.split("\\.");
+		String[] positions2 = p2.split("\\.");
+		
+		int index = 0;
+		while (index < positions1.length && index < positions2.length) {
+			int position1 = index < positions1.length ? Integer.parseInt(positions1[index]) : 0;
+			int position2 = index < positions2.length ? Integer.parseInt(positions2[index]) : 0;
+			
+			if (position1 < position2) {
+				return true;
+			} else if (position1 > position2) {
+				return false;
+			} else {
+				index++;
+			}
+		}
+		
+		return true;
+	}
+	
 	protected void log(Context context, String message, String candidate, Flow flow) {
 		ContextLog contextLog = ContextLog.builder(context)
 				.handler(ProcessHandler.class.getSimpleName() + "." + this.getClass().getSimpleName())
