@@ -23,10 +23,12 @@ public class TimeoutHandler extends LogicHandler {
 	public void handle(Context logicContext, Object result) {
 		Optional<Context> context = ServiceLocator.getInstance().getContextService().get(logicContext.getId());
 		
-		if (context.isPresent()) {
-			if (context.get().getLogicPosition().startsWith(logicContext.getLogicPosition()) && context.get().getStatus() != Status.FINISHED && context.get().getStatus() != Status.FAILED) {
+		if (context.isPresent() && context.get().getLogicPosition().startsWith(logicContext.getLogicPosition())) {
+			if (context.get().getStatus() != Status.FINISHED && context.get().getStatus() != Status.FAILED) {
 				log.error(log(context.get(), "context is timed out").toString());
 				super.handleError(logicContext, new LogicTimeoutException(logicContext.getLogicId()));
+			} else {
+				ServiceLocator.getInstance().getContextService().remove(context.get().getId());
 			}
 		}
 	}

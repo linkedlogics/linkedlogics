@@ -101,6 +101,42 @@ public class CallBack1Tests {
 				.add(verify(expr("false")).build())
 				.build();
 	}
+	
+	@Test
+	public void testScenario3() {
+		AtomicBoolean result = new AtomicBoolean();
+		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_3", new HashMap<>() {{ put("s", "hello");}},
+				new LinkedLogicsCallback() {
+					
+					@Override
+					public void onTimeout() {
+						
+					}
+					
+					@Override
+					public void onSuccess(Context context) {
+
+					}
+					
+					@Override
+					public void onCancellation(Context context) {
+						result.set(true);
+					}
+				});
+		try {
+			LinkedLogics.cancel(contextId);
+			Thread.sleep(5000);
+		} catch (InterruptedException e) { 	}
+		assertThat(result.get()).isTrue();
+	}
+
+	public static ProcessDefinition scenario3() {
+		return createProcess("SIMPLE_SCENARIO_3", 0)
+				.add(logic("STRING_UPPER_SLOW").input("s", expr("s")).returnAs("s").timeout(3).build())
+				.add(logic("STRING_UPPER").input("s", "s1").returnAs("s1").build())
+				.add(logic("STRING_UPPER").input("s", "s2").returnAs("s2").build())
+				.build();
+	}
 
 	@Logic(id = "STRING_UPPER")
 	public static String upper(@Input("s") String s) {
@@ -110,5 +146,13 @@ public class CallBack1Tests {
 	@Logic(id = "STRING_LOWER")
 	public static String lower(@Input("s") String s) {
 		return s.toLowerCase();
+	}
+	
+	@Logic(id = "STRING_UPPER_SLOW")
+	public static String upperSlow(@Input("s") String s) {
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) { }
+		return s.toUpperCase();
 	}
 }

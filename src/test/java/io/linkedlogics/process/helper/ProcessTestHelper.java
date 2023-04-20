@@ -7,7 +7,7 @@ import io.linkedlogics.context.Status;
 import io.linkedlogics.service.ServiceLocator;
 
 public class ProcessTestHelper {
-	public static final long MAX_WAIT_TIME = 500000000;
+	public static final long MAX_WAIT_TIME = 5000;
 	public static final long WAIT_SLEEP = 1;
 
 	public static boolean waitUntil(String contextId, Status status) {

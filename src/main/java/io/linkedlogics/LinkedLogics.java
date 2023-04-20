@@ -3,6 +3,8 @@ package io.linkedlogics;
 import java.util.Map;
 
 import io.linkedlogics.config.LinkedLogicsConfiguration;
+import io.linkedlogics.context.ContextError;
+import io.linkedlogics.context.Status;
 import io.linkedlogics.service.ServiceConfigurer;
 import io.linkedlogics.service.ServiceLocator;
 import io.linkedlogics.service.local.LocalServiceConfigurer;
@@ -46,6 +48,15 @@ public class LinkedLogics {
 	
 	public static String start(String processId, Map<String, Object> params, LinkedLogicsCallback callback) {
 		return LinkedLogicsStarter.start(processId, params, callback);
+	}
+	
+	public static void cancel(String contextId) {
+		ServiceLocator.getInstance().getContextService().get(contextId).ifPresent(c -> {
+			c.setStatus(Status.CANCELLED);
+			ServiceLocator.getInstance().getCallbackService().publish(c);
+			ServiceLocator.getInstance().getContextService().remove(contextId);
+		});
+		
 	}
 	
 	public static void asyncCallback(String contextId, Object result) {

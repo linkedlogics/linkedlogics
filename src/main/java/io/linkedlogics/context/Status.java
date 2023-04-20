@@ -6,5 +6,6 @@ public enum Status {
 	WAITING,
 	FINISHED,
 	FAILED,
-	SCHEDULED;
+	SCHEDULED,
+	CANCELLED;
 }

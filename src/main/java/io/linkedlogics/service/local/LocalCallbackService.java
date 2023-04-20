@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import io.linkedlogics.LinkedLogicsCallback;
 import io.linkedlogics.config.LinkedLogicsConfiguration;
 import io.linkedlogics.context.Context;
+import io.linkedlogics.context.Status;
 import io.linkedlogics.service.CallbackService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,10 +42,12 @@ public class LocalCallbackService implements CallbackService {
 	@Override
 	public void publish(Context context) {
 		Optional.ofNullable(callbackMap.remove(context.getId())).ifPresent((c) -> {
-			if (context.getError() == null) {
+			if (context.getStatus() == Status.FINISHED) {
 				c.onSuccess(context);
-			} else {
+			} else if (context.getStatus() == Status.FAILED){
 				c.onFailure(context, context.getError());
+			} else if (context.getStatus() == Status.CANCELLED) {
+				c.onCancellation(context);
 			}
 		});
 	}
