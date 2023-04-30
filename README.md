@@ -28,13 +28,19 @@ Microservices are individual applications which take part in workflow execution.
 ### Messaging Bus ###
 Messaging bus is required since whole architecture is a synchronous. Messaging bus provides different queues for each microservice. 
 
+## Low-Level Architecture ##
+
+![low level design](design/images/lld.png)
+
+Framework add several low level components(services) to each microservice. These services performs basic operations required for workflow execution such as consuming and publishing workflow step info to messaging bus, retrieving and storing latest context information in cache, actual logic execution and error handling. It also follows workflow execution and decides on next steps. Conditional and scripting workflow items are executed on current microservices. Only workflow items requiring a microservice to execute are published to messaging bus.
+
 ## Example ##
 
 ### Logic ###
 Logic is an executable part of workflow which is executed inside its owner microservice. Logics are defined by `id` which is unique within its owner. Any public method can be defined as a logic by using `@Logic` annotation.
 #### Charging Microservice ####
 ```
-package dev.linkedlogics.sample.charging;
+package io.linkedlogics.sample.charging;
 
 public class ChargingLogics {
 	private ChargingService chargingService;
@@ -55,7 +61,7 @@ public class ChargingLogics {
 ```
 #### Order Microservice ####
 ```
-package dev.linkedlogics.sample.order;
+package io.linkedlogics.sample.order;
 
 public class OrderLogics {
 	private OrderService orderService;
@@ -74,7 +80,7 @@ public class OrderLogics {
 Process is workflow definition. Any class can provide process objects, it just needs to have methods returning `ProcessDefinition`. In below example we are calling two logics from two different microservices with compensation logics. Workflow will trigger compenstaion in case any failure occurs before execution is finished.
 #### Process Definition ####
 ```
-package dev.linkedlogics.sample.process;
+package io.linkedlogics.sample.process;
 
 public class Processes {
 	
@@ -105,7 +111,7 @@ public class Processes {
 Process can be initiated from any microservice as following: 
 #### Process Execution ####
 ```
-package dev.linkedlogics.sample.process;
+package io.linkedlogics.sample.process;
 
 public class Main {
 	
