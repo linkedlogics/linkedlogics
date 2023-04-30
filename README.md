@@ -1,4 +1,4 @@
-### Linked-Logics Framework
+# Linked-Logics Framework #
 
 Linked-Logics is a decentralized workflow execution engine for building distributed, resilient and scalable applications. Linked-Logics has a different approach and is a good candidate for introducing [Sagas](https://microservices.io/patterns/data/saga.html) in microservices. It combines both `orchestration` and `choreography` together by providing DSL for **orchestration** and decentralized execution like in **choreography**. It is very simple to use and has minimal framework footprint.
 
@@ -14,6 +14,21 @@ Linked-Logics is a decentralized workflow execution engine for building distribu
 - It provides standard **timeout** and **retry** mechanisms
 - It supports easy **fork** and **join** workflows
 - It supports **asynchronous** logics
+
+##High-Level Architecture##
+
+![high level design](design/images/hld.png)
+
+##### Distributed Cache
+Distributed cache stores active workflow contexts and workflow definitions.
+
+##### Workflow Microservices
+Any microservice can be used as a workflow microservice by adding dependencies. Microservices will preserve their design and all components. Framework adds its components on top of existing ones. Each microservice defines `@Logic`s which will be available in workflow steps. Once microservice is up and running, then framework starts to poll messaging queue and executes workflow steps.
+
+##### Messaging Bus
+Messaging bus stores events for each workflow microservice.
+
+
 
 #### Logic
 Logic is an executable part of workflow which is executed inside its owner microservice. Logics are defined by `id` which is unique within its owner. Any public method can be defined as a logic by using `@Logic` annotation.
