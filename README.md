@@ -15,24 +15,24 @@ Linked-Logics is a decentralized workflow execution engine for building distribu
 - It supports easy **fork** and **join** workflows
 - It supports **asynchronous** logics
 
-##High-Level Architecture##
+## High-Level Architecture ##
 
 ![high level design](design/images/hld.png)
 
-##### Distributed Cache
+### Distributed Cache ###
 Distributed cache stores active workflow contexts and workflow definitions.
 
-##### Workflow Microservices
-Any microservice can be used as a workflow microservice by adding dependencies. Microservices will preserve their design and all components. Framework adds its components on top of existing ones. Each microservice defines `@Logic`s which will be available in workflow steps. Once microservice is up and running, then framework starts to poll messaging queue and executes workflow steps.
+### Workflow Microservices ###
+Microservices are individual applications which take part in workflow execution. They listen to their own queue in the messaging bus and consume only messages related to them. While designing workflows, we need to indicate which microservice will be responsible for each workflow item. Whole architecture is deployed as decentralized model where each microservice takes responsibility to execute the current workflow item and decide on next steps by storing the latest context in cache, identifying next execution step, sending metrics etc.
 
-##### Messaging Bus
-Messaging bus stores events for each workflow microservice.
+### Messaging Bus ###
+Messaging bus is required since whole architecture is a synchronous. Messaging bus provides different queues for each microservice. 
 
+## Example ##
 
-
-#### Logic
+### Logic ###
 Logic is an executable part of workflow which is executed inside its owner microservice. Logics are defined by `id` which is unique within its owner. Any public method can be defined as a logic by using `@Logic` annotation.
-##### Charging Microservice
+#### Charging Microservice ####
 ```
 package dev.linkedlogics.sample.charging;
 
@@ -53,7 +53,7 @@ public class ChargingLogics {
 	}
 }
 ```
-##### Order Microservice
+#### Order Microservice ####
 ```
 package dev.linkedlogics.sample.order;
 
@@ -70,9 +70,9 @@ public class OrderLogics {
 	}
 }
 ```
-#### Process
+### Process ###
 Process is workflow definition. Any class can provide process objects, it just needs to have methods returning `ProcessDefinition`. In below example we are calling two logics from two different microservices with compensation logics. Workflow will trigger compenstaion in case any failure occurs before execution is finished.
-##### Process Definition
+#### Process Definition ####
 ```
 package dev.linkedlogics.sample.process;
 
@@ -101,9 +101,9 @@ public class Processes {
 	}
 }
 ```
-#### Execution
+### Execution ###
 Process can be initiated from any microservice as following: 
-##### Process Execution
+#### Process Execution ####
 ```
 package dev.linkedlogics.sample.process;
 
