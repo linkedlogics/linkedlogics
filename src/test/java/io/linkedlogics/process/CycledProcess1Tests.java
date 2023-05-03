@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.annotation.Input;
 import io.linkedlogics.annotation.Logic;
+import io.linkedlogics.context.ContextBuilder;
 import io.linkedlogics.exception.MissingLogicError;
 import io.linkedlogics.model.ProcessDefinition;
 import io.linkedlogics.service.local.LocalServiceConfigurer;
@@ -33,18 +34,14 @@ public class CycledProcess1Tests {
 	@Test
 	public void testScenario1() {
 		assertThatThrownBy(() -> {
-			LinkedLogics.start("SIMPLE_SCENARIO_1", new HashMap<>() {{ 
-				put("list", new ArrayList<>());
-			}});
+			LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
 		}).isInstanceOf(MissingLogicError.class);
 	}
 	
 	@Test
 	public void testScenario2() {
 		assertThatThrownBy(() -> {
-			LinkedLogics.start("SIMPLE_SCENARIO_2", new HashMap<>() {{ 
-				put("list", new ArrayList<>());
-			}});
+			LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_2").params("list", new ArrayList<>()).build());
 		}).isInstanceOf(MissingLogicError.class);
 	}
 	

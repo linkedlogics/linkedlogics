@@ -18,6 +18,7 @@ import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.annotation.Input;
 import io.linkedlogics.annotation.Logic;
 import io.linkedlogics.context.Context;
+import io.linkedlogics.context.ContextBuilder;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.ProcessDefinition;
 import io.linkedlogics.service.ContextService;
@@ -39,7 +40,7 @@ public class CompensateProcess1Tests {
 
 	@Test
 	public void testScenario1() {
-		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_1", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
 		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
 
 		Context ctx = contextService.get(contextId).get();
@@ -67,7 +68,7 @@ public class CompensateProcess1Tests {
 
 	@Test
 	public void testScenario2() {
-		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_2", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_2").params("list", new ArrayList<>()).build());
 		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
 
 		Context ctx = contextService.get(contextId).get();
@@ -98,7 +99,7 @@ public class CompensateProcess1Tests {
 
 	@Test
 	public void testScenario3() {
-		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_3", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_3").params("list", new ArrayList<>()).build());
 		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
 
 		Context ctx = contextService.get(contextId).get();
@@ -129,7 +130,7 @@ public class CompensateProcess1Tests {
 
 	@Test
 	public void testScenario4() {
-		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_4", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_4").params("list", new ArrayList<>()).build());
 		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
 
 		Context ctx = contextService.get(contextId).get();
@@ -160,7 +161,7 @@ public class CompensateProcess1Tests {
 
 	@Test
 	public void testScenario5() {
-		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_5", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_5").params("list", new ArrayList<>()).build());
 		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
 
 		Context ctx = contextService.get(contextId).get();
@@ -189,7 +190,7 @@ public class CompensateProcess1Tests {
 
 	@Test
 	public void testScenario6() {
-		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_6", new HashMap<>() {{ put("list", new ArrayList<>());}});
+		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_6").params("list", new ArrayList<>()).build());
 		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
 
 		Context ctx = contextService.get(contextId).get();

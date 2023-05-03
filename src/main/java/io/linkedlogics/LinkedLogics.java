@@ -1,13 +1,17 @@
 package io.linkedlogics;
 
 import java.util.Map;
+import java.util.Optional;
 
 import io.linkedlogics.config.LinkedLogicsConfiguration;
+import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextError;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.service.ServiceConfigurer;
 import io.linkedlogics.service.ServiceLocator;
 import io.linkedlogics.service.local.LocalServiceConfigurer;
+import io.linkedlogics.service.task.CancelTask;
+import io.linkedlogics.service.task.StartTask;
 
 public class LinkedLogics {
 	static {
@@ -34,29 +38,21 @@ public class LinkedLogics {
 		ServiceLocator.getInstance().start();
 	}
 	
-	public static String start(String processId, int version, Map<String, Object> params) {
-		return LinkedLogicsStarter.start(processId, version, params, null);
+	public static String start(Context context) {
+		return start(context, null);
 	}
 	
-	public static String start(String processId, Map<String, Object> params) {
-		return LinkedLogicsStarter.start(processId, params, null);
-	}
-	
-	public static String start(String processId, int version, Map<String, Object> params, LinkedLogicsCallback callback) {
-		return LinkedLogicsStarter.start(processId, version, params, callback);
-	}
-	
-	public static String start(String processId, Map<String, Object> params, LinkedLogicsCallback callback) {
-		return LinkedLogicsStarter.start(processId, params, callback);
+	public static String start(Context context, LinkedLogicsCallback callback) {
+		ServiceLocator.getInstance().getContextService().set(context);
+		Optional.ofNullable(callback).ifPresent(c -> ServiceLocator.getInstance().getCallbackService().set(context.getId(), c));
+		ServiceLocator.getInstance().getProcessorService().process(new StartTask(context));
+		return context.getId();
 	}
 	
 	public static void cancel(String contextId) {
 		ServiceLocator.getInstance().getContextService().get(contextId).ifPresent(c -> {
-			c.setStatus(Status.CANCELLED);
-			ServiceLocator.getInstance().getCallbackService().publish(c);
-			ServiceLocator.getInstance().getContextService().remove(contextId);
+			ServiceLocator.getInstance().getProcessorService().process(new CancelTask(c));
 		});
-		
 	}
 	
 	public static void asyncCallback(String contextId, Object result) {

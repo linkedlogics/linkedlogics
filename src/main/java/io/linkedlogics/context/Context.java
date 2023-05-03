@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.linkedlogics.service.LogicService;
 import io.linkedlogics.service.SchedulerService.Schedule;
 import io.linkedlogics.service.TriggerService.Trigger;
@@ -53,8 +55,9 @@ public class Context {
 	private List<String> compensables = new ArrayList<>();
 	private Map<String, String> joinMap = new HashMap<>();
 	
-	public Context(String processId, int processVersion, Map<String, Object> params) {
-		this.id = UUID.randomUUID().toString();
+	public Context(String id, String key, String processId, int processVersion, Map<String, Object> params) {
+		this.id = id == null ? UUID.randomUUID().toString() : id;
+		this.key = key == null ? this.id : key;
 		this.processId = processId;
 		this.processVersion = processVersion;
 		this.params.putAll(params);
@@ -64,6 +67,7 @@ public class Context {
 	public static Context forPublish(Context context) {
 		Context logicContext = new Context();
 		logicContext.setId(context.getId());
+		logicContext.setKey(context.getKey());
 		logicContext.setLogicId(context.getLogicId());
 		logicContext.setLogicVersion(context.getLogicVersion());
 		logicContext.setLogicReturnAs(context.getLogicReturnAs());
@@ -93,5 +97,10 @@ public class Context {
 		scheduleContext.setLogicId(schedule.getLogicId());
 		scheduleContext.setLogicPosition(schedule.getLogicPosition());
 		return scheduleContext;
+	}
+	
+	@JsonIgnore
+	public boolean isNotFinished() {
+		return getStatus() != Status.FINISHED && getStatus() != Status.FAILED && getStatus() != Status.CANCELLED;
 	}
 }

@@ -19,6 +19,7 @@ import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.annotation.Input;
 import io.linkedlogics.annotation.Logic;
 import io.linkedlogics.context.Context;
+import io.linkedlogics.context.ContextBuilder;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.ProcessDefinition;
 import io.linkedlogics.service.ContextService;
@@ -40,10 +41,7 @@ public class SimpleProcess4Tests {
 
 	@Test
 	public void testScenario1() {
-		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_1", new HashMap<>() {{ 
-			put("list", new ArrayList<>());
-			put("val", 3);
-		}});
+		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1") .params("list", new ArrayList<>(), "val", 3).build());
 		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
 
 		Context ctx = contextService.get(contextId).get();
@@ -54,10 +52,7 @@ public class SimpleProcess4Tests {
 
 	@Test
 	public void testScenario2() {
-		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_1", new HashMap<>() {{ 
-			put("list", new ArrayList<>());
-			put("val", 7);
-		}});
+		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").params("list", new ArrayList<>(), "val", 7).build());
 		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
 
 		Context ctx = contextService.get(contextId).get();

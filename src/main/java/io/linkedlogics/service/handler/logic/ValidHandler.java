@@ -24,7 +24,7 @@ public class ValidHandler  extends LogicHandler {
 		Optional<Context> maybeContext = ServiceLocator.getInstance().getContextService().get(context.getId());
 		if (maybeContext.isPresent()) {
 			Context fullContext = maybeContext.get();
-			if (fullContext.getLogicPosition().equals(context.getLogicPosition()) && fullContext.getStatus() != Status.FINISHED && fullContext.getStatus() != Status.FAILED) {
+			if (fullContext.getLogicPosition().equals(context.getLogicPosition()) && fullContext.isNotFinished()) {
 				log.debug(log(fullContext, "context is valid").toString());
 				super.handle(context, result);
 			} else {

@@ -50,10 +50,8 @@ public class ForkFlowHandler extends ProcessFlowHandler {
 	}
 	
 	private Context forkContext(Context parent, String candidatePosition) {
-		Context forked = new Context(parent.getProcessId(), parent.getProcessVersion(), cloneParams(parent.getParams()));
+		Context forked = new Context(UUID.randomUUID().toString(), parent.getKey(), parent.getProcessId(), parent.getProcessVersion(), cloneParams(parent.getParams()));
 		forked.setParentId(parent.getId());
-		forked.setId(UUID.randomUUID().toString());
-		forked.setKey(parent.getKey());
 		forked.setStartPosition(candidatePosition);
 		forked.setEndPosition(adjacentLogicPosition(candidatePosition));
 		forked.setLogicId(null);

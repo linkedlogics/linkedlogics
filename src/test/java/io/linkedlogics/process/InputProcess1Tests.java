@@ -19,6 +19,7 @@ import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.annotation.Input;
 import io.linkedlogics.annotation.Logic;
 import io.linkedlogics.context.Context;
+import io.linkedlogics.context.ContextBuilder;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.ProcessDefinition;
 import io.linkedlogics.service.ContextService;
@@ -44,7 +45,7 @@ public class InputProcess1Tests {
 
 	@Test
 	public void testScenario1() {
-		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_1", new HashMap<>() {{ put("person", new Person("firstname", "lastname", "FREE"));}});
+		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").params("person", new Person("firstname", "lastname", "FREE")).build());
 		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
 		
 		Context ctx = contextService.get(contextId).get();
@@ -70,7 +71,7 @@ public class InputProcess1Tests {
 		persons.add(new Person("firstname", "lastname", "BUSY"));
 		persons.add(new Person("firstname", "lastname", "BUSY"));
 		
-		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_2", new HashMap<>() {{ put("persons", persons);}});
+		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_2").params("persons", persons).build());
 		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
 		
 		Context ctx = contextService.get(contextId).get();
@@ -94,7 +95,7 @@ public class InputProcess1Tests {
 		persons.add(new Person("firstname1", "lastname1", "FREE"));
 		persons.add(new Person("firstname3", "lastname3", "FREE"));
 		
-		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_3", new HashMap<>() {{ put("persons", persons);}});
+		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_3").params("persons", persons).build());
 		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
 		
 		Context ctx = contextService.get(contextId).get();
@@ -118,7 +119,7 @@ public class InputProcess1Tests {
 		persons.put("firstname4", new Person("firstname4", "lastname4", "FREE"));
 		persons.put("firstname5", new Person("firstname5", "lastname5", "FREE"));
 		
-		String contextId = LinkedLogics.start("SIMPLE_SCENARIO_4", new HashMap<>() {{ put("persons", persons);}});
+		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_4").params("persons", persons).build());
 		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
 		
 		Context ctx = contextService.get(contextId).get();
