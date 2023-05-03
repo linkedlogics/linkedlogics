@@ -1,10 +1,5 @@
 package io.linkedlogics.model;
 
-import static io.linkedlogics.LinkedLogicsBuilder.createProcess;
-import static io.linkedlogics.LinkedLogicsBuilder.group;
-import static io.linkedlogics.LinkedLogicsBuilder.verify;
-import static io.linkedlogics.LinkedLogicsBuilder.when;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +8,7 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import io.linkedlogics.LinkedLogics;
+import io.linkedlogics.LinkedLogicsBuilder;
 import io.linkedlogics.model.process.BaseLogicDefinition;
 import io.linkedlogics.model.process.BranchLogicDefinition;
 import io.linkedlogics.model.process.DelayLogicDefinition;
@@ -35,7 +30,6 @@ import io.linkedlogics.model.process.TimeoutLogicDefinition;
 import io.linkedlogics.model.process.VerifyLogicDefinition;
 import io.linkedlogics.service.LogicService;
 import io.linkedlogics.service.ServiceLocator;
-import io.linkedlogics.service.local.LocalServiceConfigurer;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -205,7 +199,7 @@ public class ProcessDefinitionWriter {
 		if (jump.getTargetLabel() != null) {
 			builder.append("\"").append(jump.getTargetLabel()).append("\"");
 		} else if (jump.getTargetExpr() != null) {
-			builder.append("expr(\"").append(escape(jump.getTargetExpr().getExpression())).append("\")");
+			builder.append("expr(").append(escape(jump.getTargetExpr().getExpression())).append(")");
 		}
 		builder.append(")");
 	}
@@ -215,7 +209,7 @@ public class ProcessDefinitionWriter {
 	}
 
 	private void write(StringBuilder builder, VerifyLogicDefinition verify) {
-		builder.append("verify(when(\"").append(escape(verify.getExpression().getExpression())).append("\"))");
+		builder.append("verify(when(").append(escape(verify.getExpression().getExpression())).append("))");
 		if (verify.getErrorCode() != null) {
 			builder.append(".elseFailWithCode(").append(verify.getErrorCode()).append(")");
 
@@ -291,7 +285,7 @@ public class ProcessDefinitionWriter {
 	}
 
 	private void write(StringBuilder builder, BranchLogicDefinition branch) {
-		builder.append("branch(when(\"").append(escape(branch.getExpression().getExpression())).append("\"), ");
+		builder.append("branch(when(").append(escape(branch.getExpression().getExpression())).append("), ");
 		write(builder, branch.getLeftLogic());
 		if (branch.getRightLogic() != null) {
 			builder.append(", ");
@@ -327,7 +321,7 @@ public class ProcessDefinitionWriter {
 	
 	private void write(StringBuilder builder, ScriptLogicDefinition logic) {
 		String escaped = escape(logic.getExpression().getExpression());
-		builder.append("script(fromText(\"").append(escaped).append("\"))");
+		builder.append("script(fromText(").append(escaped).append("))");
 		if (logic.getReturnAs() != null) {
 			builder.append(".returnAs(\"").append(logic.getReturnAs()).append("\")");
 		} else if (logic.isReturnAsMap()) {
@@ -336,7 +330,8 @@ public class ProcessDefinitionWriter {
 	}
 	
 	private String escape(String expr) {
-		return expr.replace("\n", "\\n").replace("\"", "\\\"").replace("$", "\\$").replace("^", "\\^");
+//		expr = expr.replace("\n", "\\n").replace("\"", "\\\"").replace("$", "\\$").replace("^", "\\^");
+		return "decode(\"" + LinkedLogicsBuilder.encode(expr) + "\")";
 	}
 
 	private void write(StringBuilder builder, Map<String, Object> params, boolean isInput) {
@@ -350,10 +345,10 @@ public class ProcessDefinitionWriter {
 				StringBuilder input = new StringBuilder();
 				input.append("\"").append(e.getKey()).append("\", ");
 				if (e.getValue() instanceof ExpressionLogicDefinition) {
-					input.append("expr(\"").append(escape(((ExpressionLogicDefinition) e.getValue()).getExpression())).append("\")");
+					input.append("expr(").append(escape(((ExpressionLogicDefinition) e.getValue()).getExpression())).append(")");
 				} else if (e.getValue() instanceof Map || e.getValue() instanceof List || e.getValue() instanceof Set) { 
 					try {
-						input.append("expr(\"(").append(escape(ServiceLocator.getInstance().getMapperService().getMapper().writeValueAsString(e.getValue()))).append(")\")");
+						input.append("expr(").append(escape("("+ServiceLocator.getInstance().getMapperService().getMapper().writeValueAsString(e.getValue()) + ")")).append(")");
 					} catch (JsonProcessingException ex) {
 						throw new RuntimeException(ex);
 					}

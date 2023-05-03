@@ -1,10 +1,13 @@
 package io.linkedlogics;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 
 import io.linkedlogics.model.ProcessDefinition.ProcessBuilder;
 import io.linkedlogics.model.process.BaseLogicDefinition;
@@ -24,7 +27,9 @@ import io.linkedlogics.model.process.SingleLogicDefinition.SingleLogicBuilder;
 import io.linkedlogics.model.process.VerifyLogicDefinition.VerifyLogicBuilder;
 import io.linkedlogics.service.LogicService;
 import io.linkedlogics.service.ProcessService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class LinkedLogicsBuilder {
 	
 	public static ProcessBuilder createProcess(String id, int version) {
@@ -101,8 +106,9 @@ public class LinkedLogicsBuilder {
 	}
 	
 	public static ExpressionLogicDefinition fromFile(String file) {
-		try {
-			return new ExpressionLogicDefinition.ExpressionLogicDefinitionBuilder(new String(Files.readAllBytes(Paths.get(LinkedLogics.class.getClassLoader().getResource(file).toURI())))).source(file).build();
+		try (InputStream in = LinkedLogics.class.getClassLoader().getResourceAsStream(file)) {
+			log.info("loading {}", file);
+			return new ExpressionLogicDefinition.ExpressionLogicDefinitionBuilder(new String(in.readAllBytes())).source(file).build();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -134,5 +140,13 @@ public class LinkedLogicsBuilder {
 	
 	public static ScriptLogicBuilder script(ExpressionLogicDefinition expression) {
 		return new ScriptLogicBuilder(expression);
+	}
+	
+	public static String encode(String s) {
+		return Base64.getEncoder().encodeToString(s.getBytes(Charset.forName("UTF-8")));
+	}
+	
+	public static String decode(String s) {
+		return new String(Base64.getDecoder().decode(s));
 	}
 }
