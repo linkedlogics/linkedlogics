@@ -128,7 +128,6 @@ public class PublishHandler extends LogicHandler {
 		
 		timeoutContext(context);
 		ServiceLocator.getInstance().getContextService().set(context);
-
 		if (context.getApplication() == null || (localBypass && context.getApplication().equals(LinkedLogics.getApplicationName()))) {
 			ServiceLocator.getInstance().getConsumerService().consume(Context.forPublish(context));
 		} else {
