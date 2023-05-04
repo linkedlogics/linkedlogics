@@ -348,7 +348,7 @@ public class ProcessDefinitionWriter {
 					input.append("expr(").append(escape(((ExpressionLogicDefinition) e.getValue()).getExpression())).append(")");
 				} else if (e.getValue() instanceof Map || e.getValue() instanceof List || e.getValue() instanceof Set) { 
 					try {
-						input.append("expr(").append(escape("("+ServiceLocator.getInstance().getMapperService().getMapper().writeValueAsString(e.getValue()) + ")")).append(")");
+						input.append("expr(").append(escape(ServiceLocator.getInstance().getEvaluatorService().toParseableJson(e.getValue()))).append(")");
 					} catch (JsonProcessingException ex) {
 						throw new RuntimeException(ex);
 					}

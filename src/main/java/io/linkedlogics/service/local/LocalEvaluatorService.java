@@ -5,9 +5,12 @@ import java.util.Optional;
 
 import org.codehaus.groovy.control.CompilationFailedException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import io.linkedlogics.service.EvaluatorService;
+import io.linkedlogics.service.ServiceLocator;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -32,5 +35,10 @@ public class LocalEvaluatorService implements EvaluatorService {
 		} catch (CompilationFailedException e) {
 			return Optional.of(e.getMessage());
 		}
+	}
+	
+	@Override
+	public String toParseableJson(Object value) throws JsonProcessingException {
+		return "new groovy.json.JsonSlurper().parseText('" + ServiceLocator.getInstance().getMapperService().getMapper().writeValueAsString(value) + "')";
 	}
 }

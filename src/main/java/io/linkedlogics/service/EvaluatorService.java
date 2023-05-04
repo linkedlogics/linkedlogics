@@ -3,6 +3,8 @@ package io.linkedlogics.service;
 import java.util.Map;
 import java.util.Optional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 public interface EvaluatorService extends LinkedLogicsService {
 
 	Object evaluate(String expression, Map<String, Object> params);
@@ -13,5 +15,9 @@ public interface EvaluatorService extends LinkedLogicsService {
 	
 	default Optional<String> checkSyntax(String expression) {
 		return Optional.empty();
+	}
+	
+	default String toParseableJson(Object value) throws JsonProcessingException {
+		return "(" + ServiceLocator.getInstance().getMapperService().getMapper().writeValueAsString(value) + ")";
 	}
 }
