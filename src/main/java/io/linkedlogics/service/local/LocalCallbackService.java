@@ -36,7 +36,7 @@ public class LocalCallbackService implements CallbackService {
 	@Override
 	public void set(String contextId, LinkedLogicsCallback callback) {
 		callbackMap.put(contextId, callback);
-		scheduler.schedule(() -> callback.onTimeout(), expireTime, TimeUnit.SECONDS);
+		scheduler.schedule(() -> Optional.ofNullable(callbackMap.remove(contextId)).ifPresent((c) -> c.onTimeout()), expireTime, TimeUnit.SECONDS);
 	}
 
 	@Override

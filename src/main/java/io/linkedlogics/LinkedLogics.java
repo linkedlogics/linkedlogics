@@ -1,12 +1,10 @@
 package io.linkedlogics;
 
-import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import io.linkedlogics.config.LinkedLogicsConfiguration;
 import io.linkedlogics.context.Context;
-import io.linkedlogics.context.ContextError;
-import io.linkedlogics.context.Status;
 import io.linkedlogics.service.ServiceConfigurer;
 import io.linkedlogics.service.ServiceLocator;
 import io.linkedlogics.service.local.LocalServiceConfigurer;
@@ -14,6 +12,8 @@ import io.linkedlogics.service.task.CancelTask;
 import io.linkedlogics.service.task.StartTask;
 
 public class LinkedLogics {
+	public static final String INSTANCE_NAME = getApplicationName() + "-" + UUID.randomUUID().toString();
+	
 	static {
 		configure(new LocalServiceConfigurer());
 	}
@@ -69,5 +69,9 @@ public class LinkedLogics {
 	
 	public static String getApplicationName() {
 		return LinkedLogicsConfiguration.getConfig(LinkedLogicsConfiguration.APPLICATION_NAME).map(c -> c.toString()).orElseThrow(() -> new NullPointerException("missing application name"));
+	}
+	
+	public static String getInstanceName() {
+		return INSTANCE_NAME;
 	}
 }
