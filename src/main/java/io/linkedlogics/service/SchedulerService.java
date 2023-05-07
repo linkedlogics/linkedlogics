@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public interface SchedulerService extends LinkedLogicsService {
-	
 	void schedule(Schedule schedule);
 	
 	default void handle(Schedule schedule) {

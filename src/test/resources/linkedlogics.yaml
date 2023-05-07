@@ -4,8 +4,8 @@ linkedlogics:
     name: test
   
   
-services:
-  callback:
-    expire-time: 1
-  process:
-    timeout: 30
+  services:
+    callback:
+      expire-time: 1
+    processor:
+      timeout: 30

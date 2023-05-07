@@ -7,8 +7,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import io.linkedlogics.service.TriggerService;
 
 public class LocalTriggerService implements TriggerService {
-	private static ConcurrentHashMap<String, List<Trigger>> triggerMap = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<String, List<Trigger>> triggerMap;
 	
+
+	@Override
+	public void start() {
+		triggerMap = new ConcurrentHashMap<>();
+	}
+
 	@Override
 	public void set(String contextId, Trigger trigger) {
 		if (triggerMap.contains(contextId)) {

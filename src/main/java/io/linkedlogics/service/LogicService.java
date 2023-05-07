@@ -11,5 +11,5 @@ public interface LogicService extends LinkedLogicsService {
 	
 	Optional<LogicDefinition> getLogic(String logicId, int version);
 	
-	void register(Object logics);
+	void addLogic(LogicDefinition logics);
 }

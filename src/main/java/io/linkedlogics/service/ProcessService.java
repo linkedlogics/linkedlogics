@@ -11,5 +11,5 @@ public interface ProcessService extends LinkedLogicsService {
 	
 	Optional<ProcessDefinition> getProcess(String processId, int version);
 	
-	void register(Object processes);
+	void addProcess(ProcessDefinition process);
 }

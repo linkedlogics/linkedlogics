@@ -7,8 +7,22 @@ import org.junit.jupiter.api.Test;
 
 import io.linkedlogics.service.LinkedLogicsService;
 import io.linkedlogics.service.ServiceConfigurer;
+import io.linkedlogics.service.config.ServiceConfig;
 
 public class ServiceConfigurerTests {
+	
+	@Test
+	@DisplayName("get service instance by multiple interfaces")
+	public void shouldReturnServiceByTwoInterfaces() {
+		ServiceABImpl1 serviceAB = new ServiceABImpl1();
+		
+		ServiceConfigurer configurer = new ServiceConfigurer();
+		configurer.configure(serviceAB);
+		
+		assertThat(configurer.getServices().get(ServiceA.class)).isEqualTo(serviceAB);
+		assertThat(configurer.getServices().get(ServiceB.class)).isEqualTo(serviceAB);
+		assertThat(configurer.getServices().get(ServiceC.class)).isNull();
+	}
 	
 	@Test
 	@DisplayName("get service instance by interface")
@@ -25,19 +39,6 @@ public class ServiceConfigurerTests {
 		assertThat(configurer.getServices().get(ServiceA.class)).isEqualTo(serviceA);
 		assertThat(configurer.getServices().get(ServiceB.class)).isEqualTo(serviceB);
 		assertThat(configurer.getServices().get(ServiceC.class)).isEqualTo(serviceC);
-	}
-	
-	@Test
-	@DisplayName("get service instance by multiple interfaces")
-	public void shouldReturnServiceByTwoInterfaces() {
-		ServiceABImpl1 serviceAB = new ServiceABImpl1();
-		
-		ServiceConfigurer configurer = new ServiceConfigurer();
-		configurer.configure(serviceAB);
-		
-		assertThat(configurer.getServices().get(ServiceA.class)).isEqualTo(serviceAB);
-		assertThat(configurer.getServices().get(ServiceB.class)).isEqualTo(serviceAB);
-		assertThat(configurer.getServices().get(ServiceC.class)).isNull();
 	}
 	
 	@Test
@@ -68,42 +69,46 @@ public class ServiceConfigurerTests {
 	
 	
 	private interface ServiceA extends LinkedLogicsService {
-		
+
 	}
 	
 	private interface ServiceB extends LinkedLogicsService {
-		
+
 	}
 	
 	private interface ServiceC extends LinkedLogicsService {
-		
+
 	}
 	
 	private class ServiceAImpl1 implements ServiceA {
-		
+
 	}
 	
 	private class ServiceAImpl2 implements ServiceA {
-		
+
 	}
 	
 	private class ServiceBImpl1 implements ServiceB {
-		
+
 	}
 	
 	private class ServiceBImpl2 implements ServiceB {
-		
+
 	}
 	
 	private class ServiceCImpl1 implements ServiceC {
-		
+
 	}
 	
 	private class ServiceCImpl2 implements ServiceC {
-		
+
 	}
 	
 	private class ServiceABImpl1 implements ServiceA, ServiceB {
+		
+	}
+	
+	private interface DummyServiceConfig extends ServiceConfig {
 		
 	}
 }

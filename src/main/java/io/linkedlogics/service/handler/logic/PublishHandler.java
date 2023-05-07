@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import io.linkedlogics.LinkedLogics;
-import io.linkedlogics.config.LinkedLogicsConfiguration;
 import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextLog;
 import io.linkedlogics.context.Status;
@@ -15,18 +14,18 @@ import io.linkedlogics.model.process.ScriptLogicDefinition;
 import io.linkedlogics.model.process.SingleLogicDefinition;
 import io.linkedlogics.service.EvaluatorService;
 import io.linkedlogics.service.SchedulerService;
+import io.linkedlogics.service.SchedulerService.Schedule;
 import io.linkedlogics.service.ServiceLocator;
 import io.linkedlogics.service.TriggerService;
-import io.linkedlogics.service.SchedulerService.Schedule;
 import io.linkedlogics.service.handler.process.HandlerResult;
+import io.linkedlogics.service.local.LocalProcessorService;
 import io.linkedlogics.service.task.ScriptTask;
 import io.linkedlogics.service.task.StartTask;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class PublishHandler extends LogicHandler {
-	private boolean localBypass = Boolean.valueOf(LinkedLogicsConfiguration.getConfigOrDefault(LinkedLogicsConfiguration.LINKEDLOGICS, "services.processor.bypass", "true").toString());
-	
+
 	public PublishHandler() {
 
 	}
@@ -86,7 +85,7 @@ public class PublishHandler extends LogicHandler {
 	
 	private void timeoutContext(Context context) {	
 		if (context.getExpiresAt() == null || context.getExpiresAt().isBefore(OffsetDateTime.now())) {
-			int timeout = (Integer) LinkedLogicsConfiguration.getConfigOrDefault("services.process.timeout", 600);
+			int timeout = ((LocalProcessorService) ServiceLocator.getInstance().getProcessorService()).getConfig().getTimeout();
 			context.setExpiresAt(OffsetDateTime.now().plusSeconds(timeout));
 		}
 		
@@ -128,6 +127,9 @@ public class PublishHandler extends LogicHandler {
 		
 		timeoutContext(context);
 		ServiceLocator.getInstance().getContextService().set(context);
+		
+		boolean localBypass = ((LocalProcessorService) ServiceLocator.getInstance().getProcessorService()).getConfig().getBypass(true);
+		
 		if (context.getApplication() == null || (localBypass && context.getApplication().equals(LinkedLogics.getApplicationName()))) {
 			ServiceLocator.getInstance().getConsumerService().consume(Context.forPublish(context));
 		} else {

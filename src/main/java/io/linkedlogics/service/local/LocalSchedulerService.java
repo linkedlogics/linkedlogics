@@ -2,24 +2,30 @@ package io.linkedlogics.service.local;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import io.linkedlogics.config.LinkedLogicsConfiguration;
+import io.linkedlogics.service.ConfigurableService;
 import io.linkedlogics.service.SchedulerService;
+import io.linkedlogics.service.local.config.LocalSchedulerServiceConfig;
 import lombok.AllArgsConstructor;
 
-public class LocalSchedulerService implements SchedulerService {
+public class LocalSchedulerService extends ConfigurableService<LocalSchedulerServiceConfig> implements SchedulerService {
 	private ScheduledExecutorService service;
+	
+	public LocalSchedulerService() {
+		super(LocalSchedulerServiceConfig.class);
+	}
 	
 	@Override
 	public void start() {
-		int threads = (Integer) LinkedLogicsConfiguration.getConfigOrDefault("services.scheduler.threads", -1);
-		if (threads == -1) {
+		Optional<Integer> threads = getConfig().getThreads();
+		if (threads.isEmpty()) {
 			service = Executors.newSingleThreadScheduledExecutor();
 		} else {
-			service = Executors.newScheduledThreadPool(threads);
+			service = Executors.newScheduledThreadPool(threads.get());
 		}
 	}
 	

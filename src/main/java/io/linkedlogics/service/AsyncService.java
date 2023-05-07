@@ -5,7 +5,6 @@ import java.util.Optional;
 import io.linkedlogics.context.Context;
 
 public interface AsyncService extends LinkedLogicsService {
-	
 	void set(Context context);
 	
 	Optional<Context> remove(String contextId);

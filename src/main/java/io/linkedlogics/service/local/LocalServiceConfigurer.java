@@ -15,7 +15,7 @@ public class LocalServiceConfigurer extends ServiceConfigurer {
 		configure(new LocalMapperService());
 		configure(new LocalEvaluatorService());
 		configure(new LocalCallbackService());
-		configure(new LocalMetricsService());
+		configure(new LocalMetricService());
 		configure(new LocalSchedulerService());
 		configure(new LocalTrackerService());
 		configure(new LocalQueueService());

@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import io.linkedlogics.config.LinkedLogicsConfiguration;
 import io.linkedlogics.context.Context;
+import io.linkedlogics.model.LogicDefinitionRegistrar;
+import io.linkedlogics.model.ProcessDefinitionRegistrar;
 import io.linkedlogics.service.ServiceConfigurer;
 import io.linkedlogics.service.ServiceLocator;
 import io.linkedlogics.service.local.LocalServiceConfigurer;
@@ -23,11 +25,11 @@ public class LinkedLogics {
 	}
 	
 	public static void registerLogic(Object logic) {
-		ServiceLocator.getInstance().getLogicService().register(logic);
+		LogicDefinitionRegistrar.register(logic);
 	}
 	
 	public static void registerProcess(Object process) {
-		ServiceLocator.getInstance().getProcessService().register(process);
+		ProcessDefinitionRegistrar.register(process);
 	}
 	
 	public static void shutdown() {
@@ -68,7 +70,7 @@ public class LinkedLogics {
 	}
 	
 	public static String getApplicationName() {
-		return LinkedLogicsConfiguration.getConfig(LinkedLogicsConfiguration.APPLICATION_NAME).map(c -> c.toString()).orElseThrow(() -> new NullPointerException("missing application name"));
+		return (String) LinkedLogicsConfiguration.getOrThrow("linkedlogics.application.name", "missing application.name");
 	}
 	
 	public static String getInstanceName() {

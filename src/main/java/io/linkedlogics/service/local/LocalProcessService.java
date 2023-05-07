@@ -1,8 +1,5 @@
 package io.linkedlogics.service.local;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -17,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class LocalProcessService implements ProcessService {
-	protected final Map<String, ProcessDefinition> definitions = new ConcurrentHashMap<>();
+	protected Map<String, ProcessDefinition> definitions = new ConcurrentHashMap<>();
 	
 	@Override
 	public Optional<ProcessDefinition> getProcess(String processId) {
@@ -35,43 +32,7 @@ public class LocalProcessService implements ProcessService {
 		return Optional.ofNullable(definitions.get(getProcessKey(processId, version)));
 	}
 	
-	@Override
-	public void register(Object logics) {
-		if (logics.getClass().equals(Class.class)) {
-			registerClass((Class<?>) logics);
-		} else {
-			registerObject(logics);
-		}
-	}
-	
-	protected void registerObject(Object processObject) {
-		Arrays.stream(processObject.getClass().getDeclaredMethods())
-		.filter(m -> ProcessDefinition.class.isAssignableFrom(m.getReturnType()))
-		.map(m -> {
-			try {
-				return (ProcessDefinition) m.invoke(processObject);
-			} catch (Throwable e) {
-				throw new RuntimeException(e);
-			}
-		}).forEach(this::addProcess);
-	}
-	
-	protected void registerClass(Class<?> processClass) {
-		Arrays.stream(processClass.getDeclaredMethods())
-		.filter(m -> Modifier.isStatic(m.getModifiers()))
-		.filter(m -> ProcessDefinition.class.isAssignableFrom(m.getReturnType()))
-		.map(m -> {
-			try {
-				return (ProcessDefinition) m.invoke(null);
-			} catch (InvocationTargetException e) {
-				throw new RuntimeException(e.getCause());
-			} catch (Throwable e) {
-				throw new RuntimeException(e);
-			}
-		}).forEach(this::addProcess);
-	}
-	
-	protected void addProcess(ProcessDefinition process) {
+	public void addProcess(ProcessDefinition process) {
 		if (process.isArchived()) {
 			log.info(String.format("process %s:%d is archived", process.getId(), process.getVersion()));
 			return;

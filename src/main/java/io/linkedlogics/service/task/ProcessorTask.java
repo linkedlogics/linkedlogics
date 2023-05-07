@@ -4,7 +4,7 @@ import io.linkedlogics.context.Context;
 import io.linkedlogics.service.handler.logic.AsyncHandler;
 import io.linkedlogics.service.handler.logic.ErrorHandler;
 import io.linkedlogics.service.handler.logic.InvokeHandler;
-import io.linkedlogics.service.handler.logic.MetricsHandler;
+import io.linkedlogics.service.handler.logic.MetricHandler;
 import io.linkedlogics.service.handler.logic.OutputHandler;
 import io.linkedlogics.service.handler.logic.ProcessHandler;
 import io.linkedlogics.service.handler.logic.PublishHandler;
@@ -13,7 +13,7 @@ import io.linkedlogics.service.handler.logic.ValidHandler;
 
 public class ProcessorTask extends LinkedLogicsTask {
 	public ProcessorTask(Context context) {
-		super(context, new ValidHandler(new InvokeHandler(new MetricsHandler(new AsyncHandler(new OutputHandler(new ErrorHandler(new ProcessHandler(new TrackingHandler(new PublishHandler())))))))));
+		super(context, new ValidHandler(new InvokeHandler(new MetricHandler(new AsyncHandler(new OutputHandler(new ErrorHandler(new ProcessHandler(new TrackingHandler(new PublishHandler())))))))));
 	}
 	
 	@Override

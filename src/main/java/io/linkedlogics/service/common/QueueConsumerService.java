@@ -6,16 +6,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.context.Context;
+import io.linkedlogics.service.ConfigurableService;
 import io.linkedlogics.service.ConsumerService;
 import io.linkedlogics.service.QueueService;
 import io.linkedlogics.service.ServiceLocator;
+import io.linkedlogics.service.common.config.QueueConsumerServiceConfig;
 import io.linkedlogics.service.task.ProcessorTask;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class QueueConsumerService implements ConsumerService, Runnable {
+public class QueueConsumerService extends ConfigurableService<QueueConsumerServiceConfig> implements ConsumerService, Runnable {
 	private Thread consumer;
 	private boolean isRunning;
+	
+	public QueueConsumerService() {
+		super(QueueConsumerServiceConfig.class);
+	}
 	
 	@Override
 	public void start() {
@@ -47,7 +53,7 @@ public class QueueConsumerService implements ConsumerService, Runnable {
 						log.error(e.getLocalizedMessage(), e);
 					}
 				} else {
-					Thread.sleep(1);
+					Thread.sleep(getConfig().getDelay());
 				}
 			} catch (InterruptedException e) {}
 		}

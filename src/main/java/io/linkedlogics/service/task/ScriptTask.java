@@ -3,7 +3,7 @@ package io.linkedlogics.service.task;
 import io.linkedlogics.context.Context;
 import io.linkedlogics.service.handler.logic.AsyncHandler;
 import io.linkedlogics.service.handler.logic.ErrorHandler;
-import io.linkedlogics.service.handler.logic.MetricsHandler;
+import io.linkedlogics.service.handler.logic.MetricHandler;
 import io.linkedlogics.service.handler.logic.OutputHandler;
 import io.linkedlogics.service.handler.logic.ProcessHandler;
 import io.linkedlogics.service.handler.logic.PublishHandler;
@@ -13,7 +13,7 @@ import io.linkedlogics.service.handler.logic.ValidHandler;
 
 public class ScriptTask extends LinkedLogicsTask {
 	public ScriptTask(Context context) {
-		super(context, new ValidHandler(new ScriptHandler(new MetricsHandler(new ErrorHandler(new ProcessHandler(new TrackingHandler(new PublishHandler())))))));
+		super(context, new ValidHandler(new ScriptHandler(new MetricHandler(new ErrorHandler(new ProcessHandler(new TrackingHandler(new PublishHandler())))))));
 	}
 	
 	@Override

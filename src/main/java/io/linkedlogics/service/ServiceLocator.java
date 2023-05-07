@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ServiceLocator {
 	private static final ServiceLocator INSTANCE = new ServiceLocator();
 	
-	private Map<Class<?>, LinkedLogicsService> services = new HashMap<>();
+	private Map<Class, LinkedLogicsService> services = new HashMap<>();
 	
 	public static ServiceLocator getInstance() {
 		return INSTANCE;
@@ -74,8 +74,8 @@ public class ServiceLocator {
 		return getService(CallbackService.class);
 	}
 	
-	public MetricsService getMetricsService() {
-		return getService(MetricsService.class);
+	public MetricService getMetricsService() {
+		return getService(MetricService.class);
 	}
 	
 	public TrackingService getTrackingService() {
@@ -97,5 +97,9 @@ public class ServiceLocator {
 	public void start() {
 		log.info("Launching Linked Logics");
 		services.values().stream().distinct().sorted(Comparator.comparing(LinkedLogicsService::order)).forEach(s -> s.start());
+	}
+	
+	public void print() {
+//		services.values().stream().map(s -> s.getClass().getSimpleName() + ":" + s.getConfigClass().getSimpleName()).forEach(System.out::println);
 	}
 }

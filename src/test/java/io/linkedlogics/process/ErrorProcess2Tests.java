@@ -10,7 +10,6 @@ import static io.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -23,8 +22,8 @@ import io.linkedlogics.annotation.Input;
 import io.linkedlogics.annotation.Logic;
 import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextBuilder;
-import io.linkedlogics.context.Status;
 import io.linkedlogics.context.ContextError.ErrorType;
+import io.linkedlogics.context.Status;
 import io.linkedlogics.exception.LogicException;
 import io.linkedlogics.model.ProcessDefinition;
 import io.linkedlogics.service.ContextService;

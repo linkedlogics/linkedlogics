@@ -6,7 +6,6 @@ import java.util.Optional;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 public interface EvaluatorService extends LinkedLogicsService {
-
 	Object evaluate(String expression, Map<String, Object> params);
 	
 	default Object evaluateScript(String expression, String id, Map<String, Object> params) {

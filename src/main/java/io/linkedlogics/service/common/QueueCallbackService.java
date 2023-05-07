@@ -9,27 +9,29 @@ import java.util.concurrent.TimeUnit;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.linkedlogics.LinkedLogicsCallback;
-import io.linkedlogics.config.LinkedLogicsConfiguration;
 import io.linkedlogics.context.Context;
 import io.linkedlogics.service.CallbackService;
-import io.linkedlogics.service.QueueService;
+import io.linkedlogics.service.ConfigurableService;
 import io.linkedlogics.service.ServiceLocator;
 import io.linkedlogics.service.TopicService;
+import io.linkedlogics.service.local.config.LocalCallbackServiceConfig;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class QueueCallbackService implements CallbackService, Runnable {
-	public static final String CALLBACK = "callback";
-	
-	private ConcurrentHashMap<String, LinkedLogicsCallback> callbackMap = new ConcurrentHashMap<>();
+public class QueueCallbackService extends ConfigurableService<LocalCallbackServiceConfig> implements CallbackService, Runnable {
+	private final static String CALLBACK_QUEUE = "callback";
+	private ConcurrentHashMap<String, LinkedLogicsCallback> callbackMap;
 	private ScheduledExecutorService scheduler;
 	private Thread consumer;
 	private boolean isRunning;
-	private int expireTime;
+
+	public QueueCallbackService() {
+		super(LocalCallbackServiceConfig.class);
+	}
 	
 	@Override
 	public void start() {
-		expireTime = (Integer) LinkedLogicsConfiguration.getConfigOrDefault("services.callback.expire-time", 5);
+		callbackMap = new ConcurrentHashMap<>();
 		scheduler = Executors.newSingleThreadScheduledExecutor();
 		consumer = new Thread(this);
 		consumer.start();
@@ -59,13 +61,13 @@ public class QueueCallbackService implements CallbackService, Runnable {
 	@Override
 	public void set(String contextId, LinkedLogicsCallback callback) {
 		callbackMap.put(contextId, callback);
-		scheduler.schedule(() -> callback.onTimeout(), expireTime, TimeUnit.SECONDS);
+		scheduler.schedule(() -> callback.onTimeout(), getConfig().getExpireTimeOrDefault(5), TimeUnit.SECONDS);
 	}
 
 	@Override
 	public void publish(Context context) {
 		TopicService topicService = ServiceLocator.getInstance().getTopicService();
-		topicService.offer(CALLBACK, toString(context));
+		topicService.offer(CALLBACK_QUEUE, toString(context));
 	}
 	
 	@Override
@@ -75,7 +77,7 @@ public class QueueCallbackService implements CallbackService, Runnable {
 		while (isRunning) {
 			try {
 				TopicService topicService = ServiceLocator.getInstance().getTopicService();
-				Optional<String> message = topicService.poll(CALLBACK);
+				Optional<String> message = topicService.poll(CALLBACK_QUEUE);
 				if (message.isPresent()) {
 					try {
 						callback(fromString(message.get()));

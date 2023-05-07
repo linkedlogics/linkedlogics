@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class QueuePublisherService implements PublisherService {
+
 	@Override
 	public void publish(Context context) {
 		QueueService queueService = ServiceLocator.getInstance().getQueueService();

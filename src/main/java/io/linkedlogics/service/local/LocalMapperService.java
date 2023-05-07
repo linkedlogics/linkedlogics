@@ -9,7 +9,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.linkedlogics.service.MapperService;
 
 public class LocalMapperService implements MapperService {
-
 	private ObjectMapper mapper;
 	
 	public LocalMapperService() {
@@ -18,7 +17,7 @@ public class LocalMapperService implements MapperService {
 		mapper.registerModule(new JavaTimeModule());
 		mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH24:mm:ss.SZ"));
 	}
-	
+
 	@Override
 	public ObjectMapper getMapper() {
 		return mapper;

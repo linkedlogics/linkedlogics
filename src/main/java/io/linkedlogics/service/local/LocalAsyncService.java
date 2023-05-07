@@ -6,38 +6,42 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import io.linkedlogics.config.LinkedLogicsConfiguration;
 import io.linkedlogics.context.Context;
 import io.linkedlogics.service.AsyncService;
+import io.linkedlogics.service.ConfigurableService;
 import io.linkedlogics.service.ServiceLocator;
+import io.linkedlogics.service.local.config.LocalAsyncServiceConfig;
 import io.linkedlogics.service.task.AsyncCallbackErrorTask;
 import io.linkedlogics.service.task.AsyncCallbackExpireTask;
 import io.linkedlogics.service.task.AsyncCallbackTask;
 
-public class LocalAsyncService implements AsyncService {
-	private ConcurrentHashMap<String, Context> contextMap = new ConcurrentHashMap<>();
+public class LocalAsyncService extends ConfigurableService<LocalAsyncServiceConfig> implements AsyncService {
+	private ConcurrentHashMap<String, Context> contextMap;
 	private ScheduledExecutorService scheduler;
-	private ThreadLocal<String> contextId = new ThreadLocal<>();
+	private ThreadLocal<String> contextId;
 	
-	private int expireTime;
+	public LocalAsyncService() {
+		super(LocalAsyncServiceConfig.class);
+	}
 	
 	@Override
 	public void start() {
-		expireTime = (Integer) LinkedLogicsConfiguration.getConfigOrDefault("services.async.expire-time", 5);
+		contextMap = new ConcurrentHashMap<>();
+		contextId = new ThreadLocal<>();
 		scheduler = Executors.newSingleThreadScheduledExecutor();
 	}
-
+	
 	@Override
 	public void stop() {
 		if (scheduler != null) {
 			scheduler.shutdownNow();
 		}
 	}
-
+	
 	@Override
 	public void set(Context context) {
 		contextMap.put(context.getId(), context);
-		scheduler.schedule(new AsyncCallbackExpireTask(context), expireTime, TimeUnit.SECONDS);
+		scheduler.schedule(new AsyncCallbackExpireTask(context), getConfig().getExpireTimeOrDefault(5), TimeUnit.SECONDS);
 	}
 
 	@Override

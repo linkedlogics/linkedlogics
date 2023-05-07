@@ -8,24 +8,16 @@ import io.linkedlogics.context.ContextError.ErrorType;
 import io.linkedlogics.model.ProcessDefinition;
 import io.linkedlogics.model.process.BaseLogicDefinition;
 import io.linkedlogics.model.process.JumpLogicDefinition;
-import io.linkedlogics.service.EvaluatorService;
-import io.linkedlogics.service.ProcessService;
 import io.linkedlogics.service.ServiceLocator;
-import io.linkedlogics.service.handler.process.ProcessFlowHandler.Flow;
 
 public class JumpFlowHandler extends ProcessFlowHandler {
-	private ProcessService processService;
-	private EvaluatorService evaluatorService;
 	
 	public JumpFlowHandler() {
-		processService = ServiceLocator.getInstance().getProcessService();
-		evaluatorService = ServiceLocator.getInstance().getEvaluatorService();
+		
 	}
 
 	public JumpFlowHandler(ProcessFlowHandler handler) {
 		super(handler);
-		processService = ServiceLocator.getInstance().getProcessService();
-		evaluatorService = ServiceLocator.getInstance().getEvaluatorService();
 	}
 
 	@Override
@@ -39,10 +31,10 @@ public class JumpFlowHandler extends ProcessFlowHandler {
 				if (jump.getTargetLabel() != null) {
 					targetLabel = jump.getTargetLabel();
 				} else if (jump.getTargetExpr() != null) {
-					targetLabel = (String) evaluatorService.evaluate(jump.getTargetExpr().getExpression(), context.getParams());
+					targetLabel = (String) ServiceLocator.getInstance().getEvaluatorService().evaluate(jump.getTargetExpr().getExpression(), context.getParams());
 				}
 				
-				ProcessDefinition process = processService.getProcess(context.getProcessId(), context.getProcessVersion()).get();
+				ProcessDefinition process = ServiceLocator.getInstance().getProcessService().getProcess(context.getProcessId(), context.getProcessVersion()).get();
 				BaseLogicDefinition target = process.getLabels().get(targetLabel);
 
 				if (target == null) {

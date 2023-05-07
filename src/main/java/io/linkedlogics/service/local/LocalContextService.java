@@ -12,9 +12,15 @@ import io.linkedlogics.service.ContextService;
 import io.linkedlogics.service.ServiceLocator;
 
 public class LocalContextService implements ContextService {
-	private ConcurrentHashMap<String, String> contextMap = new ConcurrentHashMap<>();
-	private ConcurrentHashMap<String, AtomicInteger> versionMap = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<String, String> contextMap;
+	private ConcurrentHashMap<String, AtomicInteger> versionMap;
 	
+	@Override
+	public void start() {
+		contextMap = new ConcurrentHashMap<>();
+		versionMap = new ConcurrentHashMap<>();
+	}
+
 	@Override
 	public void set(Context context) {
 		AtomicInteger version = versionMap.getOrDefault(context.getId(), new AtomicInteger(context.getVersion()));

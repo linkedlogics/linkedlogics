@@ -5,14 +5,14 @@ import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextError;
 import io.linkedlogics.service.ServiceLocator;
 
-public class MetricsHandler extends LogicHandler {
+public class MetricHandler extends LogicHandler {
 	public static final String DELIMITER = ".";
 	
-	public MetricsHandler() {
+	public MetricHandler() {
 
 	}
 	
-	public MetricsHandler(LogicHandler handler) {
+	public MetricHandler(LogicHandler handler) {
 		super(handler);
 	}
 

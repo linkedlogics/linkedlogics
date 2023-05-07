@@ -9,14 +9,16 @@ import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import io.linkedlogics.service.ConfigurableService;
 import io.linkedlogics.service.MapperService;
 import io.linkedlogics.service.QueueService;
 import io.linkedlogics.service.SchedulerService;
 import io.linkedlogics.service.ServiceLocator;
+import io.linkedlogics.service.local.config.LocalQueueServiceConfig;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class QueueSchedulerService implements SchedulerService, Runnable {
+public class QueueSchedulerService extends ConfigurableService<LocalQueueServiceConfig> implements SchedulerService, Runnable {
 	private static final String QUEUE_SEC = "scheduler_sec_";
 	private static final String QUEUE_MIN = "scheduler_min_";
 	
@@ -25,9 +27,13 @@ public class QueueSchedulerService implements SchedulerService, Runnable {
 	private ArrayBlockingQueue<String> queueQueue;
 	private boolean isRunning;
 	
+	public QueueSchedulerService() {
+		super(LocalQueueServiceConfig.class);
+	}
+	
 	@Override
 	public void start() {
-		queueQueue = new ArrayBlockingQueue<String>(1000);
+		queueQueue = new ArrayBlockingQueue<String>(getConfig().getQueueSize(10000));
 		scheduler = Executors.newSingleThreadScheduledExecutor();
 		scheduler.scheduleAtFixedRate(new Runnable() {
 			@Override
