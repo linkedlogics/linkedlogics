@@ -14,6 +14,8 @@ import io.linkedlogics.model.process.ExpressionLogicDefinition;
 import io.linkedlogics.model.process.FailLogicDefinition.FailLogicBuilder;
 import io.linkedlogics.model.process.GroupLogicDefinition.GroupLogicBuilder;
 import io.linkedlogics.model.process.JumpLogicDefinition.JumpLogicBuilder;
+import io.linkedlogics.model.process.LogLogicDefinition.Level;
+import io.linkedlogics.model.process.LogLogicDefinition.LogLogicBuilder;
 import io.linkedlogics.model.process.ProcessLogicDefinition.ProcessLogicBuilder;
 import io.linkedlogics.model.process.RetryLogicDefinition;
 import io.linkedlogics.model.process.SavepointLogicDefinition.SavepointLogicBuilder;
@@ -26,6 +28,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class LinkedLogicsBuilder {
+	public static final Level TRACE = Level.TRACE;
+	public static final Level DEBUG = Level.DEBUG;
+	public static final Level INFO = Level.INFO;
+	public static final Level WARN = Level.WARN;
+	public static final Level ERROR = Level.ERROR;
 	
 	public static ProcessBuilder createProcess(String id, int version) {
 		return new ProcessBuilder().id(id).version(version);
@@ -135,6 +142,10 @@ public class LinkedLogicsBuilder {
 	
 	public static ScriptLogicBuilder script(ExpressionLogicDefinition expression) {
 		return new ScriptLogicBuilder(expression);
+	}
+	
+	public static LogLogicBuilder log(String message) {
+		return new LogLogicBuilder(message);
 	}
 	
 	public static String encode(String s) {

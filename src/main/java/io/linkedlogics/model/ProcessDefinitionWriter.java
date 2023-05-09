@@ -21,6 +21,7 @@ import io.linkedlogics.model.process.GroupLogicDefinition;
 import io.linkedlogics.model.process.JoinLogicDefinition;
 import io.linkedlogics.model.process.JumpLogicDefinition;
 import io.linkedlogics.model.process.LabelLogicDefinition;
+import io.linkedlogics.model.process.LogLogicDefinition;
 import io.linkedlogics.model.process.ProcessLogicDefinition;
 import io.linkedlogics.model.process.RetryLogicDefinition;
 import io.linkedlogics.model.process.SavepointLogicDefinition;
@@ -106,6 +107,11 @@ public class ProcessDefinitionWriter {
 			write(builder, (JumpLogicDefinition) logic);
 		} else if (logic instanceof SavepointLogicDefinition) {
 			write(builder, (SavepointLogicDefinition) logic);
+		} else if (logic instanceof LogLogicDefinition) {
+			write(builder, (LogLogicDefinition) logic);
+			if (logic.getInputs() != null && !logic.getInputs().isEmpty()) {
+				write(builder, logic.getInputs(), true);
+			}
 		} else if (logic instanceof VerifyLogicDefinition) {
 			write(builder, (VerifyLogicDefinition) logic);
 		} else if (logic instanceof ScriptLogicDefinition) {
@@ -206,6 +212,11 @@ public class ProcessDefinitionWriter {
 
 	private void write(StringBuilder builder, SavepointLogicDefinition jump) {
 		builder.append("savepoint()");
+	}
+	
+	private void write(StringBuilder builder, LogLogicDefinition log) {
+		builder.append("log(\"").append(log.getMessage()).append("\").level(").append(log.getLevel().toString()).append(")");
+		
 	}
 
 	private void write(StringBuilder builder, VerifyLogicDefinition verify) {
