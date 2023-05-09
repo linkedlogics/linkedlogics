@@ -1,5 +1,7 @@
 package io.linkedlogics.service.task;
 
+import static io.linkedlogics.context.ContextLog.log;
+
 import io.linkedlogics.context.Context;
 import io.linkedlogics.service.handler.logic.ErrorHandler;
 import io.linkedlogics.service.handler.logic.ProcessHandler;

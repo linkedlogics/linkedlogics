@@ -18,23 +18,23 @@ public class EmptyCandidateFlowHandler extends ProcessFlowHandler {
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
 		if (candidate.isEmpty()) {
 			if (candidatePosition.equals("0")) {
-				log(context, "no candidate, starting with first candidate", candidatePosition, Flow.RESET);
+				trace(context, "no candidate, starting with first candidate", candidatePosition, Flow.RESET);
 				return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 			}
 			String parentLogicPosition = parentLogicPosition(candidatePosition);
 			
 			if (parentLogicPosition.equals("")) {
-				log(context, "no candidate and no parent", candidatePosition, Flow.TERMINATE);
+				trace(context, "no candidate and no parent", candidatePosition, Flow.TERMINATE);
 				return HandlerResult.endOfCandidates();
 			} else if (context.getError() != null) {
-				log(context, "no candidate, continue with parent", candidatePosition, Flow.RESET);
+				trace(context, "no candidate, continue with parent", candidatePosition, Flow.RESET);
 				return HandlerResult.nextCandidate(parentLogicPosition);
 			} else {
-				log(context, "no candidate, continue with adjacent", candidatePosition, Flow.RESET);
+				trace(context, "no candidate, continue with adjacent", candidatePosition, Flow.RESET);
 				return HandlerResult.nextCandidate(adjacentLogicPosition(parentLogicPosition));
 			}
 		} else {
-			log(context, "candidate is not empty", candidatePosition, Flow.CONTINUE);
+			trace(context, "candidate is not empty", candidatePosition, Flow.CONTINUE);
 			return super.handle(candidate, candidatePosition, context);
 		}
 	}

@@ -1,11 +1,12 @@
 package io.linkedlogics.service.handler.logic;
 
+import static io.linkedlogics.context.ContextLog.log;
+
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.Map;
 
 import io.linkedlogics.context.Context;
-import io.linkedlogics.context.ContextLog;
 import io.linkedlogics.service.ServiceLocator;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +25,7 @@ public class ScriptHandler extends LogicHandler {
 	public void handle(Context context, Object result) {
 		context.setExecutedAt(OffsetDateTime.now());
 		try {
-			log.debug(log(context, "executing script").toString());
+			log(context).handler(this).inputs().message("executing script").info();
 			String id = String.format("%s_%d_%s", context.getProcessId(), context.getProcessVersion(), context.getLogicPosition());
 			Object scriptResult = null;
 			if (context.getLogicReturnAs() != null) {
@@ -41,13 +42,5 @@ public class ScriptHandler extends LogicHandler {
 			context.setExecutedIn(Duration.between(context.getExecutedAt(), OffsetDateTime.now()).toMillis());
 			super.handleError(context, e);
 		}
-	}
-	
-	private ContextLog log(Context context, String message) {
-		return ContextLog.builder(context)
-				.handler(this.getClass().getSimpleName())
-				.inputs(context.getInput())
-				.message(message)
-				.build();
 	}
 }

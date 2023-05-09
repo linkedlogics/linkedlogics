@@ -19,10 +19,10 @@ public class ExitFlowHandler extends ProcessFlowHandler {
 	@Override
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
 		if (candidate.isPresent() && candidate.get() instanceof ExitLogicDefinition) {
-			log(context, "exiting", candidatePosition, Flow.TERMINATE);
+			trace(context, "exiting", candidatePosition, Flow.TERMINATE);
 			return HandlerResult.endOfCandidates();
 		} else {
-			log(context, "no exit", candidatePosition, Flow.CONTINUE);
+			trace(context, "no exit", candidatePosition, Flow.CONTINUE);
 			return super.handle(candidate, candidatePosition, context);
 		}
 	}

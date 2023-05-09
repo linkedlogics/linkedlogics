@@ -25,14 +25,14 @@ public class VerifyFlowHandler extends ProcessFlowHandler {
 				VerifyLogicDefinition verifyLogic = (VerifyLogicDefinition) candidate.get(); 
 				if (!verifyLogic.isVerified(context)) {
 					context.setError(new ContextError(verifyLogic.getErrorCode(), verifyLogic.getErrorMessage(), ErrorType.PERMANENT));
-					log(context, "not verified", candidatePosition, Flow.RESET);
+					trace(context, "not verified", candidatePosition, Flow.RESET);
 					return HandlerResult.nextCandidate(candidatePosition);
 				} else {
-					log(context, "verified", candidatePosition, Flow.RESET);
+					trace(context, "verified", candidatePosition, Flow.RESET);
 					return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 				}
 			} else {
-				log(context, "no verify", candidatePosition, Flow.CONTINUE);
+				trace(context, "no verify", candidatePosition, Flow.CONTINUE);
 			}
 
 			return super.handle(candidate, candidatePosition, context);

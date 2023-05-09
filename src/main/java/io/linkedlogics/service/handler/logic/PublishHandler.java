@@ -1,13 +1,15 @@
 package io.linkedlogics.service.handler.logic;
 
+import static io.linkedlogics.context.ContextLog.log;
+
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.context.Context;
-import io.linkedlogics.context.ContextLog;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.process.ExpressionLogicDefinition;
 import io.linkedlogics.model.process.ScriptLogicDefinition;
@@ -38,13 +40,12 @@ public class PublishHandler extends LogicHandler {
 	public void handle(Context context, Object result) {
 		HandlerResult handlerResult = (HandlerResult) result;
 		if (handlerResult.isEndOfCandidates()) {
-			log.debug(log(context, "execution " + (context.getError() == null ? "finished" : "failed")).toString());
+			log(context).handler(this).context().message("execution " + (context.getError() == null ? "finished" : "failed")).info();
 			finishContext(context);
 		} else if (handlerResult.getSelectedLogic().isPresent()) {
-			log.debug(log(context, "execution continues").toString());
 			continueContext(context, handlerResult);
 		} else {
-			log.debug(log(context, "execution paused").toString());
+			log(context).handler(this).context().message("execution paused").info();
 			pauseContext(context);
 		}
 		
@@ -106,6 +107,14 @@ public class PublishHandler extends LogicHandler {
 		context.setStatus(Status.STARTED);
 		context.setUpdatedAt(OffsetDateTime.now());
 		
+		String source = Optional.ofNullable(logic.getExpression().getSource()).map(s -> s).orElse("").replaceAll("\n", "");
+		source = source.substring(0, Math.min(source.length(), 20));
+		if (source.length() == 20) {
+			source = source + "...";
+		}
+		
+		log(context).handler(this).message("execution continues with script " + source  + "]").debug();
+		
 		ServiceLocator.getInstance().getContextService().set(context);
 		ServiceLocator.getInstance().getProcessorService().process(new ScriptTask(context));
 	}
@@ -128,6 +137,8 @@ public class PublishHandler extends LogicHandler {
 		timeoutContext(context);
 		ServiceLocator.getInstance().getContextService().set(context);
 		
+		log(context).handler(this).logic(logic).message("execution continues with logic " + logic.getLogicId() + "[" + logic.getLogicVersion() + "]").debug();
+		
 		boolean localBypass = ((LocalProcessorService) ServiceLocator.getInstance().getProcessorService()).getConfig().getBypass(true);
 		
 		if (context.getApplication() == null || (localBypass && context.getApplication().equals(LinkedLogics.getApplicationName()))) {
@@ -148,12 +159,5 @@ public class PublishHandler extends LogicHandler {
 			}
 		});
 		return inputs;
-	}
-	
-	private ContextLog log(Context context, String message) {
-		return ContextLog.builder(context)
-				.handler(this.getClass().getSimpleName())
-				.message(message)
-				.build();
 	}
 }

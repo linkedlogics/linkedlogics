@@ -25,18 +25,18 @@ public class DelayFlowHandler extends ProcessFlowHandler {
 		if (candidate.isPresent() && candidate.get().getDelay() != null && candidate.get().getDelay().getSeconds() > 0) {
 			if (context.getStatus() == Status.SCHEDULED) {
 				context.setStatus(Status.STARTED);
-				log(context, "delaying finished", candidatePosition, Flow.CONTINUE);
+				trace(context, "delaying finished", candidatePosition, Flow.CONTINUE);
 				return super.handle(candidate, candidatePosition, context);
 			} else {
 				context.setStatus(Status.SCHEDULED);
 				OffsetDateTime scheduledAt = OffsetDateTime.now().plusSeconds(candidate.get().getDelay().getSeconds());
 				Schedule schedule = new Schedule(context.getId(), null, candidatePosition, scheduledAt, SchedulerService.ScheduleType.DELAY); 
-				log(context, "delaying execution till " + schedule.getExpiresAt(), candidatePosition, Flow.TERMINATE);
+				trace(context, "delaying execution till " + schedule.getExpiresAt(), candidatePosition, Flow.TERMINATE);
 				ServiceLocator.getInstance().getSchedulerService().schedule(schedule);
 				return HandlerResult.noCandidate();
 			}
 		} else {
-			log(context, "no delay", candidatePosition, Flow.CONTINUE);
+			trace(context, "no delay", candidatePosition, Flow.CONTINUE);
 			return super.handle(candidate, candidatePosition, context);
 		}
 	}

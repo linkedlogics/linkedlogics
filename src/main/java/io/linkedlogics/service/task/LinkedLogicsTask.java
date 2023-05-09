@@ -1,7 +1,11 @@
 package io.linkedlogics.service.task;
 
+import static io.linkedlogics.context.ContextLog.log;
+
+import org.slf4j.MDC;
+
+import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.context.Context;
-import io.linkedlogics.context.ContextLog;
 import io.linkedlogics.service.ServiceLocator;
 import io.linkedlogics.service.handler.logic.ErrorHandler;
 import io.linkedlogics.service.handler.logic.LogicHandler;
@@ -19,22 +23,31 @@ public abstract class LinkedLogicsTask implements Runnable {
 	@Override
 	public void run() {
 		try {
+			setMdc(context);
 			ServiceLocator.getInstance().getAsyncService().setContextId(context.getId());
-			log.debug(log(context, "task is started").toString());
+			log(context).handler(this).message("executing task " + this.getClass().getSimpleName()).debug();
 			handle();
 		} catch (Throwable e) {
 			new ErrorHandler().handleError(context, e);
 		} finally {
 			ServiceLocator.getInstance().getAsyncService().unsetContextId();
+			unsetMdc();
 		}
 	}
 	
 	protected abstract void handle() ;
 	
-	private ContextLog log(Context context, String message) {
-		return ContextLog.builder(context)
-				.task(this.getClass().getSimpleName())
-				.message(message)
-				.build();
+	private void setMdc(Context context) {
+		MDC.put("contextId", context.getParentId() != null ? context.getParentId() : context.getId());
+		MDC.put("contextKey", context.getKey());
+		MDC.put("application", LinkedLogics.getApplicationName());
+		MDC.put("instance", LinkedLogics.getInstanceName());
+	}
+	
+	private void unsetMdc() {
+		MDC.remove("contextId");
+		MDC.remove("contextKey");
+		MDC.remove("application");
+		MDC.remove("instance");
 	}
 }

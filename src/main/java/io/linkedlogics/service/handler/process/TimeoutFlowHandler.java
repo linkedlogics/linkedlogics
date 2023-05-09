@@ -23,9 +23,9 @@ public class TimeoutFlowHandler extends ProcessFlowHandler {
 					candidate.get().getTimeout().getSeconds() > 0) {
 			OffsetDateTime expiresAt = OffsetDateTime.now().plusSeconds(candidate.get().getTimeout().getSeconds());
 			context.setExpiresAt(expiresAt);
-			log(context, "timeout at " + expiresAt, candidatePosition, Flow.CONTINUE);
+			trace(context, "timeout at " + expiresAt, candidatePosition, Flow.CONTINUE);
 		} else {
-			log(context, "no timeout", candidatePosition, Flow.CONTINUE);
+			trace(context, "no timeout", candidatePosition, Flow.CONTINUE);
 		}
 		
 		return super.handle(candidate, candidatePosition, context);

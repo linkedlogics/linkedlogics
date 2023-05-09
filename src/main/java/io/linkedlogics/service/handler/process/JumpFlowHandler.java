@@ -25,7 +25,7 @@ public class JumpFlowHandler extends ProcessFlowHandler {
 		if (candidate.isPresent()) {
 			if (candidate.get() instanceof JumpLogicDefinition) {
 				JumpLogicDefinition jump = (JumpLogicDefinition) candidate.get();
-				log(context, "jumping", candidatePosition, Flow.RESET);
+				trace(context, "jumping", candidatePosition, Flow.RESET);
 				
 				String targetLabel = null;
 				if (jump.getTargetLabel() != null) {
@@ -39,17 +39,17 @@ public class JumpFlowHandler extends ProcessFlowHandler {
 
 				if (target == null) {
 					context.setError(new ContextError(-1, "jump failed target " + targetLabel + " not found", ErrorType.PERMANENT));
-					log(context, "not verified", candidatePosition, Flow.RESET);
+					trace(context, "not verified", candidatePosition, Flow.RESET);
 					return HandlerResult.nextCandidate(candidatePosition);
 				} else if (!compareLogicPosition(candidate.get().getPosition(), target.getPosition())) {
 					context.setError(new ContextError(-1, "jump failed target " + targetLabel + " contradicts with DAG", ErrorType.PERMANENT));
-					log(context, "not a DAG", candidatePosition, Flow.RESET);
+					trace(context, "not a DAG", candidatePosition, Flow.RESET);
 					return HandlerResult.nextCandidate(candidatePosition);
 				}
 
 				return HandlerResult.nextCandidate(target.getPosition());
 			}
-			log(context, "no jump", candidatePosition, Flow.CONTINUE);
+			trace(context, "no jump", candidatePosition, Flow.CONTINUE);
 			return super.handle(candidate, candidatePosition, context);
 		} else {
 			return super.handle(candidate, candidatePosition, context);

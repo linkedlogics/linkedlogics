@@ -18,10 +18,10 @@ public class CleanupFlowHandler extends ProcessFlowHandler {
 	@Override
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
 		if (candidate.isPresent() && candidatePosition.equals(context.getLogicPosition()) && !candidatePosition.endsWith(LogicPositioner.COMPENSATE)) {
-			log(context, "clean up", candidatePosition, Flow.RESET);
+			trace(context, "clean up", candidatePosition, Flow.RESET);
 			return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 		} else {
-			log(context, "no clean up", candidatePosition, Flow.CONTINUE);
+			trace(context, "no clean up", candidatePosition, Flow.CONTINUE);
 			return super.handle(candidate, candidatePosition, context);
 		}
 	}

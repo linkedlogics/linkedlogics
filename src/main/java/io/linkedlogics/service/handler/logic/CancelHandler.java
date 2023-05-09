@@ -1,7 +1,8 @@
 package io.linkedlogics.service.handler.logic;
 
+import static io.linkedlogics.context.ContextLog.log;
+
 import io.linkedlogics.context.Context;
-import io.linkedlogics.context.ContextLog;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.service.ServiceLocator;
 import lombok.extern.slf4j.Slf4j;
@@ -23,16 +24,7 @@ public class CancelHandler extends LogicHandler {
 			context.setStatus(Status.CANCELLED);
 			ServiceLocator.getInstance().getCallbackService().publish(context);
 			ServiceLocator.getInstance().getContextService().remove(context.getId());
-			log.debug(log(context, "context is cancelled").toString());
-		} else {
-			log.debug(log(context, "context is already finished").toString());
+			log(context).handler(this).context().message("context is cancelled").info();
 		}
-	}
-	
-	private ContextLog log(Context context, String message) {
-		return ContextLog.builder(context)
-				.handler(this.getClass().getSimpleName())
-				.message(message)
-				.build();
 	}
 }

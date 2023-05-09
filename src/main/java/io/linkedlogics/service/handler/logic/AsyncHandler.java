@@ -1,7 +1,8 @@
 package io.linkedlogics.service.handler.logic;
 
+import static io.linkedlogics.context.ContextLog.log;
+
 import io.linkedlogics.context.Context;
-import io.linkedlogics.context.ContextLog;
 import io.linkedlogics.model.LogicDefinition;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,17 +22,10 @@ public class AsyncHandler extends LogicHandler {
 		LogicDefinition logic = findLogic(context.getLogicId(), context.getLogicVersion());
 		
 		if (!logic.isReturnAsync()) {
-			log.debug(log(context, "async logic is not used").toString());
+			log(context).handler(this).logic(logic).message("logic is not async").debug();
 			super.handle(context, result);	
 		} else {
-			log.debug(log(context, "async logic is waiting for callback").toString());
+			log(context).handler(this).logic(logic).message("logic is async waiting for callback").info();
 		}
-	}
-	
-	private ContextLog log(Context context, String message) {
-		return ContextLog.builder(context)
-				.handler(this.getClass().getSimpleName())
-				.message(message)
-				.build();
 	}
 }

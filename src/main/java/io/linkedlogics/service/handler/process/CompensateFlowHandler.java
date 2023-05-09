@@ -25,15 +25,15 @@ public class CompensateFlowHandler extends ProcessFlowHandler {
 					if (!candidatePosition.endsWith(LogicPositioner.COMPENSATE)) {
 						includeParent(candidatePosition, context);
 					}
-					log(context, "compensating with next logic at " + lastCompensablePosition, candidatePosition, Flow.RESET);
+					trace(context, "compensating with next logic at " + lastCompensablePosition, candidatePosition, Flow.RESET);
 					return HandlerResult.nextCandidate(lastCompensablePosition);
 				}
 			} else {
-				log(context, "nothing to compensate", candidatePosition, Flow.RESET);
+				trace(context, "nothing to compensate", candidatePosition, Flow.RESET);
 			}
 			return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 		} else {
-			log(context, "no error", candidatePosition, Flow.CONTINUE);
+			trace(context, "no error", candidatePosition, Flow.CONTINUE);
 			return super.handle(candidate, candidatePosition, context);
 		}
 	}

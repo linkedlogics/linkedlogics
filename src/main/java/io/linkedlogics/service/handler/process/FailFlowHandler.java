@@ -27,10 +27,10 @@ public class FailFlowHandler extends ProcessFlowHandler {
 			error.setMessage(fail.getErrorMessage());
 			error.setType(ErrorType.PERMANENT);
 			context.setError(error);
-			log(context, "failing " + error.toString(), candidatePosition, Flow.TERMINATE);
+			trace(context, "failing " + error.toString(), candidatePosition, Flow.TERMINATE);
 			return HandlerResult.endOfCandidates();
 		} else {
-			log(context, "no failure", candidatePosition, Flow.CONTINUE);
+			trace(context, "no failure", candidatePosition, Flow.CONTINUE);
 			return super.handle(candidate, candidatePosition, context);
 		}
 	}

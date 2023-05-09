@@ -21,10 +21,10 @@ public class SavepointFlowHandler extends ProcessFlowHandler {
 		if (candidate.isPresent()) {
 			if (candidate.get() instanceof SavepointLogicDefinition) {
 				context.getCompensables().clear();
-				log(context, "savepoint reached, compensations are cleared", candidatePosition, Flow.RESET);
+				trace(context, "savepoint reached, compensations are cleared", candidatePosition, Flow.RESET);
 				return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 			}
-			log(context, "no savepoint", candidatePosition, Flow.CONTINUE);
+			trace(context, "no savepoint", candidatePosition, Flow.CONTINUE);
 			return super.handle(candidate, candidatePosition, context);
 		} else {
 			return super.handle(candidate, candidatePosition, context);

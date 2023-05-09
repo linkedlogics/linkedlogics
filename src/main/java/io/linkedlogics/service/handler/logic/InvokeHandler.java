@@ -1,5 +1,7 @@
 package io.linkedlogics.service.handler.logic;
 
+import static io.linkedlogics.context.ContextLog.log;
+
 import java.lang.reflect.Modifier;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -11,7 +13,6 @@ import java.util.stream.IntStream;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.linkedlogics.context.Context;
-import io.linkedlogics.context.ContextLog;
 import io.linkedlogics.model.LogicDefinition;
 import io.linkedlogics.model.parameter.CollectionParameter;
 import io.linkedlogics.model.parameter.MapParameter;
@@ -37,12 +38,14 @@ public class InvokeHandler extends LogicHandler {
 			if (logic.isReturnAsync()) {
 				ServiceLocator.getInstance().getAsyncService().set(context);
 			}
-			log.debug(log(context, "executing logic").toString());
+			log(context).handler(this).logic(logic).inputs().message("executing logic by calling " + logic.getMethod().getName() + "() in " + logic.getMethod().getDeclaringClass().getSimpleName() + ".java").info();
 			Object methodResult = invokeMethod(context, logic, getInvokeParams(context, logic));
 			context.setExecutedIn(Duration.between(context.getExecutedAt(), OffsetDateTime.now()).toMillis());
+			log(context).handler(this).message("executing finished in " + context.getExecutedIn() + " msec").debug();
 			super.handle(context, methodResult);	
 		} catch (Exception e) {
 			context.setExecutedIn(Duration.between(context.getExecutedAt(), OffsetDateTime.now()).toMillis());
+			log(context).handler(this).message("executing failed with " + e.getLocalizedMessage()).error();
 			super.handleError(context, e);
 		}
 	}
@@ -83,13 +86,5 @@ public class InvokeHandler extends LogicHandler {
 		});
 		
 		return result;
-	}
-	
-	private ContextLog log(Context context, String message) {
-		return ContextLog.builder(context)
-				.handler(this.getClass().getSimpleName())
-				.inputs(context.getInput())
-				.message(message)
-				.build();
 	}
 }

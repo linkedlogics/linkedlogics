@@ -47,7 +47,7 @@ public class ContextBuilder {
 				});
 			}
 			
-			return new Context(contextId, contextKey, processId, processVersion, params);
+			return new Context(contextId, contextKey, process.getId(), process.getVersion(), params);
 		}).orElseThrow(() -> new IllegalArgumentException(String.format("process %s is not found", processId)));
 	}
 	

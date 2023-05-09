@@ -1,9 +1,10 @@
 package io.linkedlogics.service.handler.logic;
 
+import static io.linkedlogics.context.ContextLog.log;
+
 import java.util.Optional;
 
 import io.linkedlogics.context.Context;
-import io.linkedlogics.context.ContextLog;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.exception.LogicTimeoutException;
 import io.linkedlogics.service.ServiceLocator;
@@ -25,18 +26,11 @@ public class TimeoutHandler extends LogicHandler {
 		
 		if (context.isPresent() && context.get().getLogicPosition().startsWith(logicContext.getLogicPosition())) {
 			if (context.get().getStatus() != Status.FINISHED && context.get().getStatus() != Status.FAILED) {
-				log.error(log(context.get(), "context is timed out").toString());
+				log(context.get()).handler(this).context().message("context is timed out").debug();
 				super.handleError(logicContext, new LogicTimeoutException(logicContext.getLogicId()));
 			} else {
 				ServiceLocator.getInstance().getContextService().remove(context.get().getId());
 			}
 		}
-	}
-	
-	private ContextLog log(Context context, String message) {
-		return ContextLog.builder(context)
-				.handler(this.getClass().getSimpleName())
-				.message(message)
-				.build();
 	}
 }

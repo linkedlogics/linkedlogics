@@ -1,10 +1,10 @@
 package io.linkedlogics.service.handler.logic;
 
+import static io.linkedlogics.context.ContextLog.log;
+
 import java.util.Optional;
 
 import io.linkedlogics.context.Context;
-import io.linkedlogics.context.ContextLog;
-import io.linkedlogics.context.Status;
 import io.linkedlogics.service.ServiceLocator;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,22 +25,15 @@ public class ValidHandler  extends LogicHandler {
 		if (maybeContext.isPresent()) {
 			Context fullContext = maybeContext.get();
 			if (fullContext.getLogicPosition().equals(context.getLogicPosition()) && fullContext.isNotFinished()) {
-				log.debug(log(fullContext, "context is valid").toString());
+				log(context).handler(this).context().message("context is valid").debug();
 				super.handle(context, result);
 			} else {
-				log.error(log(fullContext, "context is not valid").toString());
+				log(context).handler(this).context().message("context is already updated").error();
 				super.handleError(context, new RuntimeException("context not valid"));
 			}
 		} else {
-			log.error(log(context, "context is not found").toString());
+			log(context).handler(this).context().message("context is not found").error();
 			super.handleError(context, new RuntimeException("context not found"));
 		}
-	}
-	
-	private ContextLog log(Context context, String message) {
-		return ContextLog.builder(context)
-				.handler(this.getClass().getSimpleName())
-				.message(message)
-				.build();
 	}
 }

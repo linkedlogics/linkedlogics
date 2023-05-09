@@ -1,10 +1,11 @@
  package io.linkedlogics.service.handler.logic;
 
+import static io.linkedlogics.context.ContextLog.log;
+
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import io.linkedlogics.context.Context;
-import io.linkedlogics.context.ContextLog;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.ProcessDefinition;
 import io.linkedlogics.model.process.BaseLogicDefinition;
@@ -64,7 +65,6 @@ public class ProcessHandler extends LogicHandler {
 			Context fullContext = maybeContext.get();
 			transfer(context, fullContext);
 			HandlerResult handlerResult = handle(fullContext);
-			log.debug(log(context, handlerResult.toString()).toString());
 			
 			if (handlerResult.isEndOfCandidates()) {
 				fullContext.setStatus(fullContext.getError() == null ? Status.FINISHED : Status.FAILED);
@@ -125,18 +125,17 @@ public class ProcessHandler extends LogicHandler {
 		HandlerResult result = null;
 		
 		if (context.getStatus() == Status.INITIAL) {
-			log.debug(log(context, "context is initial state").toString());
+			log(context).handler(this).process().inputs(context.getParams()).message("starting context").info();
 			result = HandlerResult.nextCandidate(context.getStartPosition());
 		} else if (context.getStatus() == Status.WAITING) {
-			log.debug(log(context, "context is waiting state").toString());
+			log(context).handler(this).message("resuming context for join").debug();
 			result = HandlerResult.nextCandidate(context.getLogicPosition());
 			Optional<BaseLogicDefinition> nextLogic = process.getLogicByPosition(result.getNextCandidatePosition().get());
 			waitingFlowHandler.handle(nextLogic, result.getNextCandidatePosition().get(), context);
 		} else if (context.getStatus() == Status.SCHEDULED) {
-			log.debug(log(context, "context is scheduled state").toString());
+			log(context).handler(this).message("resuming context after delay").debug();
 			result = HandlerResult.nextCandidate(context.getLogicPosition());
 		} else {
-			log.debug(log(context, "context is in progress").toString());
 			result = HandlerResult.nextCandidate(context.getLogicPosition());
 			while (result.getNextCandidatePosition().isPresent()) {
 				Optional<BaseLogicDefinition> nextLogic = process.getLogicByPosition(result.getNextCandidatePosition().get());
@@ -163,12 +162,5 @@ public class ProcessHandler extends LogicHandler {
 		context.setOutput(logicContext.getOutput());
 		context.setError(logicContext.getError() != null ? logicContext.getError() : context.getError());
 		context.setExecutedAt(logicContext.getExecutedAt());
-	}
-	
-	private ContextLog log(Context context, String message) {
-		return ContextLog.builder(context)
-				.handler(this.getClass().getSimpleName())
-				.message(message)
-				.build();
 	}
 }

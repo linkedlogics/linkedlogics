@@ -24,18 +24,18 @@ public class ErrorFlowHandler extends ProcessFlowHandler {
 				setError(context, candidate.get().getError());
 				
 				if (candidate.get().getError().getErrorLogic() != null) {
-					log(context, "error handled with logic", candidatePosition, Flow.RESET);
+					trace(context, "error handled with logic", candidatePosition, Flow.RESET);
 					return HandlerResult.nextCandidate(candidate.get().getError().getErrorLogic().getPosition());
 				} else {
-					log(context, "error handled", candidatePosition, Flow.RESET);
+					trace(context, "error handled", candidatePosition, Flow.RESET);
 					return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 				}
 			} else {
-				log(context, "error occured", candidatePosition, Flow.CONTINUE);
+				trace(context, "error occured", candidatePosition, Flow.CONTINUE);
 				return super.handle(candidate, candidatePosition, context);
 			}
 		} else {
-			log(context, "no error", candidatePosition, Flow.CONTINUE);
+			trace(context, "no error", candidatePosition, Flow.CONTINUE);
 			return super.handle(candidate, candidatePosition, context);
 		}
 	}

@@ -20,10 +20,10 @@ public class GroupFlowHandler extends ProcessFlowHandler {
 	@Override
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
 		if (candidate.isPresent() && (candidate.get() instanceof GroupLogicDefinition || candidate.get() instanceof ProcessLogicDefinition)) {
-			log(context, "executing group", candidatePosition, Flow.RESET);
+			trace(context, "executing group", candidatePosition, Flow.RESET);
 			return HandlerResult.nextCandidate(candidatePosition + ".1");
 		} else {
-			log(context, "no group", candidatePosition, Flow.CONTINUE);
+			trace(context, "no group", candidatePosition, Flow.CONTINUE);
 			return super.handle(candidate, candidatePosition, context);
 		}
 	}

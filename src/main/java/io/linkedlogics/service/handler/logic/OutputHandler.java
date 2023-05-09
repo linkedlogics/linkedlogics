@@ -1,9 +1,10 @@
 package io.linkedlogics.service.handler.logic;
 
+import static io.linkedlogics.context.ContextLog.log;
+
 import java.util.Map;
 
 import io.linkedlogics.context.Context;
-import io.linkedlogics.context.ContextLog;
 import io.linkedlogics.model.LogicDefinition;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,19 +34,11 @@ public class OutputHandler extends LogicHandler {
 		}
 		
 		if (context.getOutput().isEmpty()) {
-			log.debug(log(context, "no output").toString());
+			log(context).handler(this).logic(logic).outputs().message("not output").debug();
 		} else {
-			log.debug(log(context, "setting output").toString());
+			log(context).handler(this).logic(logic).outputs().message("setting output params").info();
 		}
 		
 		super.handle(context, null);
-	}
-	
-	private ContextLog log(Context context, String message) {
-		return ContextLog.builder(context)
-				.handler(this.getClass().getSimpleName())
-				.outputs(context.getOutput())
-				.message(message)
-				.build();
 	}
 }

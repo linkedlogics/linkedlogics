@@ -20,10 +20,10 @@ public class SuccessFlowHandler extends ProcessFlowHandler {
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
 		if (candidate.isPresent() && candidatePosition.equals(context.getLogicPosition())) {
 			if (context.getError() == null && candidate.get() instanceof SingleLogicDefinition && ((SingleLogicDefinition) candidate.get()).getCompensationLogic() != null) {
-				log(context, "adding compensation logic to compensables", candidatePosition, Flow.CONTINUE);
+				trace(context, "adding compensation logic to compensables", candidatePosition, Flow.CONTINUE);
 				context.getCompensables().add(((SingleLogicDefinition)candidate.get()).getCompensationLogic().getPosition());
 			} else {
-				log(context, "nothing to compensate", candidatePosition, Flow.CONTINUE);
+				trace(context, "nothing to compensate", candidatePosition, Flow.CONTINUE);
 			}
 		}
 		

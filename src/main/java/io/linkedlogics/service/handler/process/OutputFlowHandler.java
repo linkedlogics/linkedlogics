@@ -25,10 +25,10 @@ public class OutputFlowHandler extends ProcessFlowHandler {
 					&& candidatePosition.equals(context.getLogicPosition())) {
 			
 			if (context.getOutput() != null) {
-				log(context, "adding outputs to context " + context.getOutput(), candidatePosition, Flow.CONTINUE);
+				trace(context, "adding outputs to context " + context.getOutput(), candidatePosition, Flow.CONTINUE);
 				context.getOutput().entrySet().forEach(e -> context.getParams().put(e.getKey(), e.getValue()));
 			} else {
-				log(context, "nothing to add", candidatePosition, Flow.CONTINUE);
+				trace(context, "nothing to add", candidatePosition, Flow.CONTINUE);
 			}
 			
 			if (!candidate.get().getOutputs().isEmpty()) {
@@ -43,7 +43,7 @@ public class OutputFlowHandler extends ProcessFlowHandler {
 					outputs.append(",").append(e.getKey());
 				});
 				
-				log(context, "adding " + outputs.toString().substring(1) + " to context", candidatePosition, Flow.CONTINUE);
+				trace(context, "adding " + outputs.toString().substring(1) + " to context", candidatePosition, Flow.CONTINUE);
 			}
 		}
 		

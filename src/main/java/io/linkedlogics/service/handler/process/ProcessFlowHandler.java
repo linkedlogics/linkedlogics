@@ -1,11 +1,12 @@
 package io.linkedlogics.service.handler.process;
 
+import static io.linkedlogics.context.ContextLog.log;
+
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import io.linkedlogics.context.Context;
-import io.linkedlogics.context.ContextLog;
 import io.linkedlogics.model.process.BaseLogicDefinition;
 import io.linkedlogics.model.process.helper.LogicPositioner;
 import io.linkedlogics.service.handler.logic.ProcessHandler;
@@ -84,15 +85,11 @@ public abstract class ProcessFlowHandler {
 		return true;
 	}
 	
-	protected void log(Context context, String message, String candidate, Flow flow) {
-		ContextLog contextLog = ContextLog.builder(context)
-				.handler(ProcessHandler.class.getSimpleName() + "." + this.getClass().getSimpleName())
-				.step(String.format("%2d.%s", getOrder(), flow.getSymbol()))
-				.candidate(candidate)
-				.message(message)
-				.build();
-		
-		log.trace(contextLog.toString());
+	protected void trace(Context context, String message, String candidate, Flow flow) {
+		log(context).handler(this)
+			.step(String.format("%2d.%s", getOrder(), flow.getSymbol()))
+			.candidate(candidate)
+			.message(message).trace();
 	}
 	
 	public void setOrder(int order) {

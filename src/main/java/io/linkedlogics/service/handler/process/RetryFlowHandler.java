@@ -40,25 +40,25 @@ public class RetryFlowHandler extends ProcessFlowHandler {
 							OffsetDateTime scheduledAt = OffsetDateTime.now().plusSeconds(candidate.get().getRetry().getSeconds());
 							Schedule schedule = new Schedule(context.getId(), null, candidatePosition, scheduledAt, SchedulerService.ScheduleType.RETRY); 
 							ServiceLocator.getInstance().getSchedulerService().schedule(schedule);
-							log(context, "retry is scheduled " + schedule.getExpiresAt(), candidatePosition, Flow.TERMINATE);
+							trace(context, "retry is scheduled " + schedule.getExpiresAt(), candidatePosition, Flow.TERMINATE);
 							return HandlerResult.noCandidate();
 						} else {
-							log(context, "retrying immediately", candidatePosition, Flow.RESET);
+							trace(context, "retrying immediately", candidatePosition, Flow.RESET);
 							return HandlerResult.selectCandidate(candidate);
 						}
 					} else {
-						log(context, "no retry max retry reached", candidatePosition, Flow.CONTINUE);
+						trace(context, "no retry max retry reached", candidatePosition, Flow.CONTINUE);
 						context.getRetries().remove(candidatePosition);
 					}
 				} else {
-					log(context, "no retry permanent error", candidatePosition, Flow.CONTINUE);
+					trace(context, "no retry permanent error", candidatePosition, Flow.CONTINUE);
 				}
 			} else {
-				log(context, "no error no retry", candidatePosition, Flow.CONTINUE);
+				trace(context, "no error no retry", candidatePosition, Flow.CONTINUE);
 				context.getRetries().remove(candidatePosition);
 			}
 		} else {
-			log(context, "no retry", candidatePosition, Flow.CONTINUE);
+			trace(context, "no retry", candidatePosition, Flow.CONTINUE);
 		}
 		
 		return super.handle(candidate, candidatePosition, context);
