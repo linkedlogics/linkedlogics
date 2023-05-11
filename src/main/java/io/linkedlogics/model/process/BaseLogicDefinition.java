@@ -34,11 +34,6 @@ public abstract class BaseLogicDefinition extends TypedLogicDefinition implement
 		super(type);
 	}
 	
-	@JsonIgnore
-	protected BaseLogicDefinition parentLogic;
-	@JsonIgnore
-	protected BaseLogicDefinition adjacentLogic;
-	
 	public final BaseLogicDefinition cloneLogic() {
 		BaseLogicDefinition clone = clone();
 		clone.setDisabled(getDisabled());
@@ -50,14 +45,12 @@ public abstract class BaseLogicDefinition extends TypedLogicDefinition implement
 		clone.setError(error != null ? error.cloneLogic() : null);
 		clone.getInputs().putAll(getInputs());
 		clone.getOutputs().putAll(getOutputs());
+		clone.setTimeout(timeout != null ? timeout.cloneLogic() : null);
+		clone.setLabel(label != null ? label.cloneLogic() : null);
 		return clone;
 	}
 	
 	protected abstract BaseLogicDefinition clone() ;
-	
-	public Optional<BaseLogicDefinition> getParentLogic() {
-		return Optional.ofNullable(parentLogic);
-	}
 	
 	@Getter
 	public static class LogicBuilder<T, L extends BaseLogicDefinition> {

@@ -38,10 +38,8 @@ public class BranchLogicDefinition extends BaseLogicDefinition {
 			super(new BranchLogicDefinition());
 			getLogic().setExpression(expression);
 			getLogic().setLeftLogic(leftBranch);
-			leftBranch.setParentLogic(this.getLogic());
 			if (rightBranch != null) {
 				getLogic().setRightLogic(rightBranch);
-				rightBranch.setParentLogic(this.getLogic());
 			}
 		}
 

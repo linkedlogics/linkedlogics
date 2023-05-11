@@ -33,13 +33,7 @@ public class GroupLogicDefinition extends BaseLogicDefinition {
 	}
 	
 	protected void addLogics(List<BaseLogicDefinition> logics) {
-		logics.forEach(l -> {
-			if (!getLogics().isEmpty()) {
-				getLogics().get(getLogics().size() - 1).setAdjacentLogic(l);
-			}
-			getLogics().add(l);
-			l.setParentLogic(this);
-		});
+		logics.forEach(l -> getLogics().add(l));
 	}
 	
 	public static class GroupLogicBuilder extends LogicBuilder<GroupLogicBuilder, GroupLogicDefinition> {

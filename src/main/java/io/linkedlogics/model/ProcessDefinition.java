@@ -70,9 +70,6 @@ public class ProcessDefinition implements Comparable<ProcessDefinition> {
 		}
 		
 		public ProcessBuilder add(BaseLogicDefinition logic) {
-			if (!this.process.getLogics().isEmpty()) {
-				this.process.getLogics().get(this.process.getLogics().size() - 1).setAdjacentLogic(logic);
-			}
 			this.process.getLogics().add(logic);
 			return this;
 		}
