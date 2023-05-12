@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -54,6 +55,7 @@ public class Context {
 	private Map<String, Integer> retries = new HashMap<>();
 	private List<String> compensables = new ArrayList<>();
 	private Map<String, String> joinMap = new HashMap<>();
+	private Map<String, Integer> loopMap = new HashMap<>();
 	
 	public Context(String id, String key, String processId, int processVersion, Map<String, Object> params) {
 		this.id = id == null ? UUID.randomUUID().toString() : id;

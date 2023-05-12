@@ -13,6 +13,7 @@ public class ProcessLogicTypes {
 	public static final String SCRIPT = "script";
 	public static final String VERIFY = "verify";
 	public static final String LOG = "log";
+	public static final String LOOP = "loop";
 	
 	public static final String DELAY = "delay";
 	public static final String EXPR = "expr";

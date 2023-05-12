@@ -16,6 +16,7 @@ import io.linkedlogics.model.process.GroupLogicDefinition.GroupLogicBuilder;
 import io.linkedlogics.model.process.JumpLogicDefinition.JumpLogicBuilder;
 import io.linkedlogics.model.process.LogLogicDefinition.Level;
 import io.linkedlogics.model.process.LogLogicDefinition.LogLogicBuilder;
+import io.linkedlogics.model.process.LoopLogicDefinition.LoopLogicBuilder;
 import io.linkedlogics.model.process.ProcessLogicDefinition.ProcessLogicBuilder;
 import io.linkedlogics.model.process.RetryLogicDefinition;
 import io.linkedlogics.model.process.SavepointLogicDefinition.SavepointLogicBuilder;
@@ -52,6 +53,10 @@ public class LinkedLogicsBuilder {
 	
 	public static GroupLogicBuilder group(BaseLogicDefinition... logics) {
 		return new GroupLogicBuilder(logics);
+	}
+	
+	public static LoopLogicBuilder loop(ExpressionLogicDefinition expression, BaseLogicDefinition... logics) {
+		return new LoopLogicBuilder(expression, logics);
 	}
 	
 	public static ProcessLogicBuilder process(String processId, int version) {

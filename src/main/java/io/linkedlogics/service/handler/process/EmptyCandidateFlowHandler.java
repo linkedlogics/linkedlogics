@@ -29,6 +29,9 @@ public class EmptyCandidateFlowHandler extends ProcessFlowHandler {
 			} else if (context.getError() != null) {
 				trace(context, "no candidate, continue with parent", candidatePosition, Flow.RESET);
 				return HandlerResult.nextCandidate(parentLogicPosition);
+			} else if (context.getLoopMap().containsKey(parentLogicPosition)) {
+				trace(context, "no candidate, continue with loop", candidatePosition, Flow.RESET);
+				return HandlerResult.nextCandidate(parentLogicPosition);
 			} else {
 				trace(context, "no candidate, continue with adjacent", candidatePosition, Flow.RESET);
 				return HandlerResult.nextCandidate(adjacentLogicPosition(parentLogicPosition));

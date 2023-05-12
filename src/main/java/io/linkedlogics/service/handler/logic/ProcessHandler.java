@@ -26,6 +26,7 @@ import io.linkedlogics.service.handler.process.HandlerResult;
 import io.linkedlogics.service.handler.process.JoinFlowHandler;
 import io.linkedlogics.service.handler.process.JumpFlowHandler;
 import io.linkedlogics.service.handler.process.LogFlowHandler;
+import io.linkedlogics.service.handler.process.LoopFlowHandler;
 import io.linkedlogics.service.handler.process.OutputFlowHandler;
 import io.linkedlogics.service.handler.process.ProcessFlowHandler;
 import io.linkedlogics.service.handler.process.RetryFlowHandler;
@@ -39,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ProcessHandler extends LogicHandler {
 	private ProcessFlowHandler waitingFlowHandler = new SuccessFlowHandler(new OutputFlowHandler());
 	private ProcessFlowHandler lastFlowHandler = new SuccessFlowHandler(new OutputFlowHandler(new CleanupFlowHandler()));
-	private ProcessFlowHandler nextFlowHandler = new EmptyCandidateFlowHandler(new ForcedFlowHandler(new DisabledFlowHandler(new DelayFlowHandler(new VerifyFlowHandler(new SavepointFlowHandler(new JumpFlowHandler(new ExitFlowHandler(new FailFlowHandler(new TimeoutFlowHandler(new JoinFlowHandler(new ForkFlowHandler(new GroupFlowHandler(new BranchFlowHandler(new LogFlowHandler()))))))))))))));
+	private ProcessFlowHandler nextFlowHandler = new EmptyCandidateFlowHandler(new ForcedFlowHandler(new DisabledFlowHandler(new DelayFlowHandler(new VerifyFlowHandler(new SavepointFlowHandler(new JumpFlowHandler(new ExitFlowHandler(new FailFlowHandler(new TimeoutFlowHandler(new JoinFlowHandler(new ForkFlowHandler(new LoopFlowHandler(new GroupFlowHandler(new BranchFlowHandler(new LogFlowHandler())))))))))))))));
 	private ProcessFlowHandler errorFlowHandler = new RetryFlowHandler(new ErrorFlowHandler(new CompensateFlowHandler()));
 
 	public ProcessHandler() {

@@ -22,6 +22,7 @@ import io.linkedlogics.model.process.JoinLogicDefinition;
 import io.linkedlogics.model.process.JumpLogicDefinition;
 import io.linkedlogics.model.process.LabelLogicDefinition;
 import io.linkedlogics.model.process.LogLogicDefinition;
+import io.linkedlogics.model.process.LoopLogicDefinition;
 import io.linkedlogics.model.process.ProcessLogicDefinition;
 import io.linkedlogics.model.process.RetryLogicDefinition;
 import io.linkedlogics.model.process.SavepointLogicDefinition;
@@ -98,6 +99,11 @@ public class ProcessDefinitionWriter {
 			write(builder, (ExitLogicDefinition) logic);
 		} else if (logic instanceof FailLogicDefinition) {
 			write(builder, (FailLogicDefinition) logic);
+		} else if (logic instanceof LoopLogicDefinition) {
+			write(builder, (LoopLogicDefinition) logic);
+			if (logic.getInputs() != null && !logic.getInputs().isEmpty()) {
+				write(builder, logic.getInputs(), true);
+			}
 		} else if (logic instanceof GroupLogicDefinition) {
 			write(builder, (GroupLogicDefinition) logic);
 			if (logic.getInputs() != null && !logic.getInputs().isEmpty()) {
@@ -309,6 +315,19 @@ public class ProcessDefinitionWriter {
 		builder.append("process(\"").append(process.getProcessId()).append("\", ").append(process.getVersion()).append(")");
 	}
 
+	private void write(StringBuilder builder, LoopLogicDefinition loop) {
+		builder.append("loop(when(").append(escape(loop.getExpression().getExpression())).append("), ");
+
+		for (int i = 0; i < loop.getLogics().size(); i++) {
+			if (i > 0) {
+				builder.append(", ");
+			}
+			write(builder, loop.getLogics().get(i));
+		}
+
+		builder.append(")");
+	}
+	
 	private void write(StringBuilder builder, GroupLogicDefinition group) {
 		builder.append("group(");
 
