@@ -69,7 +69,9 @@ public class PublishHandler extends LogicHandler {
 
 	private void finishContext(Context context) {
 		ServiceLocator.getInstance().getContextService().set(context);
-		ServiceLocator.getInstance().getCallbackService().publish(context);
+		if (context.isCallback()) {
+			ServiceLocator.getInstance().getCallbackService().publish(context);
+		}
 		
 		List<TriggerService.Trigger> triggers = ServiceLocator.getInstance().getTriggerService().get(context.getId());
 		if (triggers != null && !triggers.isEmpty()) {

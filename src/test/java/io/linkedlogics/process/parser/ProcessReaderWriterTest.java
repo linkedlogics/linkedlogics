@@ -13,6 +13,7 @@ import static io.linkedlogics.LinkedLogicsBuilder.max;
 import static io.linkedlogics.LinkedLogicsBuilder.process;
 import static io.linkedlogics.LinkedLogicsBuilder.retry;
 import static io.linkedlogics.LinkedLogicsBuilder.savepoint;
+import static io.linkedlogics.LinkedLogicsBuilder.loop;
 import static io.linkedlogics.LinkedLogicsBuilder.seconds;
 import static io.linkedlogics.LinkedLogicsBuilder.verify;
 import static io.linkedlogics.LinkedLogicsBuilder.when;
@@ -143,6 +144,8 @@ public class ProcessReaderWriterTest {
 						.build())
 				.add(exit().build())
 				.add(fail().withCode(200).andMessage("failure").build())
+				.add(loop(expr("true"), logic("INSERT").build()).fork().build())
+				.add(loop(expr("true"), logic("INSERT").build()).fork("F2").build())
 				.add(branch(when("account == 222"), logic("INSERT").inputs("list", expr("list"), "val", "v1").build()).build())
 				.add(group(
 					branch(expr("a > 5"), 

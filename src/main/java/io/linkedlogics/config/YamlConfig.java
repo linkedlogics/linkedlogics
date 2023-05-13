@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
 
-public class YamlConfig {	
+class YamlConfig {	
 	private Map<String, Object> config;
 	
 	public YamlConfig(String configFile) {

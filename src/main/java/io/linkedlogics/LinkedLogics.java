@@ -45,8 +45,12 @@ public class LinkedLogics {
 	}
 	
 	public static String start(Context context, LinkedLogicsCallback callback) {
+		Optional.ofNullable(callback).ifPresent(c -> {
+			context.setCallback(true);
+			ServiceLocator.getInstance().getCallbackService().set(context.getId(), c);
+		});
+		
 		ServiceLocator.getInstance().getContextService().set(context);
-		Optional.ofNullable(callback).ifPresent(c -> ServiceLocator.getInstance().getCallbackService().set(context.getId(), c));
 		ServiceLocator.getInstance().getProcessorService().process(new StartTask(context));
 		return context.getId();
 	}

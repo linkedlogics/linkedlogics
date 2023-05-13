@@ -53,7 +53,7 @@ public class QueueConsumerService extends ConfigurableService<QueueConsumerServi
 						log.error(e.getLocalizedMessage(), e);
 					}
 				} else {
-					Thread.sleep(getConfig().getDelay());
+					Thread.sleep(getConfig().getDelay(1));
 				}
 			} catch (InterruptedException e) {}
 		}

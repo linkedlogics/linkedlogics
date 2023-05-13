@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.service.LogicService;
 import io.linkedlogics.service.SchedulerService.Schedule;
 import io.linkedlogics.service.TriggerService.Trigger;
@@ -26,6 +26,8 @@ public class Context {
 	private String parentId;
 	private Status status = Status.INITIAL;
 	private int version;
+	private final String origin = LinkedLogics.INSTANCE_NAME;
+	private boolean callback;
 	
 	private String processId;
 	private int processVersion;

@@ -10,7 +10,7 @@ import io.linkedlogics.service.QueueService;
 import io.linkedlogics.service.local.config.LocalQueueServiceConfig;
 
 public class LocalQueueService extends ConfigurableService<LocalQueueServiceConfig> implements QueueService {
-	private ConcurrentHashMap<String, ArrayBlockingQueue<String>> queueMap;
+	private ConcurrentHashMap<String, ArrayBlockingQueue<String>> queueMap = new ConcurrentHashMap<>();
 	
 	public LocalQueueService() {
 		super(LocalQueueServiceConfig.class);
@@ -18,7 +18,6 @@ public class LocalQueueService extends ConfigurableService<LocalQueueServiceConf
 
 	@Override
 	public void start() {
-		queueMap = new ConcurrentHashMap<>();
 		queueMap.put(LinkedLogics.getApplicationName(), new ArrayBlockingQueue<>(getConfig().getQueueSize(100000)));
 	}
 	

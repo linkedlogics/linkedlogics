@@ -3,10 +3,8 @@ package io.linkedlogics.context;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import io.linkedlogics.context.ContextError.ErrorType;
 import io.linkedlogics.model.LogicDefinition;

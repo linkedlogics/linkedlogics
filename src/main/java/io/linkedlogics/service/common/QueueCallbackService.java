@@ -8,18 +8,18 @@ import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.LinkedLogicsCallback;
 import io.linkedlogics.context.Context;
 import io.linkedlogics.service.CallbackService;
 import io.linkedlogics.service.ConfigurableService;
+import io.linkedlogics.service.QueueService;
 import io.linkedlogics.service.ServiceLocator;
-import io.linkedlogics.service.TopicService;
 import io.linkedlogics.service.local.config.LocalCallbackServiceConfig;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class QueueCallbackService extends ConfigurableService<LocalCallbackServiceConfig> implements CallbackService, Runnable {
-	private final static String CALLBACK_QUEUE = "callback";
 	private ConcurrentHashMap<String, LinkedLogicsCallback> callbackMap;
 	private ScheduledExecutorService scheduler;
 	private Thread consumer;
@@ -66,8 +66,8 @@ public class QueueCallbackService extends ConfigurableService<LocalCallbackServi
 
 	@Override
 	public void publish(Context context) {
-		TopicService topicService = ServiceLocator.getInstance().getTopicService();
-		topicService.offer(CALLBACK_QUEUE, toString(context));
+		QueueService queueService = ServiceLocator.getInstance().getQueueService();
+		queueService.offer(context.getOrigin(), toString(context));
 	}
 	
 	@Override
@@ -76,11 +76,12 @@ public class QueueCallbackService extends ConfigurableService<LocalCallbackServi
 		
 		while (isRunning) {
 			try {
-				TopicService topicService = ServiceLocator.getInstance().getTopicService();
-				Optional<String> message = topicService.poll(CALLBACK_QUEUE);
+				QueueService queueService = ServiceLocator.getInstance().getQueueService();
+				Optional<String> message = queueService.poll(LinkedLogics.getInstanceName());
 				if (message.isPresent()) {
 					try {
-						callback(fromString(message.get()));
+						Context context = fromString(message.get());
+						Optional.ofNullable(callbackMap.remove(context.getId())).ifPresent((c) -> callback(context, c));
 					} catch (Exception e) {
 						log.error(e.getLocalizedMessage(), e);
 					}
@@ -89,16 +90,6 @@ public class QueueCallbackService extends ConfigurableService<LocalCallbackServi
 				}
 			} catch (InterruptedException e) {}
 		}
-	}
-	
-	public void callback(Context context) {
-		Optional.ofNullable(callbackMap.remove(context.getId())).ifPresent((c) -> {
-			if (context.getError() == null) {
-				c.onSuccess(context);
-			} else {
-				c.onFailure(context, context.getError());
-			}
-		});
 	}
 	
 	private String toString(Context context) {

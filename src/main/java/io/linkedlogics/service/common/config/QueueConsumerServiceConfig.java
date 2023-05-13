@@ -8,5 +8,5 @@ import io.linkedlogics.service.config.ServiceConfig;
 public interface QueueConsumerServiceConfig extends ServiceConfig {
 	
 	@Config(key = "delay", description = "Sleep time when no messages")
-	public Integer getDelay();
+	public Integer getDelay(Integer defaultValue);
 }

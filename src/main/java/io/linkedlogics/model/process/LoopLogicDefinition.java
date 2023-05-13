@@ -35,16 +35,6 @@ public class LoopLogicDefinition extends GroupLogicDefinition {
 			getLogic().setExpression(expression);
 			this.getLogic().addLogics(Arrays.stream(logics).collect(Collectors.toList()));
 		}
-
-		public LoopLogicBuilder retry(int maxRetries, int delay) {
-			this.getLogic().setRetry(new RetryLogicDefinition.RetryLogicBuilder(maxRetries, delay).build());
-			return this;
-		}
-		
-		public LoopLogicBuilder retry(RetryLogicDefinition retry) {
-			this.getLogic().setRetry(retry);
-			return this;
-		}
 		
 		public LoopLogicBuilder fork(String fork) {
 			this.getLogic().setFork(new ForkLogicDefinition(fork));
