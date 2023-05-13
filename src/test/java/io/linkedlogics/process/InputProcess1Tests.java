@@ -36,8 +36,8 @@ public class InputProcess1Tests {
 	@BeforeAll
 	public static void setUp() {
 		LinkedLogics.configure(new LocalServiceConfigurer());
-		LinkedLogics.registerLogic(InputProcess1Tests.class);
-		LinkedLogics.registerProcess(InputProcess1Tests.class);
+		LinkedLogics.registerLogic(new InputProcess1Tests());
+		LinkedLogics.registerProcess(new InputProcess1Tests());
 		LinkedLogics.launch();
 		contextService = ServiceLocator.getInstance().getContextService();
 		ServiceLocator.getInstance().getMapperService();
@@ -55,7 +55,7 @@ public class InputProcess1Tests {
 	}
 
 
-	public static ProcessDefinition scenario1() {
+	public ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
 				.add(logic("GET_FULLNAME").input("person", expr("person")).build())
 				.add(logic("SET_STATE").input("person", expr("person")).build())
@@ -80,7 +80,7 @@ public class InputProcess1Tests {
 	}
 
 
-	public static ProcessDefinition scenario2() {
+	public ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
 				.add(logic("COUNT_BUSY_STATES").input("persons", expr("persons")).build())
 				.build();
@@ -104,7 +104,7 @@ public class InputProcess1Tests {
 	}
 
 
-	public static ProcessDefinition scenario3() {
+	public ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
 				.add(logic("COUNT_UNIQUE").input("persons", expr("persons")).build())
 				.build();
@@ -135,30 +135,30 @@ public class InputProcess1Tests {
 	}
 
 	@Logic(id = "GET_FULLNAME", returnAs = "fullname")
-	public static String getFullname(@Input(value = "person") Person person) {
+	public String getFullname(@Input(value = "person") Person person) {
 		return person.getFirstname() + " " + person.getLastname();
 	}
 
 	@Logic(id = "SET_STATE", version = 0)
-	public static void setState(@Input(value = "person", returned = true) Person person) {
+	public void setState(@Input(value = "person", returned = true) Person person) {
 		person.setState("BUSY");
 	}
-	
+
 	@Logic(id = "COUNT_BUSY_STATES", returnAs = "busy_person_count")
-	public static long countBusyStates(@Input(value = "persons") List<Person> persons) {
+	public long countBusyStates(@Input(value = "persons") List<Person> persons) {
 		return persons.stream().filter(p -> p.getState().equals("BUSY")).count();
 	}
-	
+
 	@Logic(id = "COUNT_UNIQUE", returnAs = "unique_person_count")
-	public static long countUnique(@Input(value = "persons") Set<Person> persons) {
+	public long countUnique(@Input(value = "persons") Set<Person> persons) {
 		return persons.size();
 	}
-	
+
 	@Logic(id = "CHECK_BY_FIRSTNAME", returnAs = "check_by_firstname")
-	public static boolean checkByFirstname(@Input(value = "persons") Map<String, Person> persons, @Input("firstname") String firstname) {
+	public boolean checkByFirstname(@Input(value = "persons") Map<String, Person> persons, @Input("firstname") String firstname) {
 		return persons.containsKey(firstname);
 	}
-	
+
 	@Data
 	@AllArgsConstructor
 	@NoArgsConstructor

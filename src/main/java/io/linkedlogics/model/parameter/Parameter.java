@@ -64,7 +64,7 @@ public abstract class Parameter {
 						if (parameterizedType.getActualTypeArguments().length == 1) {
 							return new CollectionParameter(param.value(), (Class<?>) parameterizedType.getRawType(), (Class<?>) parameterizedType.getActualTypeArguments()[0], param.required(), param.returned());
 						} else if (parameterizedType.getActualTypeArguments().length == 2) {
-							return new CollectionParameter(param.value(), (Class<?>) parameterizedType.getRawType(), (Class<?>) parameterizedType.getActualTypeArguments()[0], param.required(), param.returned());
+							return new MapParameter(param.value(), (Class<?>) parameterizedType.getRawType(), (Class<?>) parameterizedType.getActualTypeArguments()[0], (Class<?>) parameterizedType.getActualTypeArguments()[1], param.required(), param.returned());
 						}
 					} else {
 						return new InputParameter(param.value(), (Class<?>) type, param.required(), param.returned());
@@ -75,5 +75,4 @@ public abstract class Parameter {
 			return new NullParameter();
 		}
 	}
-
 }
