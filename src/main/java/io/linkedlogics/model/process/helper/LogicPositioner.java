@@ -7,9 +7,7 @@ import java.util.Optional;
 import io.linkedlogics.model.ProcessDefinition;
 import io.linkedlogics.model.process.BaseLogicDefinition;
 import io.linkedlogics.model.process.BranchLogicDefinition;
-import io.linkedlogics.model.process.ErrorLogicDefinition;
 import io.linkedlogics.model.process.GroupLogicDefinition;
-import io.linkedlogics.model.process.JumpLogicDefinition;
 import io.linkedlogics.model.process.ProcessLogicDefinition;
 import io.linkedlogics.model.process.SingleLogicDefinition;
 
@@ -34,14 +32,6 @@ public abstract class LogicPositioner {
 				l.getInputs().putIfAbsent(e.getKey(), e.getValue());
 			});
 		});
-		
-//		LogicFinder.findLogics(process, JumpLogicDefinition.class).stream().map(l -> (JumpLogicDefinition) l).forEach(j -> {
-//			if (labels.containsKey(j.getTargetLabel())) {
-//				j.setTargetPosition(labels.get(j.getTargetLabel()).getPosition());
-//			} else {
-//				throw new IllegalArgumentException(j.getTargetLabel() + " label is not found");
-//			}
-//		});
 	}
 
 	private static void setPosition(BaseLogicDefinition logic, Map<String, BaseLogicDefinition> positions, Map<String, BaseLogicDefinition> labels, String position) {
