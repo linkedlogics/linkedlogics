@@ -204,7 +204,7 @@ public class ContextLog {
 	}
 	
 	public void error() {
-		if (log.isWarnEnabled()) {
+		if (log.isErrorEnabled()) {
 			log.error(getLog());
 		}
 	}
