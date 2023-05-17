@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 import io.linkedlogics.context.Context;
+import io.linkedlogics.context.ContextFlow;
 import io.linkedlogics.context.ContextLog;
 import io.linkedlogics.model.process.BaseLogicDefinition;
 import io.linkedlogics.model.process.ExpressionLogicDefinition;
@@ -48,7 +49,8 @@ public class LogFlowHandler extends ProcessFlowHandler {
 			} else if (logLogic.getLevel() == Level.ERROR) {
 				log.error();
 			}
-
+			ContextFlow.log().position(candidatePosition).name(message.substring(0, Math.min(message.length(), 30))).info();
+			
 			return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 		} else {
 			return super.handle(candidate, candidatePosition, context);

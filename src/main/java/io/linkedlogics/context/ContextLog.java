@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Getter
-@ToString(exclude = {"formatter", "context"})
 public class ContextLog {
 	private DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 	private Context context;

@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextError;
+import io.linkedlogics.context.ContextFlow;
 import io.linkedlogics.context.ContextError.ErrorType;
 import io.linkedlogics.model.process.BaseLogicDefinition;
 import io.linkedlogics.model.process.VerifyLogicDefinition;
@@ -25,9 +26,11 @@ public class VerifyFlowHandler extends ProcessFlowHandler {
 				VerifyLogicDefinition verifyLogic = (VerifyLogicDefinition) candidate.get(); 
 				if (!verifyLogic.isVerified(context)) {
 					context.setError(new ContextError(verifyLogic.getErrorCode(), verifyLogic.getErrorMessage(), ErrorType.PERMANENT));
+					ContextFlow.verify().position(candidatePosition).name(candidate.get().getId() != null ? candidate.get().getId() : "VERIFY").result("FALSE").info();
 					trace(context, "not verified", candidatePosition, Flow.RESET);
 					return HandlerResult.nextCandidate(candidatePosition);
 				} else {
+					ContextFlow.verify().position(candidatePosition).name(candidate.get().getId() != null ? candidate.get().getId() : "VERIFY").result("TRUE").info();
 					trace(context, "verified", candidatePosition, Flow.RESET);
 					return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 				}

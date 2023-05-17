@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextError;
+import io.linkedlogics.context.ContextFlow;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.context.ContextError.ErrorType;
 import io.linkedlogics.model.process.BaseLogicDefinition;
@@ -40,9 +41,11 @@ public class RetryFlowHandler extends ProcessFlowHandler {
 							OffsetDateTime scheduledAt = OffsetDateTime.now().plusSeconds(candidate.get().getRetry().getSeconds());
 							Schedule schedule = new Schedule(context.getId(), null, candidatePosition, scheduledAt, SchedulerService.ScheduleType.RETRY); 
 							ServiceLocator.getInstance().getSchedulerService().schedule(schedule);
+							ContextFlow.retry().position(candidatePosition).name(candidate.get().getId()).result("retry # " + retries).info();
 							trace(context, "retry is scheduled " + schedule.getExpiresAt(), candidatePosition, Flow.TERMINATE);
 							return HandlerResult.noCandidate();
 						} else {
+							ContextFlow.retry().position(candidatePosition).name(candidate.get().getId()).result("retry # " + retries).info();
 							trace(context, "retrying immediately", candidatePosition, Flow.RESET);
 							return HandlerResult.selectCandidate(candidate);
 						}

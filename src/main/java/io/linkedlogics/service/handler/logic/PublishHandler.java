@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.context.Context;
+import io.linkedlogics.context.ContextFlow;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.process.ExpressionLogicDefinition;
 import io.linkedlogics.model.process.ScriptLogicDefinition;
@@ -72,6 +73,7 @@ public class PublishHandler extends LogicHandler {
 		if (context.isCallback()) {
 			ServiceLocator.getInstance().getCallbackService().publish(context);
 		}
+		ContextFlow.finish().position(context.getLogicPosition()).info();
 		
 		List<TriggerService.Trigger> triggers = ServiceLocator.getInstance().getTriggerService().get(context.getId());
 		if (triggers != null && !triggers.isEmpty()) {
@@ -115,6 +117,7 @@ public class PublishHandler extends LogicHandler {
 			source = source + "...";
 		}
 		
+		ContextFlow.script().position(logic.getPosition()).name(source.substring(0, Math.min(source.length(), 30))).info();
 		log(context).handler(this).message("execution continues with script " + source  + "]").debug();
 		
 		ServiceLocator.getInstance().getContextService().set(context);
@@ -139,6 +142,7 @@ public class PublishHandler extends LogicHandler {
 		timeoutContext(context);
 		ServiceLocator.getInstance().getContextService().set(context);
 		
+		ContextFlow.logic().position(logic.getPosition()).name(String.format("%s[%d]", logic.getLogicId(), logic.getLogicVersion())).info();
 		log(context).handler(this).logic(logic).message("execution continues with logic " + logic.getLogicId() + "[" + logic.getLogicVersion() + "]").debug();
 		
 		boolean localBypass = ((LocalProcessorService) ServiceLocator.getInstance().getProcessorService()).getConfig().getBypass(true);

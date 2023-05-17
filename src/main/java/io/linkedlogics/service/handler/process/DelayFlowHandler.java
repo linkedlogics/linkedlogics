@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import io.linkedlogics.context.Context;
+import io.linkedlogics.context.ContextFlow;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.process.BaseLogicDefinition;
 import io.linkedlogics.service.SchedulerService;
@@ -31,6 +32,7 @@ public class DelayFlowHandler extends ProcessFlowHandler {
 				context.setStatus(Status.SCHEDULED);
 				OffsetDateTime scheduledAt = OffsetDateTime.now().plusSeconds(candidate.get().getDelay().getSeconds());
 				Schedule schedule = new Schedule(context.getId(), null, candidatePosition, scheduledAt, SchedulerService.ScheduleType.DELAY); 
+				ContextFlow.delay().position(candidatePosition).name(candidate.get().getId()).result("delaying for " + candidate.get().getDelay().getSeconds() + " secs").info();
 				trace(context, "delaying execution till " + schedule.getExpiresAt(), candidatePosition, Flow.TERMINATE);
 				ServiceLocator.getInstance().getSchedulerService().schedule(schedule);
 				return HandlerResult.noCandidate();

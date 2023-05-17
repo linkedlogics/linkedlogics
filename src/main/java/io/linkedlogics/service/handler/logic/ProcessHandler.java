@@ -6,6 +6,7 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import io.linkedlogics.context.Context;
+import io.linkedlogics.context.ContextFlow;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.ProcessDefinition;
 import io.linkedlogics.model.process.BaseLogicDefinition;
@@ -128,6 +129,7 @@ public class ProcessHandler extends LogicHandler {
 		
 		if (context.getStatus() == Status.INITIAL) {
 			log(context).handler(this).process().inputs(context.getParams()).message("starting context").info();
+			ContextFlow.start().position("0").name(String.format("%s[%d]", context.getProcessId(), context.getProcessVersion())).info();
 			result = HandlerResult.nextCandidate(context.getStartPosition());
 		} else if (context.getStatus() == Status.WAITING) {
 			log(context).handler(this).message("resuming context for join").debug();
