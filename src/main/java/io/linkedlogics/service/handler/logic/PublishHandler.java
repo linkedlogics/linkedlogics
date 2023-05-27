@@ -69,11 +69,11 @@ public class PublishHandler extends LogicHandler {
 	}
 
 	private void finishContext(Context context) {
+		ContextFlow.finish(context.getLogicPosition()).result(context.getStatus() == Status.FINISHED ).log(context);
 		ServiceLocator.getInstance().getContextService().set(context);
 		if (context.isCallback()) {
 			ServiceLocator.getInstance().getCallbackService().publish(context);
 		}
-		ContextFlow.finish().position(context.getLogicPosition()).info();
 		
 		List<TriggerService.Trigger> triggers = ServiceLocator.getInstance().getTriggerService().get(context.getId());
 		if (triggers != null && !triggers.isEmpty()) {
@@ -117,7 +117,7 @@ public class PublishHandler extends LogicHandler {
 			source = source + "...";
 		}
 		
-		ContextFlow.script().position(logic.getPosition()).name(source.substring(0, Math.min(source.length(), 30))).info();
+		ContextFlow.script(logic.getPosition()).name(logic.getName()).result(Boolean.TRUE).message(source.substring(0, Math.min(source.length(), 30))).log(context);
 		log(context).handler(this).message("execution continues with script " + source  + "]").debug();
 		
 		ServiceLocator.getInstance().getContextService().set(context);
@@ -140,10 +140,10 @@ public class PublishHandler extends LogicHandler {
 		context.setUpdatedAt(OffsetDateTime.now());
 		
 		timeoutContext(context);
-		ServiceLocator.getInstance().getContextService().set(context);
-		
-		ContextFlow.logic().position(logic.getPosition()).name(String.format("%s[%d]", logic.getLogicId(), logic.getLogicVersion())).info();
+		ContextFlow.logic(logic.getPosition()).name(logic.getName()).result(Boolean.TRUE).message(String.format("%s[%d]", logic.getLogicId(), logic.getLogicVersion())).log(context);
 		log(context).handler(this).logic(logic).message("execution continues with logic " + logic.getLogicId() + "[" + logic.getLogicVersion() + "]").debug();
+		
+		ServiceLocator.getInstance().getContextService().set(context);
 		
 		boolean localBypass = ((LocalProcessorService) ServiceLocator.getInstance().getProcessorService()).getConfig().getBypass(true);
 		

@@ -9,4 +9,4 @@ linkedlogics:
     processor:
       timeout: 30
     evaluator:
-      check-syntax: false
+      check-syntax: true

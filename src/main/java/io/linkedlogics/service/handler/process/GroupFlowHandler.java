@@ -22,7 +22,7 @@ public class GroupFlowHandler extends ProcessFlowHandler {
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
 		if (candidate.isPresent() && (candidate.get() instanceof GroupLogicDefinition || candidate.get() instanceof ProcessLogicDefinition)) {
 			trace(context, "executing group", candidatePosition, Flow.RESET);
-			ContextFlow.group().position(candidatePosition).name(candidate.get().getId()).info();
+			ContextFlow.group(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message("executing group").log(context);
 			return HandlerResult.nextCandidate(candidatePosition + ".1");
 		} else {
 			trace(context, "no group", candidatePosition, Flow.CONTINUE);

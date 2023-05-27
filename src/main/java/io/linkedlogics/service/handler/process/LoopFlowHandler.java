@@ -5,6 +5,7 @@ import static io.linkedlogics.context.ContextLog.log;
 import java.util.Optional;
 
 import io.linkedlogics.context.Context;
+import io.linkedlogics.context.ContextFlow;
 import io.linkedlogics.model.process.BaseLogicDefinition;
 import io.linkedlogics.model.process.BranchLogicDefinition;
 import io.linkedlogics.model.process.LoopLogicDefinition;
@@ -32,7 +33,9 @@ public class LoopFlowHandler extends ProcessFlowHandler {
 					} else {
 						trace(context, "starting loop", candidatePosition, Flow.RESET);
 					}
-					context.getLoopMap().put(candidatePosition, context.getLoopMap().getOrDefault(candidatePosition, 0));
+					int iteration = context.getLoopMap().getOrDefault(candidatePosition, 0) + 1;
+					context.getLoopMap().put(candidatePosition, iteration);
+					ContextFlow.loop(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message("iteration #" + iteration).log(context);
 					return HandlerResult.nextCandidate(candidatePosition + ".1");
 				} else {
 					context.getLoopMap().remove(candidatePosition);

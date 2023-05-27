@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextError;
+import io.linkedlogics.context.ContextFlow;
 import io.linkedlogics.context.ContextError.ErrorType;
 import io.linkedlogics.model.process.BaseLogicDefinition;
 import io.linkedlogics.model.process.FailLogicDefinition;
@@ -28,6 +29,7 @@ public class FailFlowHandler extends ProcessFlowHandler {
 			error.setType(ErrorType.PERMANENT);
 			context.setError(error);
 			trace(context, "failing " + error.toString(), candidatePosition, Flow.TERMINATE);
+			ContextFlow.fail(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message(String.format("terminating execution with failure %s[%d]", error.getMessage(), error.getCode())).log(context);
 			return HandlerResult.endOfCandidates();
 		} else {
 			trace(context, "no failure", candidatePosition, Flow.CONTINUE);

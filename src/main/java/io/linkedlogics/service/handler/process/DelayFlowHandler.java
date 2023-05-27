@@ -32,7 +32,7 @@ public class DelayFlowHandler extends ProcessFlowHandler {
 				context.setStatus(Status.SCHEDULED);
 				OffsetDateTime scheduledAt = OffsetDateTime.now().plusSeconds(candidate.get().getDelay().getSeconds());
 				Schedule schedule = new Schedule(context.getId(), null, candidatePosition, scheduledAt, SchedulerService.ScheduleType.DELAY); 
-				ContextFlow.delay().position(candidatePosition).name(candidate.get().getId()).result("delaying for " + candidate.get().getDelay().getSeconds() + " secs").info();
+				ContextFlow.delay(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message("delaying for " + candidate.get().getDelay().getSeconds() + " secs").log(context);
 				trace(context, "delaying execution till " + schedule.getExpiresAt(), candidatePosition, Flow.TERMINATE);
 				ServiceLocator.getInstance().getSchedulerService().schedule(schedule);
 				return HandlerResult.noCandidate();

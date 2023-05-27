@@ -58,6 +58,7 @@ public class Context {
 	private List<String> compensables = new ArrayList<>();
 	private Map<String, String> joinMap = new HashMap<>();
 	private Map<String, Integer> loopMap = new HashMap<>();
+	private List<String> execList = new ArrayList<>();
 	
 	public Context(String id, String key, String processId, int processVersion, Map<String, Object> params) {
 		this.id = id == null ? UUID.randomUUID().toString() : id;
@@ -106,5 +107,10 @@ public class Context {
 	@JsonIgnore
 	public boolean isNotFinished() {
 		return getStatus() != Status.FINISHED && getStatus() != Status.FAILED && getStatus() != Status.CANCELLED;
+	}
+	
+	@JsonIgnore
+	public boolean isFinished() {
+		return !isNotFinished();
 	}
 }

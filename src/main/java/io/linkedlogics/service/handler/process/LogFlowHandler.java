@@ -49,7 +49,7 @@ public class LogFlowHandler extends ProcessFlowHandler {
 			} else if (logLogic.getLevel() == Level.ERROR) {
 				log.error();
 			}
-			ContextFlow.log().position(candidatePosition).name(message.substring(0, Math.min(message.length(), 30))).info();
+			ContextFlow.log(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message(message.substring(0, Math.min(message.length(), 30))).log(context);
 			
 			return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 		} else {

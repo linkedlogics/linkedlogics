@@ -31,7 +31,7 @@ public class RetryFlowHandler extends ProcessFlowHandler {
 			
 			if (context.getError() != null && matches(context.getError(), retry)) {
 				if (context.getError().getType() == ErrorType.TEMPORARY) {
-					int retries = context.getRetries().getOrDefault(candidatePosition, 1);
+					int retries = context.getRetries().getOrDefault(candidatePosition, 0);
 					if (retries < retry.getMaxRetries()) {
 						context.getRetries().put(candidatePosition, retries + 1);
 						context.setError(null);
@@ -41,16 +41,17 @@ public class RetryFlowHandler extends ProcessFlowHandler {
 							OffsetDateTime scheduledAt = OffsetDateTime.now().plusSeconds(candidate.get().getRetry().getSeconds());
 							Schedule schedule = new Schedule(context.getId(), null, candidatePosition, scheduledAt, SchedulerService.ScheduleType.RETRY); 
 							ServiceLocator.getInstance().getSchedulerService().schedule(schedule);
-							ContextFlow.retry().position(candidatePosition).name(candidate.get().getId()).result("retry # " + retries).info();
+							ContextFlow.retry(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message("retrying #" + retries).log(context);
 							trace(context, "retry is scheduled " + schedule.getExpiresAt(), candidatePosition, Flow.TERMINATE);
 							return HandlerResult.noCandidate();
 						} else {
-							ContextFlow.retry().position(candidatePosition).name(candidate.get().getId()).result("retry # " + retries).info();
+							ContextFlow.retry(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message("retrying now #" + retries).log(context);
 							trace(context, "retrying immediately", candidatePosition, Flow.RESET);
 							return HandlerResult.selectCandidate(candidate);
 						}
 					} else {
 						trace(context, "no retry max retry reached", candidatePosition, Flow.CONTINUE);
+						ContextFlow.retry(candidatePosition).name(candidate.get().getName()).result(Boolean.FALSE).message("no retry #" + retries).log(context);
 						context.getRetries().remove(candidatePosition);
 					}
 				} else {

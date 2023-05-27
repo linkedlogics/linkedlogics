@@ -3,7 +3,6 @@ package io.linkedlogics.process;
 import static io.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static io.linkedlogics.LinkedLogicsBuilder.expr;
 import static io.linkedlogics.LinkedLogicsBuilder.logic;
-import static io.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
@@ -12,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.annotation.Input;
@@ -22,33 +21,23 @@ import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextBuilder;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.ProcessDefinition;
-import io.linkedlogics.service.ContextService;
-import io.linkedlogics.service.ServiceLocator;
-import io.linkedlogics.service.local.LocalServiceConfigurer;
+import io.linkedlogics.test.LinkedLogicsExtension;
+import io.linkedlogics.test.TestContextService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@ExtendWith(LinkedLogicsExtension.class)
 public class InputProcess1Tests {
-
-	private static ContextService contextService;
-
-	@BeforeAll
-	public static void setUp() {
-		LinkedLogics.configure(new LocalServiceConfigurer());
-		LinkedLogics.registerLogic(new InputProcess1Tests());
-		LinkedLogics.registerProcess(new InputProcess1Tests());
-		LinkedLogics.launch();
-		contextService = ServiceLocator.getInstance().getContextService();
-		ServiceLocator.getInstance().getMapperService();
-	}
 
 	@Test
 	public void testScenario1() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").params("person", new Person("firstname", "lastname", "FREE")).build());
-		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
+		TestContextService.blockUntil();
 		
-		Context ctx = contextService.get(contextId).get();
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
 		assertThat(ctx.getParams().containsKey("person")).isTrue();
 		assertThat(((Map<String, Object>) ctx.getParams().get("person")).get("state")).isEqualTo("BUSY");
 		assertThat(ctx.getParams().get("fullname")).isEqualTo("firstname lastname");
@@ -72,9 +61,11 @@ public class InputProcess1Tests {
 		persons.add(new Person("firstname", "lastname", "BUSY"));
 		
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_2").params("persons", persons).build());
-		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
+		TestContextService.blockUntil();
 		
-		Context ctx = contextService.get(contextId).get();
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
 		assertThat(ctx.getParams().containsKey("busy_person_count")).isTrue();
 		assertThat(ctx.getParams().get("busy_person_count")).isEqualTo(3);
 	}
@@ -96,9 +87,11 @@ public class InputProcess1Tests {
 		persons.add(new Person("firstname3", "lastname3", "FREE"));
 		
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_3").params("persons", persons).build());
-		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
+		TestContextService.blockUntil();
 		
-		Context ctx = contextService.get(contextId).get();
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
 		assertThat(ctx.getParams().containsKey("unique_person_count")).isTrue();
 		assertThat(ctx.getParams().get("unique_person_count")).isEqualTo(3);
 	}
@@ -120,9 +113,11 @@ public class InputProcess1Tests {
 		persons.put("firstname5", new Person("firstname5", "lastname5", "FREE"));
 		
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_4").params("persons", persons).build());
-		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
+		TestContextService.blockUntil();
 		
-		Context ctx = contextService.get(contextId).get();
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
 		assertThat(ctx.getParams().containsKey("check_by_firstname")).isTrue();
 		assertThat(ctx.getParams().get("check_by_firstname")).isEqualTo(true);
 	}

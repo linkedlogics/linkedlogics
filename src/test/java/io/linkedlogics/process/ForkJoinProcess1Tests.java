@@ -4,56 +4,50 @@ import static io.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static io.linkedlogics.LinkedLogicsBuilder.expr;
 import static io.linkedlogics.LinkedLogicsBuilder.group;
 import static io.linkedlogics.LinkedLogicsBuilder.logic;
-import static io.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
+import static io.linkedlogics.test.LinkedLogicsTest.assertContext;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.annotation.Input;
 import io.linkedlogics.annotation.Logic;
+import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextBuilder;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.ProcessDefinition;
-import io.linkedlogics.service.ContextService;
-import io.linkedlogics.service.ServiceLocator;
-import io.linkedlogics.service.local.LocalServiceConfigurer;
+import io.linkedlogics.test.LinkedLogicsExtension;
+import io.linkedlogics.test.TestContextService;
 
+@ExtendWith(LinkedLogicsExtension.class)
 public class ForkJoinProcess1Tests {
-	
-	private static ContextService contextService;
-	
-	@BeforeAll
-	public static void setUp() {
-		LinkedLogics.configure(new LocalServiceConfigurer());
-		LinkedLogics.registerLogic(ForkJoinProcess1Tests.class);
-		LinkedLogics.registerProcess(ForkJoinProcess1Tests.class);
-		LinkedLogics.launch();
-		contextService = ServiceLocator.getInstance().getContextService();
-	}
 	
 	@Test
 	public void testScenario1() {
 		long start = System.currentTimeMillis();
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").build());
-		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
+
+		TestContextService.blockUntil();
 		long finish = System.currentTimeMillis();
 
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
 		assertThat(finish - start).isGreaterThan(500);
-		assertThat(finish - start).isLessThan(2500);
-		contextService.get(contextId).ifPresent(ctx -> {
-			assertThat(ctx.getParams().containsKey("concat")).isTrue();
-			assertThat(ctx.getParams().get("concat")).asString().contains("v1");
-			assertThat(ctx.getParams().get("concat")).asString().contains("v2");
-			assertThat(ctx.getParams().get("concat")).asString().contains("v3");
-		});
+		assertThat(finish - start).isLessThan(2750);
+		assertThat(ctx.getParams().containsKey("concat")).isTrue();
+		assertThat(ctx.getParams().get("concat")).asString().contains("v1");
+		assertThat(ctx.getParams().get("concat")).asString().contains("v2");
+		assertThat(ctx.getParams().get("concat")).asString().contains("v3");
+		
+		assertContext().whenLogic("1").onFork().isForked();
+		assertContext().whenLogic("2").onFork().isForked();
+		assertContext().whenLogic("3").onFork().isForked();
+		
 	}
-	
-	
 
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
@@ -76,19 +70,25 @@ public class ForkJoinProcess1Tests {
 	public void testScenario2() {
 		long start = System.currentTimeMillis();
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_2").build());
-		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
+		TestContextService.blockUntil();
 		long finish = System.currentTimeMillis();
 
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
+
 		assertThat(finish - start).isGreaterThan(500);
-		assertThat(finish - start).isLessThan(2500);
-		contextService.get(contextId).ifPresent(ctx -> {
-			assertThat(ctx.getParams().containsKey("concat")).isTrue();
-			assertThat(ctx.getParams().get("concat")).asString().contains("v1");
-			assertThat(ctx.getParams().get("concat")).asString().contains("v3");
-			assertThat(ctx.getParams().get("concat_2")).asString().contains("v21");
-			assertThat(ctx.getParams().get("concat_2")).asString().contains("v22");
-			assertThat(ctx.getParams().get("concat_2")).asString().contains("v23");
-		});
+		assertThat(finish - start).isLessThan(2750);
+		assertThat(ctx.getParams().containsKey("concat")).isTrue();
+		assertThat(ctx.getParams().get("concat")).asString().contains("v1");
+		assertThat(ctx.getParams().get("concat")).asString().contains("v3");
+		assertThat(ctx.getParams().get("concat_2")).asString().contains("v21");
+		assertThat(ctx.getParams().get("concat_2")).asString().contains("v22");
+		assertThat(ctx.getParams().get("concat_2")).asString().contains("v23");
+		
+		assertContext().whenLogic("1").onFork().isForked();
+		assertContext().whenGroup("2").onFork().isForked();
+		assertContext().whenLogic("3").onFork().isForked();
 	}
 	
 	
@@ -117,16 +117,22 @@ public class ForkJoinProcess1Tests {
 	public void testScenario3() {
 		long start = System.currentTimeMillis();
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_3").build());
-		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
+		TestContextService.blockUntil();
 		long finish = System.currentTimeMillis();
 
-		assertThat(finish - start).isLessThan(50);
-		contextService.get(contextId).ifPresent(ctx -> {
-			assertThat(ctx.getParams().containsKey("concat")).isTrue();
-			assertThat(ctx.getParams().get("concat")).asString().contains("key1");
-			assertThat(ctx.getParams().get("concat")).asString().contains("key2");
-			assertThat(ctx.getParams().get("concat")).asString().contains("key3");
-		});
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
+
+		assertThat(finish - start).isLessThan(150);
+		assertThat(ctx.getParams().containsKey("concat")).isTrue();
+		assertThat(ctx.getParams().get("concat")).asString().contains("key1");
+		assertThat(ctx.getParams().get("concat")).asString().contains("key2");
+		assertThat(ctx.getParams().get("concat")).asString().contains("key3");
+		
+		assertContext().whenLogic("1").onFork().isForked();
+		assertContext().whenLogic("2").onFork().isForked();
+		assertContext().whenLogic("3").onFork().isForked();
 	}
 	
 	

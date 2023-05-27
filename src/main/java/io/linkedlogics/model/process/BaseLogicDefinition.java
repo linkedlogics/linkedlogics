@@ -6,6 +6,7 @@ import java.util.stream.IntStream;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.linkedlogics.model.ProcessLogicTypes;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,10 +26,10 @@ public abstract class BaseLogicDefinition extends TypedLogicDefinition implement
 	protected ErrorLogicDefinition error;
 	protected TimeoutLogicDefinition timeout;
 	protected LabelLogicDefinition label;
-	protected String id;
+	protected String name;
 	protected String desc;
 	
-	public BaseLogicDefinition(String type) {
+	public BaseLogicDefinition(ProcessLogicTypes type) {
 		super(type);
 	}
 	
@@ -114,8 +115,8 @@ public abstract class BaseLogicDefinition extends TypedLogicDefinition implement
 			return (T) this;
 		}
 		
-		public T id(String id) {
-			this.logic.setId(id);
+		public T name(String name) {
+			this.logic.setName(name);
 			return (T) this;
 		}
 		

@@ -45,7 +45,7 @@ public class LocalContextService implements ContextService {
 		return Optional.ofNullable(fromString(contextMap.remove(contextId)));
 	}
 	
-	private String toString(Context context) {
+	protected static String toString(Context context) {
 		try {
 			return ServiceLocator.getInstance().getMapperService().getMapper().writeValueAsString(context);
 		} catch (Exception e) {
@@ -53,7 +53,7 @@ public class LocalContextService implements ContextService {
 		}
 	}
 	
-	private Context fromString(String string) {
+	protected static Context fromString(String string) {
 		if (string == null || string.length() == 0) {
 			return null;
 		}

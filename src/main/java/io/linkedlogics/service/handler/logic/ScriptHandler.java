@@ -7,6 +7,7 @@ import java.time.OffsetDateTime;
 import java.util.Map;
 
 import io.linkedlogics.context.Context;
+import io.linkedlogics.context.ContextFlow;
 import io.linkedlogics.service.ServiceLocator;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,9 +38,12 @@ public class ScriptHandler extends LogicHandler {
 			}
 			
 			context.setExecutedIn(Duration.between(context.getExecutedAt(), OffsetDateTime.now()).toMillis());
+//			ContextFlow.script(context.getLogicPosition()).result(Boolean.TRUE).message(id).duration(context.getExecutedIn()).log(context);
+			
 			super.handle(context, scriptResult);	
 		} catch (Exception e) {
 			context.setExecutedIn(Duration.between(context.getExecutedAt(), OffsetDateTime.now()).toMillis());
+//			ContextFlow.script(context.getLogicPosition()).result(Boolean.FALSE).duration(context.getExecutedIn()).log(context);
 			super.handleError(context, e);
 		}
 	}

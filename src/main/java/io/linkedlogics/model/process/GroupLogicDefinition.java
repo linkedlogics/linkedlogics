@@ -18,7 +18,7 @@ public class GroupLogicDefinition extends BaseLogicDefinition {
 		super(ProcessLogicTypes.GROUP);
 	}
 	
-	public GroupLogicDefinition(String type) {
+	public GroupLogicDefinition(ProcessLogicTypes type) {
 		super(type);
 	}
 	

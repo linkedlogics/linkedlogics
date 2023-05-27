@@ -3,11 +3,8 @@ package io.linkedlogics.process;
 import static io.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static io.linkedlogics.LinkedLogicsBuilder.expr;
 import static io.linkedlogics.LinkedLogicsBuilder.logic;
-import static io.linkedlogics.LinkedLogicsBuilder.verify;
-import static io.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.jupiter.api.AfterAll;
@@ -23,21 +20,19 @@ import io.linkedlogics.context.ContextBuilder;
 import io.linkedlogics.context.ContextError;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.ProcessDefinition;
-import io.linkedlogics.service.ContextService;
-import io.linkedlogics.service.ServiceLocator;
 import io.linkedlogics.service.common.QueueCallbackService;
 import io.linkedlogics.service.common.QueueConsumerService;
 import io.linkedlogics.service.common.QueuePublisherService;
 import io.linkedlogics.service.common.QueueSchedulerService;
 import io.linkedlogics.service.local.LocalServiceConfigurer;
+import io.linkedlogics.test.TestContextService;
 
 public class CallBack2Tests {
-
-	private static ContextService contextService;
 
 	@BeforeAll
 	public static void setUp() {
 		LinkedLogics.configure(new LocalServiceConfigurer()
+				.configure(new TestContextService())
 				.configure(new QueueCallbackService())
 				.configure(new QueueConsumerService())
 				.configure(new QueuePublisherService())
@@ -45,7 +40,6 @@ public class CallBack2Tests {
 		LinkedLogics.registerLogic(CallBack2Tests.class);
 		LinkedLogics.registerProcess(CallBack2Tests.class);
 		LinkedLogics.launch();
-		contextService = ServiceLocator.getInstance().getContextService();
 	}
 	
 	@AfterAll
@@ -75,7 +69,10 @@ public class CallBack2Tests {
 						
 					}
 				});
-		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
+		TestContextService.blockUntil();
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
 		assertThat(result.get()).isTrue();
 	}
 

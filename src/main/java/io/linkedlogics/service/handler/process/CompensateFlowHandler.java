@@ -3,6 +3,7 @@ package io.linkedlogics.service.handler.process;
 import java.util.Optional;
 
 import io.linkedlogics.context.Context;
+import io.linkedlogics.context.ContextFlow;
 import io.linkedlogics.model.process.BaseLogicDefinition;
 import io.linkedlogics.model.process.helper.LogicPositioner;
 
@@ -26,6 +27,7 @@ public class CompensateFlowHandler extends ProcessFlowHandler {
 						includeParent(candidatePosition, context);
 					}
 					trace(context, "compensating with next logic at " + lastCompensablePosition, candidatePosition, Flow.RESET);
+					ContextFlow.compensate(lastCompensablePosition).result(Boolean.TRUE).message("compensating with logic at" + lastCompensablePosition).log(context);
 					return HandlerResult.nextCandidate(lastCompensablePosition);
 				}
 			} else {

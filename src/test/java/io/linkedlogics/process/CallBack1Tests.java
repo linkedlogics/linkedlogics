@@ -4,14 +4,12 @@ import static io.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static io.linkedlogics.LinkedLogicsBuilder.expr;
 import static io.linkedlogics.LinkedLogicsBuilder.logic;
 import static io.linkedlogics.LinkedLogicsBuilder.verify;
-import static io.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.LinkedLogicsCallback;
@@ -22,22 +20,11 @@ import io.linkedlogics.context.ContextBuilder;
 import io.linkedlogics.context.ContextError;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.ProcessDefinition;
-import io.linkedlogics.service.ContextService;
-import io.linkedlogics.service.ServiceLocator;
-import io.linkedlogics.service.local.LocalServiceConfigurer;
+import io.linkedlogics.test.LinkedLogicsExtension;
+import io.linkedlogics.test.TestContextService;
 
+@ExtendWith(LinkedLogicsExtension.class)
 public class CallBack1Tests {
-
-	private static ContextService contextService;
-
-	@BeforeAll
-	public static void setUp() {
-		LinkedLogics.configure(new LocalServiceConfigurer());
-		LinkedLogics.registerLogic(CallBack1Tests.class);
-		LinkedLogics.registerProcess(CallBack1Tests.class);
-		LinkedLogics.launch();
-		contextService = ServiceLocator.getInstance().getContextService();
-	}
 
 	@Test
 	public void testScenario1() {
@@ -61,7 +48,10 @@ public class CallBack1Tests {
 						
 					}
 				});
-		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
+		TestContextService.blockUntil();
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
 		assertThat(result.get()).isTrue();
 	}
 
@@ -92,7 +82,10 @@ public class CallBack1Tests {
 						result.set(true);
 					}
 				});
-		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
+		TestContextService.blockUntil();
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
 		assertThat(result.get()).isTrue();
 	}
 

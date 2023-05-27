@@ -13,6 +13,7 @@ import java.util.stream.IntStream;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.linkedlogics.context.Context;
+import io.linkedlogics.context.ContextFlow;
 import io.linkedlogics.model.LogicDefinition;
 import io.linkedlogics.model.parameter.CollectionParameter;
 import io.linkedlogics.model.parameter.MapParameter;
@@ -41,10 +42,12 @@ public class InvokeHandler extends LogicHandler {
 			log(context).handler(this).logic(logic).inputs().message("executing logic by calling " + logic.getMethod().getName() + "() in " + logic.getMethod().getDeclaringClass().getSimpleName() + ".java").info();
 			Object methodResult = invokeMethod(context, logic, getInvokeParams(context, logic));
 			context.setExecutedIn(Duration.between(context.getExecutedAt(), OffsetDateTime.now()).toMillis());
+//			ContextFlow.logic(context.getLogicPosition()).result(Boolean.TRUE).message(String.format("%s[%d]", context.getLogicId(), context.getLogicVersion())).duration(context.getExecutedIn()).log(context);
 			log(context).handler(this).message("executing finished in " + context.getExecutedIn() + " msec").debug();
 			super.handle(context, methodResult);	
 		} catch (Exception e) {
 			context.setExecutedIn(Duration.between(context.getExecutedAt(), OffsetDateTime.now()).toMillis());
+//			ContextFlow.logic(context.getLogicPosition()).result(Boolean.FALSE).message(String.format("%s[%d] %s", context.getLogicId(), context.getLogicVersion(), e.getLocalizedMessage())).duration(context.getExecutedIn()).log(context);
 			log(context).handler(this).message("executing failed with " + e.getLocalizedMessage()).error();
 			super.handleError(context, e);
 		}

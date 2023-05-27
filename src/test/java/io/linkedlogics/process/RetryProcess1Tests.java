@@ -5,45 +5,33 @@ import static io.linkedlogics.LinkedLogicsBuilder.expr;
 import static io.linkedlogics.LinkedLogicsBuilder.group;
 import static io.linkedlogics.LinkedLogicsBuilder.logic;
 import static io.linkedlogics.LinkedLogicsBuilder.retry;
-import static io.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
+import static io.linkedlogics.test.LinkedLogicsTest.assertContext;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.annotation.Input;
 import io.linkedlogics.annotation.Logic;
 import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextBuilder;
-import io.linkedlogics.context.Status;
 import io.linkedlogics.context.ContextError.ErrorType;
+import io.linkedlogics.context.Status;
 import io.linkedlogics.exception.LogicException;
 import io.linkedlogics.model.ProcessDefinition;
-import io.linkedlogics.service.ContextService;
-import io.linkedlogics.service.ServiceLocator;
-import io.linkedlogics.service.local.LocalServiceConfigurer;
+import io.linkedlogics.test.LinkedLogicsExtension;
+import io.linkedlogics.test.TestContextService;
 
+@ExtendWith(LinkedLogicsExtension.class)
 public class RetryProcess1Tests {
 
-	private static ContextService contextService;
-
 	private static AtomicInteger retryCounter;
-
-	@BeforeAll
-	public static void setUp() {
-		LinkedLogics.configure(new LocalServiceConfigurer());
-		LinkedLogics.registerLogic(RetryProcess1Tests.class);
-		LinkedLogics.registerProcess(RetryProcess1Tests.class);
-		LinkedLogics.launch();
-		contextService = ServiceLocator.getInstance().getContextService();
-	}
 
 	@BeforeEach
 	public void resetCounter() {
@@ -53,13 +41,20 @@ public class RetryProcess1Tests {
 	@Test
 	public void testScenario1() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FAILED, 12000)).isTrue();
+		TestContextService.blockUntil(12000);
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
 
-		Context ctx = contextService.get(contextId).get();
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
-		assertThat(retryCounter.get()).isEqualTo(3);
+		assertThat(retryCounter.get()).isEqualTo(4);
 		assertThat(ctx.getParams().get("list")).asList().hasSize(0);
 		assertThat(ctx.getParams().get("list")).asList().contains();
+		
+		assertContext().whenLogic("1").onError().isRetried();
+		assertContext().whenLogic("1").onError().isRetried(3);
+		assertContext().whenLogic("2").onError().isNotRetried();
 	}
 
 
@@ -73,15 +68,21 @@ public class RetryProcess1Tests {
 	@Test
 	public void testScenario2() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_2").params("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FINISHED, 12000)).isTrue();
-
-		Context ctx = contextService.get(contextId).get();
+		TestContextService.blockUntil(12000);
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 
 		assertThat(retryCounter.get()).isEqualTo(2);
 		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
 		assertThat(ctx.getParams().get("list")).asList().contains(1, 2);
+		
+		assertContext().whenLogic("1").onError().isRetried();
+		assertContext().whenLogic("1").onError().isRetried(1);
+		assertContext().whenLogic("2").onError().isNotRetried();
 	}
 
 
@@ -95,13 +96,17 @@ public class RetryProcess1Tests {
 	@Test
 	public void testScenario3() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_3").params("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FAILED, 12000)).isTrue();
-
-		Context ctx = contextService.get(contextId).get();
+		TestContextService.blockUntil(12000);
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
-		assertThat(retryCounter.get()).isEqualTo(3);
-		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
+		assertThat(retryCounter.get()).isEqualTo(4);
+		assertThat(ctx.getParams().get("list")).asList().hasSize(4);
 		assertThat(ctx.getParams().get("list")).asList().contains(2);
+		
+		assertContext().whenLogic("1").onError().isRetried(3);
 	}
 
 
@@ -118,13 +123,17 @@ public class RetryProcess1Tests {
 	@Test
 	public void testScenario4() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_4").params("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FAILED, 12000)).isTrue();
-
-		Context ctx = contextService.get(contextId).get();
+		TestContextService.blockUntil(12000);
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(retryCounter.get()).isEqualTo(1);
 		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
 		assertThat(ctx.getParams().get("list")).asList().contains(2);
+		
+		assertContext().whenLogic("1").onError().isNotRetried();
 	}
 
 

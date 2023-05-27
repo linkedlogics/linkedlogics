@@ -25,17 +25,17 @@ public class BranchFlowHandler extends ProcessFlowHandler {
 			if (candidate.get() instanceof BranchLogicDefinition) {
 				BranchLogicDefinition branchLogic = (BranchLogicDefinition) candidate.get(); 
 				if (branchLogic.isSatisfied(context)) {
-					ContextFlow.branch().position(candidatePosition).name(candidate.get().getId()).result("TRUE").info();
+					ContextFlow.branch(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message("branch is satisfied").log(context);
 					trace(context, "branch is satisfied going LEFT", candidatePosition, Flow.RESET);
 					log(context).handler(this).logic(branchLogic).message("branch is satisfied going LEFT").info();
 					return HandlerResult.nextCandidate(candidatePosition + LogicPositioner.BRANCH_LEFT);
 				} else if (branchLogic.getRightLogic() != null) {
-					ContextFlow.branch().position(candidatePosition).name(candidate.get().getId()).result("FALSE").info();
+					ContextFlow.branch(candidatePosition).name(candidate.get().getName()).result(Boolean.FALSE).message("branch is not satisfied").log(context);
 					trace(context, "branch is not satisfied going RIGHT", candidatePosition, Flow.RESET);
 					log(context).handler(this).logic(branchLogic).message("branch is satisfied going RIGHT").info();
 					return HandlerResult.nextCandidate(candidatePosition + LogicPositioner.BRANCH_RIGHT);
 				} else {
-					ContextFlow.branch().position(candidatePosition).name(candidate.get().getId()).result("FALSE").info();
+					ContextFlow.branch(candidatePosition).name(candidate.get().getName()).result(Boolean.FALSE).message("branch is not satisfied (no logic)").log(context);
 					trace(context, "branch is not satisfied", candidatePosition, Flow.RESET);
 					return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 				}

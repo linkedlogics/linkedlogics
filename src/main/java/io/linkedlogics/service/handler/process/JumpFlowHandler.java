@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextError;
+import io.linkedlogics.context.ContextFlow;
 import io.linkedlogics.context.ContextError.ErrorType;
 import io.linkedlogics.model.ProcessDefinition;
 import io.linkedlogics.model.process.BaseLogicDefinition;
@@ -40,13 +41,16 @@ public class JumpFlowHandler extends ProcessFlowHandler {
 				if (target == null) {
 					context.setError(new ContextError(-1, "jump failed target " + targetLabel + " not found", ErrorType.PERMANENT));
 					trace(context, "not verified", candidatePosition, Flow.RESET);
+					ContextFlow.jump(candidatePosition).name(candidate.get().getName()).result(Boolean.FALSE).message("jump failed NO_TARGET").log(context);
 					return HandlerResult.nextCandidate(candidatePosition);
 				} else if (!compareLogicPosition(candidate.get().getPosition(), target.getPosition())) {
 					context.setError(new ContextError(-1, "jump failed target " + targetLabel + " contradicts with DAG", ErrorType.PERMANENT));
 					trace(context, "not a DAG", candidatePosition, Flow.RESET);
+					ContextFlow.jump(candidatePosition).name(candidate.get().getName()).result(Boolean.FALSE).message("jump failed NOT_DAG").log(context);
 					return HandlerResult.nextCandidate(candidatePosition);
 				}
 
+				ContextFlow.jump(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message("jump to " + targetLabel).log(context);
 				return HandlerResult.nextCandidate(target.getPosition());
 			}
 			trace(context, "no jump", candidatePosition, Flow.CONTINUE);

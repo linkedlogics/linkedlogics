@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.linkedlogics.context.Context;
+import io.linkedlogics.context.ContextFlow;
 import io.linkedlogics.model.process.BaseLogicDefinition;
 import io.linkedlogics.service.ServiceLocator;
 import io.linkedlogics.service.handler.process.ProcessFlowHandler.Flow;
@@ -35,6 +36,7 @@ public class ForkFlowHandler extends ProcessFlowHandler {
 				trace(context, "forking with id " + forkContext.getId(), candidatePosition, Flow.RESET);
 				
 				ServiceLocator.getInstance().getProcessorService().process(new StartTask(forkContext));
+				ContextFlow.fork(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message("fork is successful with key " + candidate.get().getFork().getKey().orElse("NO_KEY")).log(context);
 				return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 			}
 			trace(context, "forked execution", candidatePosition, Flow.CONTINUE);

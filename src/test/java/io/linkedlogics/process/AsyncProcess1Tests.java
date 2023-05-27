@@ -3,14 +3,14 @@ package io.linkedlogics.process;
 import static io.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static io.linkedlogics.LinkedLogicsBuilder.expr;
 import static io.linkedlogics.LinkedLogicsBuilder.logic;
-import static io.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
+import static io.linkedlogics.test.LinkedLogicsTest.assertContext;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.annotation.Input;
@@ -21,36 +21,34 @@ import io.linkedlogics.context.ContextError.ErrorType;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.exception.LogicException;
 import io.linkedlogics.model.ProcessDefinition;
-import io.linkedlogics.service.ContextService;
-import io.linkedlogics.service.ServiceLocator;
-import io.linkedlogics.service.local.LocalServiceConfigurer;
+import io.linkedlogics.test.LinkedLogicsExtension;
+import io.linkedlogics.test.TestContextService;
 
+@ExtendWith(LinkedLogicsExtension.class)
 public class AsyncProcess1Tests {
-
-	private static ContextService contextService;
-
-	@BeforeAll
-	public static void setUp() {
-		LinkedLogics.configure(new LocalServiceConfigurer());
-		LinkedLogics.registerLogic(AsyncProcess1Tests.class);
-		LinkedLogics.registerProcess(AsyncProcess1Tests.class);
-		LinkedLogics.launch();
-		contextService = ServiceLocator.getInstance().getContextService();
-	}
 
 	@Test
 	public void testScenario1() {
 		long start = System.currentTimeMillis();
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").param("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FINISHED, 1500)).isTrue();
+		TestContextService.blockUntil();
 		long finish = System.currentTimeMillis();
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
 
 		assertThat(finish - start).isGreaterThan(500);
 		assertThat(finish - start).isLessThan(2000);
-		Context ctx = contextService.get(contextId).get();
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
 		assertThat(ctx.getParams().get("list")).asList().contains(2, 4, 6);
+		
+		assertContext().whenLogic("1").isExecuted();
+		assertContext().whenLogic("2").isExecuted();
+		assertContext().whenLogic("3").isExecuted();
+		assertContext().whenLogic("4").isExecuted();
+		assertContext().whenLogic("5").isExecuted();
 	}
 
 	public static ProcessDefinition scenario1() {
@@ -66,13 +64,21 @@ public class AsyncProcess1Tests {
 	@Test
 	public void testScenario2() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_2").param("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FAILED, 10000)).isTrue();
-
-		Context ctx = contextService.get(contextId).get();
+		TestContextService.blockUntil(10000);
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
 		assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
+		
 		assertThat(ctx.getError()).isNotNull();
 		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
 		assertThat(ctx.getParams().get("list")).asList().contains(2);
+		
+		assertContext().whenLogic("1").isExecuted();
+		assertContext().whenLogic("2").isExecuted();
+		assertContext().whenLogic("3").isExecuted();
+		assertContext().whenLogic("4").isNotExecuted();
+		assertContext().whenLogic("5").isNotExecuted();
 	}
 
 	public static ProcessDefinition scenario2() {
@@ -88,12 +94,22 @@ public class AsyncProcess1Tests {
 	@Test
 	public void testScenario3() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_3").params("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FAILED, 10000)).isTrue();
-		Context ctx = contextService.get(contextId).get();
+		TestContextService.blockUntil(10000);
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
 		assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
+		
 		assertThat(ctx.getError()).isNotNull();
 		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
 		assertThat(ctx.getParams().get("list")).asList().contains(2, 4);
+		
+		assertContext().whenLogic("1").isExecuted();
+		assertContext().whenLogic("2").isExecuted();
+		assertContext().whenLogic("3").isExecuted();
+		assertContext().whenLogic("4").isNotExecuted();
+		assertContext().whenLogic("5").isExecuted();
+		assertContext().whenLogic("6").isNotExecuted();
 	}
 
 	public static ProcessDefinition scenario3() {

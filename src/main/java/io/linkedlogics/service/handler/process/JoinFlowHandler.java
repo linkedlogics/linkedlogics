@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import io.linkedlogics.context.Context;
+import io.linkedlogics.context.ContextFlow;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.process.BaseLogicDefinition;
 import io.linkedlogics.service.ServiceLocator;
@@ -37,6 +38,7 @@ public class JoinFlowHandler extends ProcessFlowHandler {
 			} else {
 				context.setStatus(Status.STARTED);
 				trace(context, "join successful", candidatePosition, Flow.CONTINUE);
+				ContextFlow.join(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message("join successful").log(context);
 				return super.handle(candidate, candidatePosition, context);
 			}
 		} else {

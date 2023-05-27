@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextError;
+import io.linkedlogics.context.ContextFlow;
 import io.linkedlogics.model.process.BaseLogicDefinition;
 import io.linkedlogics.model.process.ErrorLogicDefinition;
 import io.linkedlogics.service.handler.process.ProcessFlowHandler.Flow;
@@ -25,9 +26,11 @@ public class ErrorFlowHandler extends ProcessFlowHandler {
 				
 				if (candidate.get().getError().getErrorLogic() != null) {
 					trace(context, "error handled with logic", candidatePosition, Flow.RESET);
+					ContextFlow.error(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message("error handled with logic " + candidate.get().getError().getErrorLogic().getPosition()).log(context);
 					return HandlerResult.nextCandidate(candidate.get().getError().getErrorLogic().getPosition());
 				} else {
 					trace(context, "error handled", candidatePosition, Flow.RESET);
+					ContextFlow.error(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message("error handled").log(context);
 					return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
 				}
 			} else {
