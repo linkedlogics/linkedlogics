@@ -1,4 +1,4 @@
-package io.linkedlogics.test.check;
+package io.linkedlogics.test.asserts;
 
 import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextFlow.Type;
@@ -53,5 +53,9 @@ public class AssertError {
 	public void isNotHandled() {
 		Boolean result = AssertUtil.getSetByType(context, Type.ERROR).contains(id);
 		assert !result : String.format("Error on %s handled but NOT expected", id);
+	}
+	
+	public AssertWhen compensation() {
+		return new AssertWhen(context, id + LogicPositioner.COMPENSATE);
 	}
 }

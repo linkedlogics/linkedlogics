@@ -1,4 +1,4 @@
-package io.linkedlogics.test.check;
+package io.linkedlogics.test.asserts;
 
 import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextFlow;

@@ -7,9 +7,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.LinkedLogicsCallback;
@@ -24,28 +23,13 @@ import io.linkedlogics.service.common.QueueCallbackService;
 import io.linkedlogics.service.common.QueueConsumerService;
 import io.linkedlogics.service.common.QueuePublisherService;
 import io.linkedlogics.service.common.QueueSchedulerService;
-import io.linkedlogics.service.local.LocalServiceConfigurer;
+import io.linkedlogics.test.LinkedLogicsExtension;
+import io.linkedlogics.test.LinkedLogicsRegister;
 import io.linkedlogics.test.TestContextService;
 
+@ExtendWith(LinkedLogicsExtension.class)
+@LinkedLogicsRegister(serviceClasses = {QueueCallbackService.class, QueueConsumerService.class, QueuePublisherService.class, QueueSchedulerService.class})
 public class CallBack2Tests {
-
-	@BeforeAll
-	public static void setUp() {
-		LinkedLogics.configure(new LocalServiceConfigurer()
-				.configure(new TestContextService())
-				.configure(new QueueCallbackService())
-				.configure(new QueueConsumerService())
-				.configure(new QueuePublisherService())
-				.configure(new QueueSchedulerService()));
-		LinkedLogics.registerLogic(CallBack2Tests.class);
-		LinkedLogics.registerProcess(CallBack2Tests.class);
-		LinkedLogics.launch();
-	}
-	
-	@AfterAll
-	public static void stop() {
-		LinkedLogics.shutdown();
-	}
 
 	@Test
 	public void testScenario1() {

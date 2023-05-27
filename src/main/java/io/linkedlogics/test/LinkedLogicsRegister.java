@@ -10,4 +10,6 @@ import java.lang.annotation.Target;
 public @interface LinkedLogicsRegister {
 	Class[] classes() default {};
 	Class[] staticClasses() default {};
+	Class[] serviceClasses() default {};
+	Class[] serviceConfigurerClasses() default {};
 }

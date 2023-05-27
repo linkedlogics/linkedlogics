@@ -28,7 +28,9 @@ public class LocalProcessorService extends ConfigurableService<LocalProcessorSer
 	
 	@Override
 	public void stop() {
-		service.shutdownNow();
+		if (service != null) {
+			service.shutdownNow();
+		}
 	}
 
 	@Override

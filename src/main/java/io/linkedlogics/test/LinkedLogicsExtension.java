@@ -7,6 +7,8 @@ import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import io.linkedlogics.LinkedLogics;
+import io.linkedlogics.service.LinkedLogicsService;
+import io.linkedlogics.service.ServiceConfigurer;
 import io.linkedlogics.service.local.LocalServiceConfigurer;
 
 public class LinkedLogicsExtension implements BeforeEachCallback, AfterEachCallback {
@@ -18,10 +20,17 @@ public class LinkedLogicsExtension implements BeforeEachCallback, AfterEachCallb
 
 	@Override
 	public void beforeEach(ExtensionContext context) throws Exception {
-		LinkedLogics.configure(new LocalServiceConfigurer().configure(new TestContextService()));
+		LocalServiceConfigurer serviceConfigurer = new LocalServiceConfigurer();
+		serviceConfigurer.configure(new TestContextService());
 		LinkedLogicsRegister annotation = context.getRequiredTestInstance().getClass().getAnnotation(LinkedLogicsRegister.class);
 		
 		if (annotation != null) {
+			Arrays.stream(annotation.serviceConfigurerClasses())
+			.forEach(c -> serviceConfigurer.configure((ServiceConfigurer) getInstance(c)));
+			
+			Arrays.stream(annotation.serviceClasses())
+				.forEach(c -> serviceConfigurer.configure((LinkedLogicsService) getInstance(c)));
+			
 			Arrays.stream(annotation.classes())
 				  .forEach(c -> LinkedLogics.registerLogic(getInstance(c)));
 			
@@ -33,11 +42,11 @@ public class LinkedLogicsExtension implements BeforeEachCallback, AfterEachCallb
 		
 			Arrays.stream(annotation.staticClasses())
 			  .forEach(c -> LinkedLogics.registerProcess(c));
-		} else {
-			LinkedLogics.registerLogic(context.getRequiredTestInstance());
-			LinkedLogics.registerProcess(context.getRequiredTestInstance());
 		}
 		
+		LinkedLogics.configure(serviceConfigurer);
+		LinkedLogics.registerLogic(context.getRequiredTestInstance());
+		LinkedLogics.registerProcess(context.getRequiredTestInstance());
 		LinkedLogics.launch();
 	}
 	

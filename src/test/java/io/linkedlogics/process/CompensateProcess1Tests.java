@@ -199,7 +199,7 @@ public class CompensateProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().contains("v1");
 		
 		assertContext().when("1").isExecuted();
-		assertContext().when("1Z").isNotExecuted();
+		assertContext().when("1").onError().compensation().isNotExecuted();
 		assertContext().when("2").isExecuted();
 		assertContext().when("2").onError().isCompensated();
 		assertContext().when("3").isExecuted();
@@ -240,7 +240,7 @@ public class CompensateProcess1Tests {
 		assertContext().when("1").isExecuted();
 		assertContext().when("1").onError().isCompensated();
 		assertContext().when("2").isExecuted();
-		assertContext().when("2Z").isNotExecuted();
+		assertContext().when("2").onError().compensation().isNotExecuted();
 		assertContext().when("3").asVerify().isNotVerified();
 		assertContext().when("4").isNotExecuted();
 		assertContext().when("5").isExecuted();

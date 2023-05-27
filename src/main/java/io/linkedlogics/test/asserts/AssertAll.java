@@ -1,4 +1,4 @@
-package io.linkedlogics.test.check;
+package io.linkedlogics.test.asserts;
 
 import java.util.Set;
 import java.util.stream.IntStream;

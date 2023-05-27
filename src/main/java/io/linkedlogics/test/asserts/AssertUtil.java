@@ -1,4 +1,4 @@
-package io.linkedlogics.test.check;
+package io.linkedlogics.test.asserts;
 
 import java.util.List;
 import java.util.Map;

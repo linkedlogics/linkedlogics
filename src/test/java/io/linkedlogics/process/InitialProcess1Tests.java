@@ -34,7 +34,7 @@ import io.linkedlogics.service.ServiceLocator;
 import io.linkedlogics.service.local.LocalServiceConfigurer;
 import io.linkedlogics.test.LinkedLogicsExtension;
 import io.linkedlogics.test.TestContextService;
-import io.linkedlogics.test.check.AssertContext;
+import io.linkedlogics.test.asserts.AssertContext;
 
 @ExtendWith(LinkedLogicsExtension.class)
 public class InitialProcess1Tests {

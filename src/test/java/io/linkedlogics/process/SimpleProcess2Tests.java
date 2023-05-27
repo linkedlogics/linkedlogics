@@ -43,7 +43,7 @@ public class SimpleProcess2Tests {
 		assertContext().when("1").isExecuted();
 		assertContext().when("2").isExecuted();
 		assertContext().when("3").asBranch().isNotSatisfied();
-		assertContext().when("3R").isExecuted();
+		assertContext().when("3").asBranch().rightBranch().isExecuted();
 	}
 
 
@@ -73,7 +73,7 @@ public class SimpleProcess2Tests {
 		assertContext().when("1").isExecuted();
 		assertContext().when("2").isExecuted();
 		assertContext().when("3").asBranch().isNotSatisfied();
-		assertContext().when("3R").isNotExecuted();
+		assertContext().when("3").asBranch().rightBranch().isNotExecuted();
 	}
 
 
@@ -102,7 +102,7 @@ public class SimpleProcess2Tests {
 		assertContext().when("1").isExecuted();
 		assertContext().when("2").isExecuted();
 		assertContext().when("3").asBranch().isSatisfied();
-		assertContext().when("3L").isExecuted();
+		assertContext().when("3").asBranch().leftBranch().isExecuted();
 	}
 
 
@@ -132,7 +132,7 @@ public class SimpleProcess2Tests {
 		assertContext().when("1").isExecuted();
 		assertContext().when("2").isExecuted();
 		assertContext().when("3").asBranch().isSatisfied();
-		assertContext().when("3L").isExecuted();
+		assertContext().when("3").asBranch().leftBranch().isExecuted();
 	}
 
 
@@ -161,7 +161,7 @@ public class SimpleProcess2Tests {
 		assertContext().when("1").isExecuted();
 		assertContext().when("2").isExecuted();
 		assertContext().when("3").asBranch().isSatisfied();
-		assertContext().when("3L").asBranch().isNotSatisfied();
+		assertContext().when("3").asBranch().leftBranch().asBranch().isNotSatisfied();
 	}
 
 
@@ -192,8 +192,8 @@ public class SimpleProcess2Tests {
 		
 		assertContext().when("1").isExecuted();
 		assertContext().when("2").asBranch().isNotSatisfied();
-		assertContext().when("2L").isNotExecuted();
-		assertContext().when("2R").isExecuted();
+		assertContext().when("2").asBranch().leftBranch().isNotExecuted();
+		assertContext().when("2").asBranch().rightBranch().isExecuted();
 	}
 
 
@@ -227,8 +227,8 @@ public class SimpleProcess2Tests {
 		
 		assertContext().when("1").isExecuted();
 		assertContext().when("2").asBranch().isSatisfied();
-		assertContext().when("3L").isNotExecuted();
-		assertContext().when("3R").isNotExecuted();
+		assertContext().when("3").asBranch().leftBranch().isNotExecuted();
+		assertContext().when("3").asBranch().rightBranch().isNotExecuted();
 	}
 
 

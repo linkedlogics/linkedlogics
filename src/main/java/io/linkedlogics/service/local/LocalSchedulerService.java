@@ -31,7 +31,9 @@ public class LocalSchedulerService extends ConfigurableService<LocalSchedulerSer
 	
 	@Override
 	public void stop() {
-		service.shutdownNow();
+		if (service != null) {
+			service.shutdownNow();
+		}
 	}
 
 	@Override
