@@ -73,6 +73,7 @@ public class CallBack2Tests {
 		Context ctx = TestContextService.getCurrentContext();
 		assertThat(ctx.getId()).isEqualTo(contextId);
 		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
+		try { Thread.sleep(100); } catch (InterruptedException e) { }
 		assertThat(result.get()).isTrue();
 	}
 

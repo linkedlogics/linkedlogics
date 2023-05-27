@@ -39,12 +39,12 @@ public class ExitProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenBranch("3").isNotSatisfied();
-		assertContext().whenExit("3R").isExecuted();
-		assertContext().whenLogic("4").isNotExecuted();
-		assertContext().whenLogic("5").isNotExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").asBranch().isNotSatisfied();
+		assertContext().when("3R").isExecuted();
+		assertContext().when("4").isNotExecuted();
+		assertContext().when("5").isNotExecuted();
 	}
 
 	public static ProcessDefinition scenario1() {

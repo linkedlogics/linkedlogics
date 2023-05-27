@@ -39,10 +39,10 @@ public class JumpProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v3");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenJump("2").isExecuted();
-		assertContext().whenLogic("3").isNotExecuted();
-		assertContext().whenLogic("4").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").isNotExecuted();
+		assertContext().when("4").isExecuted();
 	}
 
 	public static ProcessDefinition scenario1() {
@@ -66,14 +66,14 @@ public class JumpProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(4);
 		assertThat(ctx.getParams().get("list")).asList().contains("v11", "v12", "v32", "v33");
 		
-		assertContext().whenGroup("1").isExecuted();
-		assertContext().whenJump("1.3").isExecuted();
-		assertContext().whenLogic("1.4").isNotExecuted();
-		assertContext().whenGroup("2").isNotExecuted();
-		assertContext().whenGroup("3").isNotExecuted();
-		assertContext().whenLogic("3.1").isNotExecuted();
-		assertContext().whenLogic("3.2").isExecuted();
-		assertContext().whenLogic("3.3").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("1.3").isExecuted();
+		assertContext().when("1.4").isNotExecuted();
+		assertContext().when("2").isNotExecuted();
+		assertContext().when("3").isNotExecuted();
+		assertContext().when("3.1").isNotExecuted();
+		assertContext().when("3.2").isExecuted();
+		assertContext().when("3.3").isExecuted();
 	}
 
 	public static ProcessDefinition scenario2() {
@@ -103,10 +103,10 @@ public class JumpProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenJump("2").isNotExecuted();
-		assertContext().whenLogic("3").isNotExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").isNotExecuted();
+		assertContext().when("4").isNotExecuted();
 	}
 
 	public static ProcessDefinition scenario3() {
@@ -130,10 +130,10 @@ public class JumpProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenJump("2").isNotExecuted();
-		assertContext().whenLogic("3").isNotExecuted();
-		assertContext().whenLogic("4").isNotExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isNotExecuted();
+		assertContext().when("3").isNotExecuted();
+		assertContext().when("4").isNotExecuted();
 	}
 
 	public static ProcessDefinition scenario4() {

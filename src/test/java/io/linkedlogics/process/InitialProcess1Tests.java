@@ -52,10 +52,10 @@ public class InitialProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2", "v3");
 		assertThat(ctx.getParams().get("text")).isEqualTo("3 items");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenLogic("3").isExecuted();
-		assertContext().whenScript("4").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").isExecuted();
+		assertContext().when("4").isExecuted();
 	}
 
 	public static ProcessDefinition scenario1() {

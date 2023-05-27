@@ -52,6 +52,7 @@ public class CallBack1Tests {
 		Context ctx = TestContextService.getCurrentContext();
 		assertThat(ctx.getId()).isEqualTo(contextId);
 		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
+		try { Thread.sleep(100); } catch (InterruptedException e) { }
 		assertThat(result.get()).isTrue();
 	}
 
@@ -86,6 +87,7 @@ public class CallBack1Tests {
 		Context ctx = TestContextService.getCurrentContext();
 		assertThat(ctx.getId()).isEqualTo(contextId);
 		assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
+		try { Thread.sleep(100); } catch (InterruptedException e) { }
 		assertThat(result.get()).isTrue();
 	}
 

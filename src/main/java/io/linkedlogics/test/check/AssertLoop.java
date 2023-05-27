@@ -9,16 +9,6 @@ public class AssertLoop {
 	private Context context;
 	private String id;
 	
-	public void isExecuted() {
-		Boolean result = AssertUtil.getSetByType(context, Type.LOOP).contains(id);
-		assert result : String.format("Loop %s not executed but expected", id);
-	}
-	
-	public void isNotisExecuted() {
-		Boolean result = AssertUtil.getSetByType(context, Type.LOOP).contains(id);
-		assert !result : String.format("Loop on %s executed but NOT expected", id);
-	}
-	
 	public void isIterated(int times) {
 		int retries = AssertUtil.countResults(context, Type.LOOP, id, true);
 		assert retries == times : String.format("Loop on %s iterated %d times but expected was %d times", id, retries, times);

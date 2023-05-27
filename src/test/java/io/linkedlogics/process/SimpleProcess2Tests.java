@@ -40,10 +40,10 @@ public class SimpleProcess2Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2", "v4");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenBranch("3").isNotSatisfied();
-		assertContext().whenLogic("3R").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").asBranch().isNotSatisfied();
+		assertContext().when("3R").isExecuted();
 	}
 
 
@@ -70,10 +70,10 @@ public class SimpleProcess2Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenBranch("3").isNotSatisfied();
-		assertContext().whenLogic("3R").isNotExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").asBranch().isNotSatisfied();
+		assertContext().when("3R").isNotExecuted();
 	}
 
 
@@ -99,10 +99,10 @@ public class SimpleProcess2Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2", "v3");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenBranch("3").isSatisfied();
-		assertContext().whenLogic("3L").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").asBranch().isSatisfied();
+		assertContext().when("3L").isExecuted();
 	}
 
 
@@ -129,10 +129,10 @@ public class SimpleProcess2Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2", "v3");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenBranch("3").isSatisfied();
-		assertContext().whenLogic("3L").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").asBranch().isSatisfied();
+		assertContext().when("3L").isExecuted();
 	}
 
 
@@ -158,10 +158,10 @@ public class SimpleProcess2Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2", "v4");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenBranch("3").isSatisfied();
-		assertContext().whenBranch("3L").isNotSatisfied();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").asBranch().isSatisfied();
+		assertContext().when("3L").asBranch().isNotSatisfied();
 	}
 
 
@@ -190,10 +190,10 @@ public class SimpleProcess2Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(6);
 		assertThat(ctx.getParams().get("list")).asList().contains("v11", "v12", "v13", "v31", "v32", "v33");
 		
-		assertContext().whenGroup("1").isExecuted();
-		assertContext().whenBranch("2").isNotSatisfied();
-		assertContext().whenGroup("2L").isNotExecuted();
-		assertContext().whenGroup("2R").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").asBranch().isNotSatisfied();
+		assertContext().when("2L").isNotExecuted();
+		assertContext().when("2R").isExecuted();
 	}
 
 
@@ -225,10 +225,10 @@ public class SimpleProcess2Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
 		assertThat(ctx.getParams().get("list")).asList().contains("v11", "v12", "v13");
 		
-		assertContext().whenGroup("1").isExecuted();
-		assertContext().whenBranch("2").isSatisfied();
-		assertContext().whenGroup("3L").isNotExecuted();
-		assertContext().whenGroup("3R").isNotExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").asBranch().isSatisfied();
+		assertContext().when("3L").isNotExecuted();
+		assertContext().when("3R").isNotExecuted();
 	}
 
 
@@ -260,9 +260,9 @@ public class SimpleProcess2Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
 		assertThat(ctx.getParams().get("list")).asList().contains("v2");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenBranch("3").isSatisfied();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").asBranch().isSatisfied();
 	}
 
 

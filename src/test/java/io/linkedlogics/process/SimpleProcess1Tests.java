@@ -38,9 +38,9 @@ public class SimpleProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2", "v3");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenLogic("3").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").isExecuted();
 	}
 
 
@@ -65,9 +65,9 @@ public class SimpleProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(9);
 		assertThat(ctx.getParams().get("list")).asList().contains("v11", "v12", "v13","v21", "v22", "v23","v31", "v32", "v33");
 		
-		assertContext().whenGroup("1").isExecuted();
-		assertContext().whenGroup("2").isExecuted();
-		assertContext().whenGroup("3").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").isExecuted();
 	}
 
 
@@ -98,13 +98,13 @@ public class SimpleProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1");
 		
-		assertContext().whenGroup("1").isExecuted();
-		assertContext().whenGroup("1.1").isExecuted();
-		assertContext().whenGroup("1.1.1").isExecuted();
-		assertContext().whenGroup("1.1.1.1").isExecuted();
-		assertContext().whenGroup("1.1.1.1.1").isExecuted();
-		assertContext().whenGroup("1.1.1.1.1.1").isExecuted();
-		assertContext().whenLogic("1.1.1.1.1.1.1").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("1.1").isExecuted();
+		assertContext().when("1.1.1").isExecuted();
+		assertContext().when("1.1.1.1").isExecuted();
+		assertContext().when("1.1.1.1.1").isExecuted();
+		assertContext().when("1.1.1.1.1.1").isExecuted();
+		assertContext().when("1.1.1.1.1.1.1").isExecuted();
 	}
 
 
@@ -155,18 +155,18 @@ public class SimpleProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(5);
 		assertThat(ctx.getParams().get("list")).asList().contains("v11", "v13", "v31", "v32", "v33");
 		
-		assertContext().whenGroup("1").isExecuted();
-		assertContext().whenLogic("1.1").isExecuted();
-		assertContext().whenLogic("1.2").isNotExecuted();
-		assertContext().whenLogic("1.3").isExecuted();
-		assertContext().whenGroup("2").isNotExecuted();
-		assertContext().whenLogic("2.1").isNotExecuted();
-		assertContext().whenLogic("2.2").isNotExecuted();
-		assertContext().whenLogic("2.3").isNotExecuted();
-		assertContext().whenGroup("3").isExecuted();
-		assertContext().whenLogic("3.1").isExecuted();
-		assertContext().whenLogic("3.2").isExecuted();
-		assertContext().whenLogic("3.3").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("1.1").isExecuted();
+		assertContext().when("1.2").isNotExecuted();
+		assertContext().when("1.3").isExecuted();
+		assertContext().when("2").isNotExecuted();
+		assertContext().when("2.1").isNotExecuted();
+		assertContext().when("2.2").isNotExecuted();
+		assertContext().when("2.3").isNotExecuted();
+		assertContext().when("3").isExecuted();
+		assertContext().when("3.1").isExecuted();
+		assertContext().when("3.2").isExecuted();
+		assertContext().when("3.3").isExecuted();
 	}
 
 
@@ -197,9 +197,9 @@ public class SimpleProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "V2", "V3");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenLogic("3").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").isExecuted();
 	}
 
 
@@ -226,9 +226,9 @@ public class SimpleProcess1Tests {
 		assertThat(ctx.getParams().containsKey("out")).isTrue();
 		assertThat(ctx.getParams().get("out")).isEqualTo("o2");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenLogic("3").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").isExecuted();
 	}
 
 

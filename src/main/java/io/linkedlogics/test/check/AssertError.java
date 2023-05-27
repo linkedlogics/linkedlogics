@@ -44,4 +44,14 @@ public class AssertError {
 		Boolean result = AssertUtil.getSetByType(context, Type.COMPENSATE).contains(id + LogicPositioner.COMPENSATE);
 		assert !result : String.format("Error on %s compensated but NOT expected", id);
 	}
+	
+	public void isHandled() {
+		Boolean result = AssertUtil.getSetByType(context, Type.ERROR).contains(id);
+		assert result : String.format("Error on %s not handled but expected", id);
+	}
+	
+	public void isNotHandled() {
+		Boolean result = AssertUtil.getSetByType(context, Type.ERROR).contains(id);
+		assert !result : String.format("Error on %s handled but NOT expected", id);
+	}
 }

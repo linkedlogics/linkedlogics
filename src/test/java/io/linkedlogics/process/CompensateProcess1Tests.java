@@ -4,14 +4,12 @@ import static io.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static io.linkedlogics.LinkedLogicsBuilder.expr;
 import static io.linkedlogics.LinkedLogicsBuilder.logic;
 import static io.linkedlogics.LinkedLogicsBuilder.verify;
-import static io.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
 import static io.linkedlogics.test.LinkedLogicsTest.assertContext;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -22,9 +20,6 @@ import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextBuilder;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.ProcessDefinition;
-import io.linkedlogics.service.ContextService;
-import io.linkedlogics.service.ServiceLocator;
-import io.linkedlogics.service.local.LocalServiceConfigurer;
 import io.linkedlogics.test.LinkedLogicsExtension;
 import io.linkedlogics.test.TestContextService;
 
@@ -43,9 +38,9 @@ public class CompensateProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2", "v3");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenLogic("3").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").isExecuted();
 	}
 
 	public static ProcessDefinition scenario1() {
@@ -77,14 +72,14 @@ public class CompensateProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
 		assertThat(ctx.getParams().get("list")).asList().contains("v4");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("1").onError().isCompensated();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenLogic("2").onError().isCompensated();
-		assertContext().whenLogic("3").isExecuted();
-		assertContext().whenLogic("3").onError().isCompensated();
-		assertContext().whenVerify("4").isNotVerified();
-		assertContext().whenLogic("5").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("1").onError().isCompensated();
+		assertContext().when("2").isExecuted();
+		assertContext().when("2").onError().isCompensated();
+		assertContext().when("3").isExecuted();
+		assertContext().when("3").onError().isCompensated();
+		assertContext().when("4").asVerify().isNotVerified();
+		assertContext().when("5").isExecuted();
 	}
 
 	public static ProcessDefinition scenario2() {
@@ -119,14 +114,14 @@ public class CompensateProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
 		assertThat(ctx.getParams().get("list")).asList().contains("v4");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("1").onError().isCompensated();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenLogic("2").onError().isCompensated();
-		assertContext().whenVerify("3").isNotVerified();
-		assertContext().whenLogic("4").isNotExecuted();
-		assertContext().whenLogic("4").onError().isNotCompensated();
-		assertContext().whenLogic("5").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("1").onError().isCompensated();
+		assertContext().when("2").isExecuted();
+		assertContext().when("2").onError().isCompensated();
+		assertContext().when("3").asVerify().isNotVerified();
+		assertContext().when("4").isNotExecuted();
+		assertContext().when("4").onError().isNotCompensated();
+		assertContext().when("5").isExecuted();
 	}
 
 	public static ProcessDefinition scenario3() {
@@ -161,14 +156,14 @@ public class CompensateProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
 		assertThat(ctx.getParams().get("list")).asList().contains("v4");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("1").onError().isCompensated();
-		assertContext().whenVerify("2").isNotVerified();
-		assertContext().whenLogic("3").isNotExecuted();
-		assertContext().whenLogic("3").onError().isNotCompensated();
-		assertContext().whenLogic("4").isNotExecuted();
-		assertContext().whenLogic("4").onError().isNotCompensated();
-		assertContext().whenLogic("5").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("1").onError().isCompensated();
+		assertContext().when("2").asVerify().isNotVerified();
+		assertContext().when("3").isNotExecuted();
+		assertContext().when("3").onError().isNotCompensated();
+		assertContext().when("4").isNotExecuted();
+		assertContext().when("4").onError().isNotCompensated();
+		assertContext().when("5").isExecuted();
 	}
 
 	public static ProcessDefinition scenario4() {
@@ -203,13 +198,13 @@ public class CompensateProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("1Z").isNotExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenLogic("2").onError().isCompensated();
-		assertContext().whenLogic("3").isExecuted();
-		assertContext().whenLogic("3").onError().isCompensated();
-		assertContext().whenVerify("4").isNotVerified();
+		assertContext().when("1").isExecuted();
+		assertContext().when("1Z").isNotExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("2").onError().isCompensated();
+		assertContext().when("3").isExecuted();
+		assertContext().when("3").onError().isCompensated();
+		assertContext().when("4").asVerify().isNotVerified();
 	}
 
 	public static ProcessDefinition scenario5() {
@@ -242,13 +237,13 @@ public class CompensateProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
 		assertThat(ctx.getParams().get("list")).asList().contains("v2", "v4");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("1").onError().isCompensated();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenLogic("2Z").isNotExecuted();
-		assertContext().whenVerify("3").isNotVerified();
-		assertContext().whenLogic("4").isNotExecuted();
-		assertContext().whenLogic("5").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("1").onError().isCompensated();
+		assertContext().when("2").isExecuted();
+		assertContext().when("2Z").isNotExecuted();
+		assertContext().when("3").asVerify().isNotVerified();
+		assertContext().when("4").isNotExecuted();
+		assertContext().when("5").isExecuted();
 	}
 
 	public static ProcessDefinition scenario6() {

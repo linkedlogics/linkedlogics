@@ -46,10 +46,10 @@ public class ScriptProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2", "v3");
 		assertThat(ctx.getParams().get("text")).isEqualTo("3 items");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenLogic("3").isExecuted();
-		assertContext().whenScript("4").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").isExecuted();
+		assertContext().when("4").isExecuted();
 	}
 
 	public static ProcessDefinition scenario1() {
@@ -74,10 +74,10 @@ public class ScriptProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2", "v3");
 		assertThat(ctx.getParams().get("text")).isEqualTo("3 items");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenLogic("3").isExecuted();
-		assertContext().whenVerify("4").isNotVerified();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").isExecuted();
+		assertContext().when("4").asVerify().isNotVerified();
 	}
 
 	public static ProcessDefinition scenario2() {
@@ -102,11 +102,11 @@ public class ScriptProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().contains("John Doe", "New York", "NY");
 		assertThat(ctx.getParams().get("text")).isEqualTo("3 items");
 		
-		assertContext().whenScript("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenLogic("3").isExecuted();
-		assertContext().whenLogic("4").isExecuted();
-		assertContext().whenScript("5").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").isExecuted();
+		assertContext().when("4").isExecuted();
+		assertContext().when("5").isExecuted();
 	}
 
 	public static ProcessDefinition scenario3() {
@@ -137,11 +137,11 @@ public class ScriptProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().contains("John Doe", "New York", "NY");
 		assertThat(ctx.getParams().get("text")).isEqualTo("3 items");
 		
-		assertContext().whenScript("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenLogic("3").isExecuted();
-		assertContext().whenLogic("4").isExecuted();
-		assertContext().whenScript("5").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").isExecuted();
+		assertContext().when("4").isExecuted();
+		assertContext().when("5").isExecuted();
 	}
 
 	public static ProcessDefinition scenario4() {

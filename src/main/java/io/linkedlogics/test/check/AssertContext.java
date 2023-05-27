@@ -24,44 +24,8 @@ public class AssertContext {
 		this.id = id;
 	}
 	
-	public AssertLogic whenLogic(String id) {
-		return new AssertLogic(context, this.id + id);
-	}
-	
-	public AssertBranch whenBranch(String id) {
-		return new AssertBranch(context, this.id + id);
-	}
-	
-	public AssertGroup whenGroup(String id) {
-		return new AssertGroup(context, this.id + id);
-	}
-
-	public AssertScript whenScript(String id) {
-		return new AssertScript(context, this.id + id);
-	}
-	
-	public AssertVerify whenVerify(String id) {
-		return new AssertVerify(context, this.id + id);
-	}
-	
-	public AssertAny whenAny(String id) {
-		return new AssertAny(context, this.id + id);
-	}
-	
-	public AssertFail whenFail(String id) {
-		return new AssertFail(context, this.id + id);
-	}
-	
-	public AssertJump whenJump(String id) {
-		return new AssertJump(context, this.id + id);
-	}
-	
-	public AssertExit whenExit(String id) {
-		return new AssertExit(context, this.id + id);
-	}
-	
-	public AssertLoop whenLoop(String id) {
-		return new AssertLoop(context, this.id + id);
+	public AssertWhen when(String id) {
+		return new AssertWhen(context, this.id + id);
 	}
 	
 	public AssertAll whenAll(String... ids) {

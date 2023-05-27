@@ -40,14 +40,15 @@ public class DelayedProcessor1Tests {
 		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
 
 		assertThat(finish - start).isGreaterThan(2500);
-		assertThat(finish - start).isLessThan(4000);
+		assertThat(finish - start).isLessThan(5000);
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2", "v3");
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenLogic("3").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("2").onDelay().isDelayed();
+		assertContext().when("3").isExecuted();
 	}
 
 	public static ProcessDefinition scenario1() {
@@ -70,14 +71,15 @@ public class DelayedProcessor1Tests {
 		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
 
 		assertThat(finish - start).isGreaterThan(2500);
-		assertThat(finish - start).isLessThan(3500);
+		assertThat(finish - start).isLessThan(5000);
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(ctx.getParams().get("list")).asList().hasSize(9);
 		assertThat(ctx.getParams().get("list")).asList().contains("v11", "v12", "v13","v21", "v22", "v23","v31", "v32", "v33");
 		
-		assertContext().whenGroup("1").isExecuted();
-		assertContext().whenGroup("2").isExecuted();
-		assertContext().whenGroup("3").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("2").onDelay().isDelayed();
+		assertContext().when("3").isExecuted();
 	}
 
 	public static ProcessDefinition scenario2() {

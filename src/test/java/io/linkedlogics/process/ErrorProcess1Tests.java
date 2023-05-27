@@ -8,14 +8,14 @@ import static io.linkedlogics.LinkedLogicsBuilder.logic;
 import static io.linkedlogics.LinkedLogicsBuilder.savepoint;
 import static io.linkedlogics.LinkedLogicsBuilder.verify;
 import static io.linkedlogics.LinkedLogicsBuilder.when;
-import static io.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
+import static io.linkedlogics.test.LinkedLogicsTest.assertContext;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.annotation.Input;
@@ -24,32 +24,32 @@ import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextBuilder;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.ProcessDefinition;
-import io.linkedlogics.service.ContextService;
-import io.linkedlogics.service.ServiceLocator;
-import io.linkedlogics.service.local.LocalServiceConfigurer;
+import io.linkedlogics.test.LinkedLogicsExtension;
+import io.linkedlogics.test.TestContextService;
 
+@ExtendWith(LinkedLogicsExtension.class)
 public class ErrorProcess1Tests {
-
-	private static ContextService contextService;
-
-	@BeforeAll
-	public static void setUp() {
-		LinkedLogics.configure(new LocalServiceConfigurer());
-		LinkedLogics.registerLogic(ErrorProcess1Tests.class);
-		LinkedLogics.registerProcess(ErrorProcess1Tests.class);
-		LinkedLogics.launch();
-		contextService = ServiceLocator.getInstance().getContextService();
-	}
 
 	@Test
 	public void testScenario1() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
-
-		Context ctx = contextService.get(contextId).get();
+		TestContextService.blockUntil();
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1");
+		
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("2.1").isExecuted();
+		assertContext().when("2.2").isExecuted();
+		assertContext().when("2.3").asVerify().isNotVerified();
+		assertContext().when("2.1").onError().isCompensated();
+		assertContext().when("2.2").onError().isCompensated();
+		assertContext().when("3").isNotExecuted();
 	}
 
 	public static ProcessDefinition scenario1() {
@@ -70,12 +70,23 @@ public class ErrorProcess1Tests {
 	@Test
 	public void testScenario2() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_2").params("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
-
-		Context ctx = contextService.get(contextId).get();
+		TestContextService.blockUntil();
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v4");
+		
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("2.1").isExecuted();
+		assertContext().when("2.2").isExecuted();
+		assertContext().when("2.3").asVerify().isNotVerified();
+		assertContext().when("2.1").onError().isCompensated();
+		assertContext().when("2.2").onError().isCompensated();
+		assertContext().when("3").isExecuted();
 	}
 
 	public static ProcessDefinition scenario2() {
@@ -97,12 +108,24 @@ public class ErrorProcess1Tests {
 	@Test
 	public void testScenario3() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_3").params("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
-
-		Context ctx = contextService.get(contextId).get();
+		TestContextService.blockUntil();
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(ctx.getParams().get("list")).asList().hasSize(0);
 		assertThat(ctx.getParams().get("list")).asList().contains();
+		
+		assertContext().when("1").isExecuted();
+		assertContext().when("1").onError().isCompensated();
+		assertContext().when("2").isExecuted();
+		assertContext().when("2.1").isExecuted();
+		assertContext().when("2.2").isExecuted();
+		assertContext().when("2.3").asVerify().isNotVerified();
+		assertContext().when("2.1").onError().isCompensated();
+		assertContext().when("2.2").onError().isCompensated();
+		assertContext().when("3").isNotExecuted();
 	}
 
 	public static ProcessDefinition scenario3() {
@@ -125,12 +148,25 @@ public class ErrorProcess1Tests {
 	@Test
 	public void testScenario4() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_4").params("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
-
-		Context ctx = contextService.get(contextId).get();
+		TestContextService.blockUntil();
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v4");
+		
+		assertContext().when("1").isExecuted();
+		assertContext().when("1").onError().isNotCompensated();
+		assertContext().when("2").isExecuted();
+		assertContext().when("2.1").isExecuted();
+		assertContext().when("2.2").isExecuted();
+		assertContext().when("2.3").asVerify().isNotVerified();
+		assertContext().when("2").onError().isHandled();
+		assertContext().when("2.1").onError().isCompensated();
+		assertContext().when("2.2").onError().isCompensated();
+		assertContext().when("3").isExecuted();
 	}
 
 	public static ProcessDefinition scenario4() {
@@ -153,12 +189,25 @@ public class ErrorProcess1Tests {
 	@Test
 	public void testScenario5() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_5").params("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
-
-		Context ctx = contextService.get(contextId).get();
+		TestContextService.blockUntil();
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(ctx.getParams().get("list")).asList().hasSize(0);
 		assertThat(ctx.getParams().get("list")).asList().contains();
+		
+		assertContext().when("1").isExecuted();
+		assertContext().when("1").onError().isCompensated();
+		assertContext().when("2").isExecuted();
+		assertContext().when("2.1").isExecuted();
+		assertContext().when("2.2").isExecuted();
+		assertContext().when("2.3").asVerify().isNotVerified();
+		assertContext().when("2").onError().isNotHandled();
+		assertContext().when("2.1").onError().isCompensated();
+		assertContext().when("2.2").onError().isCompensated();
+		assertContext().when("3").isNotExecuted();
 	}
 
 	public static ProcessDefinition scenario5() {
@@ -182,12 +231,25 @@ public class ErrorProcess1Tests {
 	@Test
 	public void testScenario6() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_6").params("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
-
-		Context ctx = contextService.get(contextId).get();
+		TestContextService.blockUntil();
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v4");
+		
+		assertContext().when("1").isExecuted();
+		assertContext().when("1").onError().isNotCompensated();
+		assertContext().when("2").isExecuted();
+		assertContext().when("2.1").isExecuted();
+		assertContext().when("2.2").isExecuted();
+		assertContext().when("2.3").asVerify().isNotVerified();
+		assertContext().when("2").onError().isHandled();
+		assertContext().when("2.1").onError().isCompensated();
+		assertContext().when("2.2").onError().isCompensated();
+		assertContext().when("3").isExecuted();
 	}
 
 	public static ProcessDefinition scenario6() {
@@ -211,12 +273,25 @@ public class ErrorProcess1Tests {
 	@Test
 	public void testScenario7() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_7").params("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
-
-		Context ctx = contextService.get(contextId).get();
+		TestContextService.blockUntil();
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(ctx.getParams().get("list")).asList().hasSize(0);
 		assertThat(ctx.getParams().get("list")).asList().contains();
+		
+		assertContext().when("1").isExecuted();
+		assertContext().when("1").onError().isCompensated();
+		assertContext().when("2").isExecuted();
+		assertContext().when("2.1").isExecuted();
+		assertContext().when("2.2").isExecuted();
+		assertContext().when("2.3").asVerify().isNotVerified();
+		assertContext().when("2").onError().isNotHandled();
+		assertContext().when("2.1").onError().isCompensated();
+		assertContext().when("2.2").onError().isCompensated();
+		assertContext().when("3").isNotExecuted();
 	}
 
 	public static ProcessDefinition scenario7() {
@@ -240,12 +315,20 @@ public class ErrorProcess1Tests {
 	@Test
 	public void testScenario8() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_8").params("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
-
-		Context ctx = contextService.get(contextId).get();
+		TestContextService.blockUntil();
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v6");
+		
+		assertContext().when("1").isExecuted();
+		assertContext().when("1").onError().isNotCompensated();
+		assertContext().when("2").isExecuted();
+		assertContext().when("2").onError().isHandled();
+		assertContext().when("3").isExecuted();
 	}
 
 	public static ProcessDefinition scenario8() {
@@ -278,12 +361,20 @@ public class ErrorProcess1Tests {
 	@Test
 	public void testScenario9() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_9").params("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
-
-		Context ctx = contextService.get(contextId).get();
+		TestContextService.blockUntil();
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v6", "v7");
+		
+		assertContext().when("1").isExecuted();
+		assertContext().when("1").onError().isNotCompensated();
+		assertContext().when("2").isExecuted();
+		assertContext().when("2").onError().isHandled();
+		assertContext().when("3").isExecuted();
 	}
 
 	public static ProcessDefinition scenario9() {
@@ -316,12 +407,20 @@ public class ErrorProcess1Tests {
 	@Test
 	public void testScenario10() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_10").params("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FINISHED)).isTrue();
-
-		Context ctx = contextService.get(contextId).get();
+		TestContextService.blockUntil();
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v7");
+		
+		assertContext().when("1").isExecuted();
+		assertContext().when("1").onError().isNotCompensated();
+		assertContext().when("2").isExecuted();
+		assertContext().when("2").onError().isHandled();
+		assertContext().when("3").isExecuted();
 	}
 
 	public static ProcessDefinition scenario10() {
@@ -354,12 +453,20 @@ public class ErrorProcess1Tests {
 	@Test
 	public void testScenario11() {
 		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_11").params("list", new ArrayList<>()).build());
-		assertThat(waitUntil(contextId, Status.FAILED)).isTrue();
-
-		Context ctx = contextService.get(contextId).get();
+		TestContextService.blockUntil();
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
 		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1");
+		
+		assertContext().when("1").isExecuted();
+		assertContext().when("1").onError().isNotCompensated();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").onError().isNotHandled();
+		assertContext().when("4").isNotExecuted();
 	}
 
 	public static ProcessDefinition scenario11() {

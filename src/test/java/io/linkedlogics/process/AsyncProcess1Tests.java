@@ -44,11 +44,11 @@ public class AsyncProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
 		assertThat(ctx.getParams().get("list")).asList().contains(2, 4, 6);
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenLogic("3").isExecuted();
-		assertContext().whenLogic("4").isExecuted();
-		assertContext().whenLogic("5").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").isExecuted();
+		assertContext().when("4").isExecuted();
+		assertContext().when("5").isExecuted();
 	}
 
 	public static ProcessDefinition scenario1() {
@@ -74,11 +74,11 @@ public class AsyncProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
 		assertThat(ctx.getParams().get("list")).asList().contains(2);
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenLogic("3").isExecuted();
-		assertContext().whenLogic("4").isNotExecuted();
-		assertContext().whenLogic("5").isNotExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").isExecuted();
+		assertContext().when("4").isNotExecuted();
+		assertContext().when("5").isNotExecuted();
 	}
 
 	public static ProcessDefinition scenario2() {
@@ -104,12 +104,12 @@ public class AsyncProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
 		assertThat(ctx.getParams().get("list")).asList().contains(2, 4);
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenLogic("3").isExecuted();
-		assertContext().whenLogic("4").isNotExecuted();
-		assertContext().whenLogic("5").isExecuted();
-		assertContext().whenLogic("6").isNotExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").isExecuted();
+		assertContext().when("4").isNotExecuted();
+		assertContext().when("5").isExecuted();
+		assertContext().when("6").isNotExecuted();
 	}
 
 	public static ProcessDefinition scenario3() {

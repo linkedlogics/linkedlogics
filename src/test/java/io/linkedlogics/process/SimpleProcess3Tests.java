@@ -93,10 +93,10 @@ public class SimpleProcess3Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
 		assertThat(ctx.getParams().get("list")).asList().contains(2, 8);
 		
-		assertContext().whenLogic("1").isExecuted();
-		assertContext().whenBranch("2").isNotSatisfied();
-		assertContext().whenLogic("3").isExecuted();
-		assertContext().whenBranch("4").isSatisfied();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").asBranch().isNotSatisfied();
+		assertContext().when("3").isExecuted();
+		assertContext().when("4").asBranch().isSatisfied();
 	}
 
 

@@ -52,9 +52,9 @@ public class RetryProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(0);
 		assertThat(ctx.getParams().get("list")).asList().contains();
 		
-		assertContext().whenLogic("1").onError().isRetried();
-		assertContext().whenLogic("1").onError().isRetried(3);
-		assertContext().whenLogic("2").onError().isNotRetried();
+		assertContext().when("1").onError().isRetried();
+		assertContext().when("1").onError().isRetried(3);
+		assertContext().when("2").onError().isNotRetried();
 	}
 
 
@@ -80,9 +80,9 @@ public class RetryProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
 		assertThat(ctx.getParams().get("list")).asList().contains(1, 2);
 		
-		assertContext().whenLogic("1").onError().isRetried();
-		assertContext().whenLogic("1").onError().isRetried(1);
-		assertContext().whenLogic("2").onError().isNotRetried();
+		assertContext().when("1").onError().isRetried();
+		assertContext().when("1").onError().isRetried(1);
+		assertContext().when("2").onError().isNotRetried();
 	}
 
 
@@ -106,7 +106,7 @@ public class RetryProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(4);
 		assertThat(ctx.getParams().get("list")).asList().contains(2);
 		
-		assertContext().whenLogic("1").onError().isRetried(3);
+		assertContext().when("1").onError().isRetried(3);
 	}
 
 
@@ -133,7 +133,7 @@ public class RetryProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(1);
 		assertThat(ctx.getParams().get("list")).asList().contains(2);
 		
-		assertContext().whenLogic("1").onError().isNotRetried();
+		assertContext().when("1").onError().isNotRetried();
 	}
 
 

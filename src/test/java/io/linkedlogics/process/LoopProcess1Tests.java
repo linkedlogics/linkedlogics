@@ -2,22 +2,17 @@ package io.linkedlogics.process;
 
 import static io.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static io.linkedlogics.LinkedLogicsBuilder.expr;
-import static io.linkedlogics.LinkedLogicsBuilder.group;
+import static io.linkedlogics.LinkedLogicsBuilder.log;
 import static io.linkedlogics.LinkedLogicsBuilder.logic;
 import static io.linkedlogics.LinkedLogicsBuilder.loop;
-import static io.linkedlogics.LinkedLogicsBuilder.when;
 import static io.linkedlogics.LinkedLogicsBuilder.script;
-import static io.linkedlogics.LinkedLogicsBuilder.log;
-import static io.linkedlogics.LinkedLogicsBuilder.fromText;
-import static io.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
+import static io.linkedlogics.LinkedLogicsBuilder.when;
 import static io.linkedlogics.test.LinkedLogicsTest.assertContext;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -28,9 +23,6 @@ import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextBuilder;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.ProcessDefinition;
-import io.linkedlogics.service.ContextService;
-import io.linkedlogics.service.ServiceLocator;
-import io.linkedlogics.service.local.LocalServiceConfigurer;
 import io.linkedlogics.test.LinkedLogicsExtension;
 import io.linkedlogics.test.TestContextService;
 
@@ -49,8 +41,8 @@ public class LoopProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(6);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2");
 		
-		assertContext().whenLoop("1").isExecuted();
-		assertContext().whenLoop("1").isIterated(3);
+		assertContext().when("1").isExecuted();
+		assertContext().when("1").asLoop().isIterated(3);
 	}
 
 
@@ -75,8 +67,8 @@ public class LoopProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v2", "v3");
 		
-		assertContext().whenScript("1").isExecuted();
-		assertContext().whenLoop("2").isIterated(3);
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").asLoop().isIterated(3);
 	}
 	
 	public static ProcessDefinition scenario2() {
@@ -102,9 +94,10 @@ public class LoopProcess1Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(9);
 		assertThat(ctx.getParams().get("list")).asList().contains("a1", "a2", "a3", "b1", "b2", "b3", "c1", "c2", "c3");
 		
-		assertContext().whenScript("1").isExecuted();
-		assertContext().whenLoop("2").isIterated(3);
-		assertContext().whenLoop("2.2").isIterated(9);
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").asLoop().isIterated(3);
+		assertContext().when("2.2").asLoop().isIterated(9);
+		
 	}
 	
 	public static ProcessDefinition scenario3() {

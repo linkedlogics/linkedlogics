@@ -15,7 +15,7 @@ public class AssertAll {
 	}
 	
 	public void areExecuted() {
-		Set<String> executed = AssertUtil.getSet(context);
+		Set<String> executed = AssertUtil.getSetByTypes(context, AssertUtil.EXECUTABLE_TYPES);
 		
 		IntStream.range(0, ids.length).forEach(i -> {
 			assert executed.contains(ids[i]) : String.format("%s is NOT executed but expected", ids[i]);
@@ -23,7 +23,7 @@ public class AssertAll {
 	}
 	
 	public void areNotExecuted() {
-		Set<String> executed = AssertUtil.getSet(context);
+		Set<String> executed = AssertUtil.getSetByTypes(context, AssertUtil.EXECUTABLE_TYPES);
 		
 		IntStream.range(0, ids.length).forEach(i -> {
 			assert !executed.contains(ids[i]) : String.format("%s is executed but NOT expected", ids[i]);

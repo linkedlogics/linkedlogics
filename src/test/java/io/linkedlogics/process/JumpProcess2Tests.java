@@ -6,14 +6,12 @@ import static io.linkedlogics.LinkedLogicsBuilder.fromText;
 import static io.linkedlogics.LinkedLogicsBuilder.jump;
 import static io.linkedlogics.LinkedLogicsBuilder.logic;
 import static io.linkedlogics.LinkedLogicsBuilder.script;
-import static io.linkedlogics.process.helper.ProcessTestHelper.waitUntil;
 import static io.linkedlogics.test.LinkedLogicsTest.assertContext;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -24,9 +22,6 @@ import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextBuilder;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.ProcessDefinition;
-import io.linkedlogics.service.ContextService;
-import io.linkedlogics.service.ServiceLocator;
-import io.linkedlogics.service.local.LocalServiceConfigurer;
 import io.linkedlogics.test.LinkedLogicsExtension;
 import io.linkedlogics.test.TestContextService;
 
@@ -45,11 +40,11 @@ public class JumpProcess2Tests {
 		assertThat(ctx.getParams().get("list")).asList().hasSize(2);
 		assertThat(ctx.getParams().get("list")).asList().contains("v1", "v3");
 		
-		assertContext().whenScript("1").isExecuted();
-		assertContext().whenLogic("2").isExecuted();
-		assertContext().whenJump("3").isExecuted();
-		assertContext().whenLogic("4").isNotExecuted();
-		assertContext().whenLogic("5").isExecuted();
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").isExecuted();
+		assertContext().when("3").isExecuted();
+		assertContext().when("4").isNotExecuted();
+		assertContext().when("5").isExecuted();
 	}
 
 	public static ProcessDefinition scenario1() {

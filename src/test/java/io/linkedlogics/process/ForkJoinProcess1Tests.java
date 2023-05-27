@@ -43,9 +43,9 @@ public class ForkJoinProcess1Tests {
 		assertThat(ctx.getParams().get("concat")).asString().contains("v2");
 		assertThat(ctx.getParams().get("concat")).asString().contains("v3");
 		
-		assertContext().whenLogic("1").onFork().isForked();
-		assertContext().whenLogic("2").onFork().isForked();
-		assertContext().whenLogic("3").onFork().isForked();
+		assertContext().when("1").onFork().isForked();
+		assertContext().when("2").onFork().isForked();
+		assertContext().when("3").onFork().isForked();
 		
 	}
 
@@ -86,9 +86,9 @@ public class ForkJoinProcess1Tests {
 		assertThat(ctx.getParams().get("concat_2")).asString().contains("v22");
 		assertThat(ctx.getParams().get("concat_2")).asString().contains("v23");
 		
-		assertContext().whenLogic("1").onFork().isForked();
-		assertContext().whenGroup("2").onFork().isForked();
-		assertContext().whenLogic("3").onFork().isForked();
+		assertContext().when("1").onFork().isForked();
+		assertContext().when("2").onFork().isForked();
+		assertContext().when("3").onFork().isForked();
 	}
 	
 	
@@ -130,9 +130,9 @@ public class ForkJoinProcess1Tests {
 		assertThat(ctx.getParams().get("concat")).asString().contains("key2");
 		assertThat(ctx.getParams().get("concat")).asString().contains("key3");
 		
-		assertContext().whenLogic("1").onFork().isForked();
-		assertContext().whenLogic("2").onFork().isForked();
-		assertContext().whenLogic("3").onFork().isForked();
+		assertContext().when("1").onFork().isForked();
+		assertContext().when("2").onFork().isForked();
+		assertContext().when("3").onFork().isForked();
 	}
 	
 	
