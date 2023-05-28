@@ -143,7 +143,7 @@ public class InputProcess1Tests {
 
 	public ProcessDefinition scenario5() {
 		return createProcess("SIMPLE_SCENARIO_5", 0)
-				.add(logic("GET_PERSON").inputs("firstname", "firstname", "lastname", "lastname", "state", "FREE").build())
+				.add(logic("GET_PERSON").inputs("firstname", "firstname", "lastname", "lastname", "state", "FREE", "unknown", "unknown").build())
 				.build();
 	}
 	
@@ -161,7 +161,7 @@ public class InputProcess1Tests {
 
 	public ProcessDefinition scenario6() {
 		return createProcess("SIMPLE_SCENARIO_6", 0)
-				.add(logic("GET_PERSON_MAP").inputs("firstname", "firstname", "lastname", "lastname", "state", "FREE").build())
+				.add(logic("GET_PERSON_MAP").inputs("firstname", "firstname", "lastname", "lastname", "state", "FREE", "unknown", "unknown").build())
 				.build();
 	}
 
