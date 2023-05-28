@@ -73,7 +73,6 @@ public class QueueSchedulerService extends ConfigurableService<LocalQueueService
 				while (scheduleMessage.isPresent()) {
 					try {
 						Schedule schedule = mapperService.getMapper().readValue(scheduleMessage.get(), Schedule.class);
-						System.out.println(">>>");
 						if (schedule.getExpiresAt().withNano(0).isBefore(OffsetDateTime.now())) {
 							handle(schedule);
 						} else {
