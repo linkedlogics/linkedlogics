@@ -10,6 +10,9 @@ public class InputParameter extends Parameter {
 	
 	@Override
 	protected Object getValue(Context context) {
+		if (name == null || name.length() == 0) {
+			return context.getInput();
+		}
 		return context.getInput().get(name);
 	}
 }

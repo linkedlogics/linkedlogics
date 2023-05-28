@@ -128,6 +128,42 @@ public class InputProcess1Tests {
 				.add(logic("CHECK_BY_FIRSTNAME").input("persons", expr("persons")).input("firstname", "firstname1").build())
 				.build();
 	}
+	
+	@Test
+	public void testScenario5() {
+		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_5").params("firstname", "firstname", "lastname", "lastname", "state", "FREE").build());
+		TestContextService.blockUntil();
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
+		assertThat(ctx.getParams().get("fullname")).isEqualTo("firstname lastname");
+	}
+
+
+	public ProcessDefinition scenario5() {
+		return createProcess("SIMPLE_SCENARIO_5", 0)
+				.add(logic("GET_PERSON").inputs("firstname", "firstname", "lastname", "lastname", "state", "FREE").build())
+				.build();
+	}
+	
+	@Test
+	public void testScenario6() {
+		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_6").params("firstname", "firstname", "lastname", "lastname", "state", "FREE").build());
+		TestContextService.blockUntil();
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getId()).isEqualTo(contextId);
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
+		assertThat(ctx.getParams().get("fullname")).isEqualTo("firstname lastname");
+	}
+
+
+	public ProcessDefinition scenario6() {
+		return createProcess("SIMPLE_SCENARIO_6", 0)
+				.add(logic("GET_PERSON_MAP").inputs("firstname", "firstname", "lastname", "lastname", "state", "FREE").build())
+				.build();
+	}
 
 	@Logic(id = "GET_FULLNAME", returnAs = "fullname")
 	public String getFullname(@Input(value = "person") Person person) {
@@ -152,6 +188,16 @@ public class InputProcess1Tests {
 	@Logic(id = "CHECK_BY_FIRSTNAME", returnAs = "check_by_firstname")
 	public boolean checkByFirstname(@Input(value = "persons") Map<String, Person> persons, @Input("firstname") String firstname) {
 		return persons.containsKey(firstname);
+	}
+	
+	@Logic(id = "GET_PERSON", returnAs = "fullname")
+	public String getPerson(@Input Person person) {
+		return person.getFirstname() + " " + person.getLastname();
+	}
+	
+	@Logic(id = "GET_PERSON_MAP", returnAs = "fullname")
+	public String getPerson(@Input Map<String, Object> person) {
+		return person.get("firstname") + " " + person.get("lastname");
 	}
 
 	@Data

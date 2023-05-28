@@ -6,7 +6,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Input {
-    String value();
+    String value() default "";
     boolean required() default false;
     boolean returned() default false;
     String description() default "";
