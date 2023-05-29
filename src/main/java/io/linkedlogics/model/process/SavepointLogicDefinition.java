@@ -17,7 +17,7 @@ public class SavepointLogicDefinition extends BaseLogicDefinition {
 		return clone;
 	}
 
-	public static class SavepointLogicBuilder extends LogicBuilder<SavepointLogicBuilder, SavepointLogicDefinition> {
+	public static class SavepointLogicBuilder extends BaseLogicBuilder<SavepointLogicBuilder, SavepointLogicDefinition> {
 		public SavepointLogicBuilder() {
 			super(new SavepointLogicDefinition());
 		}

@@ -8,8 +8,10 @@ import static io.linkedlogics.LinkedLogicsBuilder.logic;
 
 import io.linkedlogics.model.ProcessDefinition;
 import io.linkedlogics.model.process.BaseLogicDefinition;
+import io.linkedlogics.model.process.BaseLogicDefinition.BaseLogicBuilder;
 import io.linkedlogics.model.process.ExpressionLogicDefinition;
 import io.linkedlogics.model.process.GroupLogicDefinition;
+import io.linkedlogics.model.process.GroupLogicDefinition.GroupLogicBuilder;
 import io.linkedlogics.model.process.SingleLogicDefinition;
 import io.linkedlogics.model.process.SingleLogicDefinition.SingleLogicBuilder;
 
@@ -26,35 +28,34 @@ public class FriendsAndFamilyLogics {
 	public static ProcessDefinition ffStop() {
 		return createProcess(FF_STOP, 0)
 				.add(getRequesterAorB())
-				.add(branch(isRequesterAorB(), handleA(), handleB()).build())
+				.add(branch(isRequesterAorB(), handleA(), handleB()))
 				.build();
 	}
 	
-	private static BaseLogicDefinition handleA() {
-		return branch(isStopAll(), removeAll(), removeB()).build();
+	private static BaseLogicBuilder<?, ?> handleA() {
+		return branch(isStopAll(), removeAll(), removeB());
 	}
 	
-	private static BaseLogicDefinition handleB() {
-		return branch(isStopAll(), sendNotification("WRONG_SMS"), removeB()).build();
+	private static BaseLogicBuilder handleB() {
+		return branch(isStopAll(), sendNotification("WRONG_SMS"), removeB());
 	}
 	
-	private static GroupLogicDefinition removeB() {
-		return group(removeOffer(expr("request.msisdn_b")).build(),
-					 branch(isLastB(), removeA(), sendNotification("TEMPLATE_B")).build())
-			  .build();
+	private static GroupLogicBuilder removeB() {
+		return group(removeOffer(expr("request.msisdn_b")),
+					 branch(isLastB(), removeA(), sendNotification("TEMPLATE_B")));
 	}
 	
-	private static GroupLogicDefinition removeA() {
-		return group(removeOffer(expr("request.msisdn_a")).build(),
-				sendNotification("TEMPLATE_A")).build();
+	private static GroupLogicBuilder removeA() {
+		return group(removeOffer(expr("request.msisdn_a")),
+				sendNotification("TEMPLATE_A"));
 	}
 	
-	private static GroupLogicDefinition removeAll() {
-		return group(removeOffers(), removeA()).build();
+	private static GroupLogicBuilder removeAll() {
+		return group(removeOffers(), removeA());
 	}
 	
-	private static SingleLogicDefinition getRequesterAorB() {
-		return logic(GET_FF_INFO).input("msisdn", expr("request.msisdn")).returnAs("ff").application(NGBSS_ADAPTER).build();
+	private static SingleLogicBuilder getRequesterAorB() {
+		return logic(GET_FF_INFO).input("msisdn", expr("request.msisdn")).returnAs("ff").application(NGBSS_ADAPTER);
 	}
 	
 	private static ExpressionLogicDefinition isRequesterAorB() {
@@ -69,12 +70,12 @@ public class FriendsAndFamilyLogics {
 		return logic(REMOVE_OFFER).input("msisdn", removeMsisdn).input("offer_id", "FF_OFFER_ID").application(NGBSS_ADAPTER);
 	}
 	
-	private static SingleLogicDefinition removeOffers() {
-		return logic(REMOVE_OFFERS).input("msisdn", expr("request.msisdn_a")).input("offer_id", "FF_OFFER_ID").application(NGBSS_ADAPTER).build();
+	private static SingleLogicBuilder removeOffers() {
+		return logic(REMOVE_OFFERS).input("msisdn", expr("request.msisdn_a")).input("offer_id", "FF_OFFER_ID").application(NGBSS_ADAPTER);
 	}
 	
-	private static SingleLogicDefinition sendNotification(String template) {
-		return logic(SEND_NOTIFICATION).input("template", template).build();
+	private static SingleLogicBuilder sendNotification(String template) {
+		return logic(SEND_NOTIFICATION).input("template", template);
 	}
 	
 	private static ExpressionLogicDefinition isStopAll() {

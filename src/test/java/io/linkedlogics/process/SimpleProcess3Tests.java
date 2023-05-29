@@ -47,10 +47,10 @@ public class SimpleProcess3Tests {
 
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", 1).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 3).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 4).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 1))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 3))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 4))
 				.build();
 	}
 
@@ -73,11 +73,11 @@ public class SimpleProcess3Tests {
 
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", 1).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
-				.add(logic("MULTIPLY").input("val1", 3).input("val2", 2).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 4).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 1))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2))
+				.add(logic("MULTIPLY").input("val1", 3).input("val2", 2))
+				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 4))
 				.build();
 	}
 
@@ -103,10 +103,10 @@ public class SimpleProcess3Tests {
 
 	public static ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", 1).build())
-				.add(branch(expr("insert_result"), logic("INSERT").input("list", expr("list")).build(), logic("INSERT").inputs("list", expr("list"), "val", "5").build()).inputs("val", 4).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
-				.add(branch(expr("insert_result"), logic("INSERT").input("list", expr("list")).input("val", 8).build()).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 1))
+				.add(branch(expr("insert_result"), logic("INSERT").input("list", expr("list")), logic("INSERT").inputs("list", expr("list"), "val", "5")).inputs("val", 4))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2))
+				.add(branch(expr("insert_result"), logic("INSERT").input("list", expr("list")).input("val", 8)))
 				.build();
 	}
 
@@ -128,10 +128,10 @@ public class SimpleProcess3Tests {
 
 	public static ProcessDefinition scenario4() {
 		return createProcess("SIMPLE_SCENARIO_4", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
-				.add(logic("MULTIPLY_ADD").input("val1", 4).input("val2", 4).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", expr("add_result")).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2))
+				.add(logic("MULTIPLY_ADD").input("val1", 4).input("val2", 4))
+				.add(logic("INSERT").input("list", expr("list")).input("val", expr("add_result")))
+				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")))
 				.build();
 	}
 
@@ -153,12 +153,12 @@ public class SimpleProcess3Tests {
 
 	public static ProcessDefinition scenario5() {
 		return createProcess("SIMPLE_SCENARIO_5", 0)
-				.add(group(logic("MULTIPLY").build(),
-						logic("ADD").build())
+				.add(group(logic("MULTIPLY"),
+						logic("ADD"))
 						.input("val1", 4).input("val2", 4)
-						.build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", expr("add_result")).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")).build())
+						)
+				.add(logic("INSERT").input("list", expr("list")).input("val", expr("add_result")))
+				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")))
 				.build();
 	}
 

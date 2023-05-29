@@ -66,43 +66,43 @@ public class LogicFinderTests {
 		public ProcessDefinition createProcessA0() {
 			return createProcess(PROCESS_A, 0)
 					.add(logic(LOGIC_1)
-							.compensate(logic(LOGIC_2).build())
-							.build())
-					.add(group(logic(LOGIC_1).compensate(logic(LOGIC_2).build()).build(),
-							group(logic(LOGIC_1).compensate(logic(LOGIC_2).build()).build(),
-									logic(LOGIC_1).compensate(logic(LOGIC_2).build()).build(),
-									verify(expr("false")).code(-200).message("failure").build())
-								.handle(error().withCodes(-200).orMessages("error").throwAgain(-500, "another error").build())
-								.build(),
-							logic(LOGIC_1).compensate(logic(LOGIC_2).build()).build())
-						.handle(error().withCodes(-500).orMessages("error").build())
-						.build())
+							.compensate(logic(LOGIC_2))
+							)
+					.add(group(logic(LOGIC_1).compensate(logic(LOGIC_2)),
+							group(logic(LOGIC_1).compensate(logic(LOGIC_2)),
+									logic(LOGIC_1).compensate(logic(LOGIC_2)),
+									verify(expr("false")).code(-200).message("failure"))
+								.handle(error().withCodes(-200).orMessages("error").throwAgain(-500, "another error"))
+								,
+							logic(LOGIC_1).compensate(logic(LOGIC_2)))
+						.handle(error().withCodes(-500).orMessages("error"))
+						)
 					.add(branch(expr("list.size() < 2"), 
-							logic(LOGIC_1).build(), 
+							logic(LOGIC_1), 
 							branch(expr("list.size() < 2"), 
-									logic(LOGIC_1).build(), 
-									group(logic(LOGIC_1).build()).build()).build()).build())
-					.add(logic(LOGIC_1).build())
-					.add(verify(when("false")).elseFailWithCode(-200).andMessage("failure").handle(error().usingLogic(branch(expr("list.size() < 2"),logic(LOGIC_1).build()).build()).build()).build())
+									logic(LOGIC_1), 
+									group(logic(LOGIC_1)))))
+					.add(logic(LOGIC_1))
+					.add(verify(when("false")).elseFailWithCode(-200).andMessage("failure").handle(error().using(branch(expr("list.size() < 2"),logic(LOGIC_1)))))
 					.build();
 		}
 		
 		public ProcessDefinition createProcessB0() {
 			return createProcess(PROCESS_B, 0)
-					.add(process(PROCESS_A, 0).build())
-					.add(group(process(PROCESS_A, 0).build(),
-							group(process(PROCESS_A, 0).build(),
-									process(PROCESS_A, 0).build())
-								.build(),
-							process(PROCESS_A, 0).build())
-						.build())
+					.add(process(PROCESS_A, 0))
+					.add(group(process(PROCESS_A, 0),
+							group(process(PROCESS_A, 0),
+									process(PROCESS_A, 0))
+								,
+							process(PROCESS_A, 0))
+						)
 					.add(branch(expr("list.size() < 2"), 
-							process(PROCESS_A, 0).build(), 
+							process(PROCESS_A, 0), 
 							branch(expr("list.size() < 2"), 
-									process(PROCESS_A, 0).build(), 
-									group(process(PROCESS_A, 0).build()).build()).build()).build())
-					.add(process(PROCESS_A, 0).build())
-					.add(verify(expr("false")).elseFailWithCode(-200).andMessage("failure").handle(error().usingLogic(process(PROCESS_A, 0).build()).build()).build())
+									process(PROCESS_A, 0), 
+									group(process(PROCESS_A, 0)))))
+					.add(process(PROCESS_A, 0))
+					.add(verify(expr("false")).elseFailWithCode(-200).andMessage("failure").handle(error().using(process(PROCESS_A, 0))))
 					.build();
 		}
 	}

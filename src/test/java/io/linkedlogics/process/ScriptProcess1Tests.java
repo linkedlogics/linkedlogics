@@ -3,8 +3,7 @@ package io.linkedlogics.process;
 import static io.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static io.linkedlogics.LinkedLogicsBuilder.error;
 import static io.linkedlogics.LinkedLogicsBuilder.expr;
-import static io.linkedlogics.LinkedLogicsBuilder.fromFile;
-import static io.linkedlogics.LinkedLogicsBuilder.fromText;
+import static io.linkedlogics.LinkedLogicsBuilder.file;
 import static io.linkedlogics.LinkedLogicsBuilder.logic;
 import static io.linkedlogics.LinkedLogicsBuilder.script;
 import static io.linkedlogics.LinkedLogicsBuilder.var;
@@ -54,10 +53,10 @@ public class ScriptProcess1Tests {
 
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").build())
-				.add(script(fromText("result = list.size() + ' items'")).returnAs("text").build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v2"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v3"))
+				.add(script("result = list.size() + ' items'").returnAs("text"))
 				.build();
 	}
 	
@@ -82,10 +81,10 @@ public class ScriptProcess1Tests {
 
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").build())
-				.add(verify(when("false")).elseFailWithCode(-1).handle(error().usingLogic(script(fromText("result = list.size() + ' items'")).returnAs("text").build()).build()).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v2"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v3"))
+				.add(verify(when("false")).elseFailWithCode(-1).handle(error().using(script("result = list.size() + ' items'").returnAs("text"))))
 				.build();
 	}
 	
@@ -116,11 +115,11 @@ public class ScriptProcess1Tests {
 				+ "return json";
 		
 		return createProcess("SIMPLE_SCENARIO_3", 0)
-				.add(script(fromText(script)).returnAsMap().build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", var("name")).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", var("address.city")).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", var("address.state")).build())
-				.add(script(fromText("result = list.size() + ' items'")).returnAs("text").build())
+				.add(script(script).returnAsMap())
+				.add(logic("INSERT").input("list", expr("list")).input("val", var("name")))
+				.add(logic("INSERT").input("list", expr("list")).input("val", var("address.city")))
+				.add(logic("INSERT").input("list", expr("list")).input("val", var("address.state")))
+				.add(script("result = list.size() + ' items'").returnAs("text"))
 				.build();
 	}
 
@@ -146,11 +145,11 @@ public class ScriptProcess1Tests {
 
 	public static ProcessDefinition scenario4() {
 		return createProcess("SIMPLE_SCENARIO_4", 0)
-				.add(script(fromFile("scripts/script.groovy")).returnAsMap().build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", var("name")).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", var("address.city")).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", var("address.state")).build())
-				.add(script(fromText("result = list.size() + ' items'")).returnAs("text").build())
+				.add(script(file("scripts/script.groovy")).returnAsMap())
+				.add(logic("INSERT").input("list", expr("list")).input("val", var("name")))
+				.add(logic("INSERT").input("list", expr("list")).input("val", var("address.city")))
+				.add(logic("INSERT").input("list", expr("list")).input("val", var("address.state")))
+				.add(script("result = list.size() + ' items'").returnAs("text"))
 				.build();
 	}
 	
@@ -158,12 +157,12 @@ public class ScriptProcess1Tests {
 	public void testScenario5() {
 		assertThatThrownBy(() -> {
 			createProcess("SIMPLE_SCENARIO_5", 0)
-			.add(script(fromFile("scripts/script.groovy")).returnAsMap().build())
-			.add(logic("INSERT").input("list", expr("list")).input("val", var("name")).build())
-			.add(logic("INSERT").input("list", expr("list")).input("val", var("address.city")).build())
-			.add(logic("INSERT").input("list", expr("list")).input("val", var("address.state")).build())
-			.add(script(fromText("result = list.size() +  items'")).returnAs("text").build())
-			.build();
+			.add(script(file("scripts/script.groovy")).returnAsMap())
+			.add(logic("INSERT").input("list", expr("list")).input("val", var("name")))
+			.add(logic("INSERT").input("list", expr("list")).input("val", var("address.city")))
+			.add(logic("INSERT").input("list", expr("list")).input("val", var("address.state")))
+			.add(script("result = list.size() +  items'").returnAs("text"))
+			;
 		}).hasMessageContaining("syntax error");
 	}
 	

@@ -59,8 +59,8 @@ public class ErrorProcess2Tests {
 
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", 1).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 1))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2))
 				.build();
 	}
 
@@ -85,8 +85,8 @@ public class ErrorProcess2Tests {
 
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", 1).retry(3, 0).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 1).retry(3, 0))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2))
 				.build();
 	}
 
@@ -113,8 +113,8 @@ public class ErrorProcess2Tests {
 
 	public static ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
-				.add(logic("INSERT_SAFE").input("list", expr("list")).input("val", 1).retry(3, 0).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
+				.add(logic("INSERT_SAFE").input("list", expr("list")).input("val", 1).retry(3, 0))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2))
 				.build();
 	}
 
@@ -139,11 +139,11 @@ public class ErrorProcess2Tests {
 
 	public static ProcessDefinition scenario4() {
 		return createProcess("SIMPLE_SCENARIO_4", 0)
-				.add(group(logic("INSERT").input("list", expr("list")).input("val", 2).build(),
-						logic("INSERT").input("list", expr("list")).input("val", 1).build())
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", 2),
+						logic("INSERT").input("list", expr("list")).input("val", 1))
 						.retry(3, 0)
-						.build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 3).build())
+						)
+				.add(logic("INSERT").input("list", expr("list")).input("val", 3))
 				.build();
 	}
 
@@ -167,9 +167,9 @@ public class ErrorProcess2Tests {
 
 	public static ProcessDefinition scenario5() {
 		return createProcess("SIMPLE_SCENARIO_5", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 3).handle(error().build()).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 4).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 3).handle(error()))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 4))
 				.build();
 	}
 
@@ -193,9 +193,9 @@ public class ErrorProcess2Tests {
 
 	public static ProcessDefinition scenario6() {
 		return createProcess("SIMPLE_SCENARIO_6", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 3).handle(error().withCodes(-100).build()).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 4).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 3).handle(error().withCodes(-100)))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 4))
 				.build();
 	}
 
@@ -220,9 +220,9 @@ public class ErrorProcess2Tests {
 
 	public static ProcessDefinition scenario7() {
 		return createProcess("SIMPLE_SCENARIO_7", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 3).handle(error().withCodes(-100).build()).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 4).forced().build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 3).handle(error().withCodes(-100)))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 4).forced())
 				.build();
 	}
 	
@@ -246,9 +246,9 @@ public class ErrorProcess2Tests {
 
 	public static ProcessDefinition scenario8() {
 		return createProcess("SIMPLE_SCENARIO_8", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
-				.add(verify(expr("false")).handle(error().usingLogic(logic("INSERT").input("list", expr("list")).input("val", 6).build()).throwAgain().build()).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 4).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2))
+				.add(verify(expr("false")).handle(error().using(logic("INSERT").input("list", expr("list")).input("val", 6)).throwAgain()))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 4))
 				.build();
 	}
 

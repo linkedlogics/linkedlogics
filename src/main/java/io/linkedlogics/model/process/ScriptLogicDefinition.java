@@ -19,7 +19,7 @@ public class ScriptLogicDefinition extends BaseLogicDefinition {
 		return null;
 	}
 
-	public static class ScriptLogicBuilder extends LogicBuilder<ScriptLogicBuilder, ScriptLogicDefinition> {
+	public static class ScriptLogicBuilder extends BaseLogicBuilder<ScriptLogicBuilder, ScriptLogicDefinition> {
 		public ScriptLogicBuilder(ExpressionLogicDefinition expression) {
 			super(new ScriptLogicDefinition());
 			getLogic().setExpression(expression);

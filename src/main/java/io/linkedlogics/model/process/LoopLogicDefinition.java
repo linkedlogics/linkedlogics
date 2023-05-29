@@ -29,11 +29,11 @@ public class LoopLogicDefinition extends GroupLogicDefinition {
 		return clone;
 	}
 
-	public static class LoopLogicBuilder extends LogicBuilder<LoopLogicBuilder, LoopLogicDefinition> {
-		public LoopLogicBuilder(ExpressionLogicDefinition expression, BaseLogicDefinition... logics) {
+	public static class LoopLogicBuilder extends BaseLogicBuilder<LoopLogicBuilder, LoopLogicDefinition> {
+		public LoopLogicBuilder(ExpressionLogicDefinition expression, BaseLogicBuilder... logics) {
 			super(new LoopLogicDefinition());
 			getLogic().setExpression(expression);
-			this.getLogic().addLogics(Arrays.stream(logics).collect(Collectors.toList()));
+			this.getLogic().addLogics(Arrays.stream(logics).map(b -> b.build()).collect(Collectors.toList()));
 		}
 		
 		public LoopLogicBuilder fork(String fork) {

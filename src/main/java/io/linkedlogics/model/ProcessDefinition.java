@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.linkedlogics.model.process.BaseLogicDefinition;
+import io.linkedlogics.model.process.BaseLogicDefinition.BaseLogicBuilder;
 import io.linkedlogics.model.process.helper.LogicPositioner;
 import lombok.Getter;
 import lombok.Setter;
@@ -69,8 +70,8 @@ public class ProcessDefinition implements Comparable<ProcessDefinition> {
 			return this;
 		}
 		
-		public ProcessBuilder add(BaseLogicDefinition logic) {
-			this.process.getLogics().add(logic);
+		public ProcessBuilder add(BaseLogicBuilder<?, ?> logic) {
+			this.process.getLogics().add(logic.build());
 			return this;
 		}
 		

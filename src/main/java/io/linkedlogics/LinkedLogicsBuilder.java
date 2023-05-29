@@ -5,7 +5,7 @@ import java.nio.charset.Charset;
 import java.util.Base64;
 
 import io.linkedlogics.model.ProcessDefinition.ProcessBuilder;
-import io.linkedlogics.model.process.BaseLogicDefinition;
+import io.linkedlogics.model.process.BaseLogicDefinition.BaseLogicBuilder;
 import io.linkedlogics.model.process.BranchLogicDefinition.BranchLogicBuilder;
 import io.linkedlogics.model.process.ErrorLogicDefinition;
 import io.linkedlogics.model.process.ErrorLogicDefinition.ErrorLogicBuilder;
@@ -51,11 +51,11 @@ public class LinkedLogicsBuilder {
 		return new SingleLogicBuilder().id(id).version(LogicService.LATEST_VERSION);
 	}
 	
-	public static GroupLogicBuilder group(BaseLogicDefinition... logics) {
+	public static GroupLogicBuilder group(BaseLogicBuilder... logics) {
 		return new GroupLogicBuilder(logics);
 	}
 	
-	public static LoopLogicBuilder loop(ExpressionLogicDefinition expression, BaseLogicDefinition... logics) {
+	public static LoopLogicBuilder loop(ExpressionLogicDefinition expression, BaseLogicBuilder... logics) {
 		return new LoopLogicBuilder(expression, logics);
 	}
 	
@@ -63,11 +63,11 @@ public class LinkedLogicsBuilder {
 		return new ProcessLogicBuilder(processId, version);
 	}
 	
-	public static BranchLogicBuilder branch(ExpressionLogicDefinition expression, BaseLogicDefinition leftBranch, BaseLogicDefinition rightBranch) {
+	public static BranchLogicBuilder branch(ExpressionLogicDefinition expression, BaseLogicBuilder<?, ?> leftBranch, BaseLogicBuilder<?, ?> rightBranch) {
 		return new BranchLogicBuilder(expression, leftBranch, rightBranch);
 	}
 	
-	public static BranchLogicBuilder branch(ExpressionLogicDefinition expression, BaseLogicDefinition leftBranch) {
+	public static BranchLogicBuilder branch(ExpressionLogicDefinition expression, BaseLogicBuilder<?, ?> leftBranch) {
 		return new BranchLogicBuilder(expression, leftBranch, null);
 	}
 	
@@ -87,8 +87,8 @@ public class LinkedLogicsBuilder {
 		return new ErrorLogicBuilder();
 	}
 	
-	public static ErrorLogicDefinition.ErrorLogicBuilder error(BaseLogicDefinition errorLogic) {
-		return new ErrorLogicBuilder().usingLogic(errorLogic);
+	public static ErrorLogicDefinition.ErrorLogicBuilder error(BaseLogicBuilder<?, ?> errorLogic) {
+		return new ErrorLogicBuilder().using(errorLogic);
 	}
 	
 	public static RetryLogicDefinition.RetryLogicBuilder retry(int maxRetries, int delay) {
@@ -103,16 +103,11 @@ public class LinkedLogicsBuilder {
 		return expr(expression);
 	}
 	
-	public static ExpressionLogicDefinition fromText(String expression) {
-		return expr(expression);
-	}
-	
-	
 	public static ExpressionLogicDefinition var(String expression) {
 		return expr(expression);
 	}
 	
-	public static ExpressionLogicDefinition fromFile(String file) {
+	public static ExpressionLogicDefinition file(String file) {
 		try (InputStream in = LinkedLogics.class.getClassLoader().getResourceAsStream(file)) {
 			log.info("loading {}", file);
 			return new ExpressionLogicDefinition.ExpressionLogicDefinitionBuilder(new String(in.readAllBytes())).source(file).build();
@@ -143,6 +138,10 @@ public class LinkedLogicsBuilder {
 	
 	public static FailLogicBuilder fail() {
 		return new FailLogicBuilder();
+	}
+	
+	public static ScriptLogicBuilder script(String expression) {
+		return new ScriptLogicBuilder(expr(expression));
 	}
 	
 	public static ScriptLogicBuilder script(ExpressionLogicDefinition expression) {

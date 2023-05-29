@@ -55,16 +55,16 @@ public class SimpleProcess4Tests {
 
 	public static ProcessDefinition scenario2v0() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
-				.add(logic("MULTIPLY").input("val1", expr("val")).input("val2", 2).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")).build())
+				.add(logic("MULTIPLY").input("val1", expr("val")).input("val2", 2))
+				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")))
 				.build();
 	}
 
 
 	public static ProcessDefinition scenario2v1() {
 		return createProcess("SIMPLE_SCENARIO_2", 1)
-				.add(logic("MULTIPLY").input("val1", expr("val")).input("val2", 4).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")).build())
+				.add(logic("MULTIPLY").input("val1", expr("val")).input("val2", 4))
+				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")))
 				.build();
 	}
 
@@ -72,9 +72,9 @@ public class SimpleProcess4Tests {
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
 				.add(branch(expr("val > 5"), 
-						process("SIMPLE_SCENARIO_2", 1).build(),
-						process("SIMPLE_SCENARIO_2", 0).build())
-					.build())
+						process("SIMPLE_SCENARIO_2", 1),
+						process("SIMPLE_SCENARIO_2", 0))
+					)
 				.build();
 	}
 

@@ -44,19 +44,19 @@ public class ErrorProcess3Tests {
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v1")
-						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v1").build())
-						.build())
-				.add(verify(when("true")).elseFailWithCode(-99).andMessage("success").build())
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v1"))
+						)
+				.add(verify(when("true")).elseFailWithCode(-99).andMessage("success"))
 				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v2")
-						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v2").build())	
-						.build(),
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v2"))	
+						,
 						logic("INSERT").input("list", expr("list")).input("val", "v3")
-						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3").build())
-						.build(),
-						verify(when("false")).elseFailWithCode(-100).andMessage("failure").build())
-						.handle(error().withCodes(-100).throwAgain().build())
-						.build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v4").build())
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3"))
+						,
+						verify(when("false")).elseFailWithCode(-100).andMessage("failure"))
+						.handle(error().withCodes(-100).throwAgain())
+						)
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v4"))
 				.build();
 	}
 
@@ -78,27 +78,27 @@ public class ErrorProcess3Tests {
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", "v1")
-						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v1").build())
-						.build())
-				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v2")
-						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v2").build())	
-						.build(),
-						group(logic("INSERT").input("list", expr("list")).input("val", "v3")
-								.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3").build())	
-								.build(),
-								logic("INSERT").input("list", expr("list")).input("val", "v4")
-								.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v4").build())
-								.build(),
-								verify(when("false")).elseFailWithCode(-200).andMessage("failure").build())
-						.handle(error().withCodes(-200).orMessages("error").throwAgain(-500, "another error").build())
-						.build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v5")
-						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v5").build())
-						.build()
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v1"))
 						)
-						.handle(error().withCodes(-500).orMessages("error").build())
-						.build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v6").build())
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v2")
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v2"))	
+						,
+						group(logic("INSERT").input("list", expr("list")).input("val", "v3")
+								.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3"))	
+								,
+								logic("INSERT").input("list", expr("list")).input("val", "v4")
+								.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v4"))
+								,
+								verify(when("false")).elseFailWithCode(-200).andMessage("failure"))
+						.handle(error().withCodes(-200).orMessages("error").throwAgain(-500, "another error"))
+						,
+						logic("INSERT").input("list", expr("list")).input("val", "v5")
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v5"))
+						
+						)
+						.handle(error().withCodes(-500).orMessages("error"))
+						)
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v6"))
 				.build();
 	}
 
@@ -119,16 +119,16 @@ public class ErrorProcess3Tests {
 
 	public static ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1"))
 				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v2")
-						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v2").build())	
-						.build(),
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v2"))	
+						,
 						logic("INSERT").input("list", expr("list")).input("val", "v3")
-						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3").build())
-						.build(),
-						verify(when("false")).elseFailWithCode(-100).andMessage("failure").build())
-						.handle(error().build()).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v4").build())
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3"))
+						,
+						verify(when("false")).elseFailWithCode(-100).andMessage("failure"))
+						.handle(error()))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v4"))
 				.build();
 	}
 
@@ -148,16 +148,16 @@ public class ErrorProcess3Tests {
 
 	public static ProcessDefinition scenario4() {
 		return createProcess("SIMPLE_SCENARIO_4", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1"))
 				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v2")
-						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v2").build())	
-						.build(),
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v2"))	
+						,
 						logic("INSERT").input("list", expr("list")).input("val", "v3")
-						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3").build())
-						.build(),
-						verify(when("false")).elseFailWithCode(-100).andMessage("failure").build())
-						.handle(error().withCodes(-200).build()).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v4").build())
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3"))
+						,
+						verify(when("false")).elseFailWithCode(-100).andMessage("failure"))
+						.handle(error().withCodes(-200)))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v4"))
 				.build();
 	}
 

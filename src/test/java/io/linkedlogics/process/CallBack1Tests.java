@@ -58,7 +58,7 @@ public class CallBack1Tests {
 
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
-				.add(logic("STRING_UPPER").input("s", expr("s")).returnAs("s").build())
+				.add(logic("STRING_UPPER").input("s", expr("s")).returnAs("s"))
 				.build();
 	}
 	
@@ -93,8 +93,8 @@ public class CallBack1Tests {
 
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
-				.add(logic("STRING_UPPER").input("s", expr("s")).returnAs("s").build())
-				.add(verify(expr("false")).build())
+				.add(logic("STRING_UPPER").input("s", expr("s")).returnAs("s"))
+				.add(verify(expr("false")))
 				.build();
 	}
 	
@@ -128,9 +128,9 @@ public class CallBack1Tests {
 
 	public static ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
-				.add(logic("STRING_UPPER_SLOW").input("s", expr("s")).returnAs("s").timeout(3).build())
-				.add(logic("STRING_UPPER").input("s", "s1").returnAs("s1").build())
-				.add(logic("STRING_UPPER").input("s", "s2").returnAs("s2").build())
+				.add(logic("STRING_UPPER_SLOW").input("s", expr("s")).returnAs("s").timeout(3))
+				.add(logic("STRING_UPPER").input("s", "s1").returnAs("s1"))
+				.add(logic("STRING_UPPER").input("s", "s2").returnAs("s2"))
 				.build();
 	}
 

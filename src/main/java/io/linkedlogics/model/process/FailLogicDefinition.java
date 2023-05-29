@@ -19,7 +19,7 @@ public class FailLogicDefinition extends BaseLogicDefinition {
 		return clone;
 	}
 	
-	public static class FailLogicBuilder extends LogicBuilder<FailLogicBuilder, FailLogicDefinition> {
+	public static class FailLogicBuilder extends BaseLogicBuilder<FailLogicBuilder, FailLogicDefinition> {
 		public FailLogicBuilder() {
 			super(new FailLogicDefinition());
 		}

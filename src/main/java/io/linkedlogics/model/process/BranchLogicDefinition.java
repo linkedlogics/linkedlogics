@@ -33,13 +33,13 @@ public class BranchLogicDefinition extends BaseLogicDefinition {
 		return clone;
 	}
 
-	public static class BranchLogicBuilder extends LogicBuilder<BranchLogicBuilder, BranchLogicDefinition> {
-		public BranchLogicBuilder(ExpressionLogicDefinition expression, BaseLogicDefinition leftBranch, BaseLogicDefinition rightBranch) {
+	public static class BranchLogicBuilder extends BaseLogicBuilder<BranchLogicBuilder, BranchLogicDefinition> {
+		public BranchLogicBuilder(ExpressionLogicDefinition expression, BaseLogicBuilder<?, ?> leftBranch, BaseLogicBuilder<?, ?> rightBranch) {
 			super(new BranchLogicDefinition());
 			getLogic().setExpression(expression);
-			getLogic().setLeftLogic(leftBranch);
+			getLogic().setLeftLogic(leftBranch.build());
 			if (rightBranch != null) {
-				getLogic().setRightLogic(rightBranch);
+				getLogic().setRightLogic(rightBranch.build());
 			}
 		}
 

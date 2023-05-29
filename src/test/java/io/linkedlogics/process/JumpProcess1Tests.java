@@ -47,10 +47,10 @@ public class JumpProcess1Tests {
 
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
-				.add(jump("L2").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").label("L1").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").label("L2").build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1"))
+				.add(jump("L2"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").label("L1"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").label("L2"))
 				.build();
 	}
 
@@ -78,16 +78,16 @@ public class JumpProcess1Tests {
 
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
-				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v11").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v12").build(),
-						jump("L1").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v13").build()).build())
-				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v21").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v22").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v23").build()).build())
-				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v31").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v32").label("L1").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v33").build()).build())
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v11"),
+						logic("INSERT").input("list", expr("list")).input("val", "v12"),
+						jump("L1"),
+						logic("INSERT").input("list", expr("list")).input("val", "v13")))
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v21"),
+						logic("INSERT").input("list", expr("list")).input("val", "v22"),
+						logic("INSERT").input("list", expr("list")).input("val", "v23")))
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v31"),
+						logic("INSERT").input("list", expr("list")).input("val", "v32").label("L1"),
+						logic("INSERT").input("list", expr("list")).input("val", "v33")))
 				.build();
 	}
 	
@@ -111,10 +111,10 @@ public class JumpProcess1Tests {
 
 	public static ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").label("L1").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").build())
-				.add(jump("L1").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").label("L1"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v2"))
+				.add(jump("L1"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v3"))
 				.build();
 	}
 	
@@ -138,10 +138,10 @@ public class JumpProcess1Tests {
 
 	public static ProcessDefinition scenario4() {
 		return createProcess("SIMPLE_SCENARIO_4", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
-				.add(jump("L1").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1"))
+				.add(jump("L1"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v2"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v3"))
 				.build();
 	}
 

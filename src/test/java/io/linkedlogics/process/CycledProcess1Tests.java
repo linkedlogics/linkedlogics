@@ -39,19 +39,19 @@ public class CycledProcess1Tests {
 	
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").build())
-				.add(process("SIMPLE_SCENARIO_2", 0).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v2"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v3"))
+				.add(process("SIMPLE_SCENARIO_2", 0))
 				.build();
 	}
 	
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v4").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v5").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v6").build())
-				.add(process("SIMPLE_SCENARIO_1", 0).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v4"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v5"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v6"))
+				.add(process("SIMPLE_SCENARIO_1", 0))
 				.build();
 	}
 	

@@ -49,13 +49,13 @@ public class FailProcess1Tests {
 
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v2"))
 				.add(branch(expr("list.size() < 2"), 
-						logic("INSERT").input("list", expr("list")).input("val", "v3").build(), 
-						fail().withCode(-5).build()).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v5").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v6").build())
+						logic("INSERT").input("list", expr("list")).input("val", "v3"), 
+						fail().withCode(-5)))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v5"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v6"))
 				.build();
 	}
 	
@@ -82,19 +82,19 @@ public class FailProcess1Tests {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
 				.add(logic("INSERT")
 						.input("list", expr("list")).input("val", "v1")
-						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v1").build())
-						.build())
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v1"))
+						)
 				.add(logic("INSERT")
 						.input("list", expr("list")).input("val", "v2")
-						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v2").build())
-						.build())
-				.add(fail().build())
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v2"))
+						)
+				.add(fail())
 				.add(logic("INSERT")
 						.input("list", expr("list")).input("val", "v3")
-						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3").build())
-						.build())
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3"))
+						)
 				.add(logic("INSERT")
-						.input("list", expr("list")).input("val", "v4").forced().build())
+						.input("list", expr("list")).input("val", "v4").forced())
 				.build();
 	}
 	
@@ -122,23 +122,23 @@ public class FailProcess1Tests {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
 				.add(logic("INSERT")
 						.input("list", expr("list")).input("val", "v1")
-						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v1").build())
-						.build())
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v1"))
+						)
 				.add(logic("INSERT")
 						.input("list", expr("list")).input("val", "v2")
-						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v2").build())
-						.build())
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v2"))
+						)
 				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v11")
-						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v2").build()).build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v12").forced().build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v13").forced().build()).build())
-				.add(fail().build())
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v2")),
+						logic("INSERT").input("list", expr("list")).input("val", "v12").forced(),
+						logic("INSERT").input("list", expr("list")).input("val", "v13").forced()))
+				.add(fail())
 				.add(logic("INSERT")
 						.input("list", expr("list")).input("val", "v3")
-						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3").build())
-						.build())
+						.compensate(logic("REMOVE").input("list", expr("list")).input("val", "v3"))
+						)
 				.add(logic("INSERT")
-						.input("list", expr("list")).input("val", "v4").forced().build())
+						.input("list", expr("list")).input("val", "v4").forced())
 				.build();
 	}
 

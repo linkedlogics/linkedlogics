@@ -60,8 +60,8 @@ public class RetryProcess1Tests {
 
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", 1).retry(3, 1).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 1).retry(3, 1))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2))
 				.build();
 	}
 
@@ -88,8 +88,8 @@ public class RetryProcess1Tests {
 
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
-				.add(logic("INSERT_SAFE").input("list", expr("list")).input("val", 1).retry(3, 1).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
+				.add(logic("INSERT_SAFE").input("list", expr("list")).input("val", 1).retry(3, 1))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2))
 				.build();
 	}
 
@@ -112,11 +112,11 @@ public class RetryProcess1Tests {
 
 	public static ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
-				.add(group(logic("INSERT").input("list", expr("list")).input("val", 2).build(),
-						logic("INSERT").input("list", expr("list")).input("val", 1).build())
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", 2),
+						logic("INSERT").input("list", expr("list")).input("val", 1))
 						.retry(3, 1)
-						.build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 3).build())
+						)
+				.add(logic("INSERT").input("list", expr("list")).input("val", 3))
 				.build();
 	}
 	
@@ -139,11 +139,11 @@ public class RetryProcess1Tests {
 
 	public static ProcessDefinition scenario4() {
 		return createProcess("SIMPLE_SCENARIO_4", 0)
-				.add(group(logic("INSERT").input("list", expr("list")).input("val", 2).build(),
-						logic("INSERT").input("list", expr("list")).input("val", 1).build())
-						.retry(retry(3, 1).excludeCodes(-1).build())
-						.build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 3).build())
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", 2),
+						logic("INSERT").input("list", expr("list")).input("val", 1))
+						.retry(retry(3, 1).exclude().codes(-1))
+						)
+				.add(logic("INSERT").input("list", expr("list")).input("val", 3))
 				.build();
 	}
 

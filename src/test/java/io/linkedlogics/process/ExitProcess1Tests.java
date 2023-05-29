@@ -49,13 +49,13 @@ public class ExitProcess1Tests {
 
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v2"))
 				.add(branch(expr("list.size() < 2"), 
-						logic("INSERT").input("list", expr("list")).input("val", "v3").build(), 
-						exit().build()).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v5").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v6").build())
+						logic("INSERT").input("list", expr("list")).input("val", "v3"), 
+						exit()))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v5"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v6"))
 				.build();
 	}
 

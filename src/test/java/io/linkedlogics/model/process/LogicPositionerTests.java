@@ -90,56 +90,56 @@ public class LogicPositionerTests {
 	public static class ProcessA {
 		public ProcessDefinition createProcessA0() {
 			return createProcess(PROCESS_A, 0)
-					.add(logic(LOGIC_1).build())
-					.add(logic(LOGIC_2).build())
-					.add(logic(LOGIC_3).build())
+					.add(logic(LOGIC_1))
+					.add(logic(LOGIC_2))
+					.add(logic(LOGIC_3))
 					.build();
 		}
 		
 		public ProcessDefinition createProcessA1() {
 			return createProcess(PROCESS_A, 1)
 					.add(group(
-								logic(LOGIC_1).build(), 
-								logic(LOGIC_2).build())
-						.build())
+								logic(LOGIC_1), 
+								logic(LOGIC_2))
+						)
 					.add(group(
-								logic(LOGIC_2).build(), 
-								logic(LOGIC_3).build())
-						.build())
+								logic(LOGIC_2), 
+								logic(LOGIC_3))
+						)
 					.build();
 		}
 		
 		public ProcessDefinition createProcessA2() {
 			return createProcess(PROCESS_A, 2)
 					.add(group(
-								logic(LOGIC_1).build(), 
-								logic(LOGIC_2).build())
-						.build())
+								logic(LOGIC_1), 
+								logic(LOGIC_2))
+						)
 					.add(group(
-								branch(expr("true"), logic(LOGIC_2).build(), logic(LOGIC_3).build()).build(), 
-								logic(LOGIC_3).build())
-						.build())
+								branch(expr("true"), logic(LOGIC_2), logic(LOGIC_3)), 
+								logic(LOGIC_3))
+						)
 					.build();
 		}
 		
 		public ProcessDefinition createProcessA3() {
 			return createProcess(PROCESS_A, 3)
-					.add(logic(LOGIC_1).compensate(logic(LOGIC_2).build()).build())
-					.add(logic(LOGIC_3).build())
+					.add(logic(LOGIC_1).compensate(logic(LOGIC_2)))
+					.add(logic(LOGIC_3))
 					.build();
 		}
 		
 		public ProcessDefinition createProcessA4() {
 			return createProcess(PROCESS_A, 4)
 					.add(group(
-								logic(LOGIC_1).build(), 
-								logic(LOGIC_2).build())
-						.handle(error().withCodes(-1).usingLogic(logic(LOGIC_3).build()).build())
-						.build())
+								logic(LOGIC_1), 
+								logic(LOGIC_2))
+						.handle(error().withCodes(-1).using(logic(LOGIC_3)))
+						)
 					.add(group(
-								logic(LOGIC_2).build(), 
-								logic(LOGIC_3).build())
-						.build())
+								logic(LOGIC_2), 
+								logic(LOGIC_3))
+						)
 					.build();
 		}
 	}

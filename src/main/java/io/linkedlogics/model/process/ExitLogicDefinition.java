@@ -15,7 +15,7 @@ public class ExitLogicDefinition extends BaseLogicDefinition {
 		return clone;
 	}
 	
-	public static class ExitLogicBuilder extends LogicBuilder<ExitLogicBuilder, ExitLogicDefinition> {
+	public static class ExitLogicBuilder extends BaseLogicBuilder<ExitLogicBuilder, ExitLogicDefinition> {
 		public ExitLogicBuilder() {
 			super(new ExitLogicDefinition());
 		}

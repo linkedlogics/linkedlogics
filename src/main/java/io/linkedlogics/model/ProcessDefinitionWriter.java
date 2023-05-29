@@ -173,29 +173,27 @@ public class ProcessDefinitionWriter {
 		if (logic.getError() != null) {
 			write(builder, logic.getError());
 		}
-
-		builder.append(BUILD);
 	}
 
 	private void write(StringBuilder builder, RetryLogicDefinition retry) {
 		builder.append(".retry(retry(max(").append(retry.getMaxRetries()).append("), seconds(").append(retry.getSeconds()).append("))");
 
-		if (retry.getErrorCodeSet().size() > 0) {
-			if (retry.isExclude()) {
-				builder.append(".excludeCodes(").append(retry.getErrorCodeSet().stream().map(i -> String.valueOf(i)).collect(Collectors.joining(", ")));
-			} else {
-				builder.append(".includeCodes(").append(retry.getErrorCodeSet().stream().map(i -> String.valueOf(i)).collect(Collectors.joining(", ")));
-			}
+		if (retry.isExclude()) {
+			builder.append(".exclude()");
+		}
+
+		if (retry.isExclude()) {
+			builder.append(".codes(").append(retry.getErrorCodeSet().stream().map(i -> String.valueOf(i)).collect(Collectors.joining(", ")));
 			builder.append(")");
 		}
 
 		if (retry.getErrorMessageSet().size() > 0) {
-			builder.append(".andMessages(");
+			builder.append(".messages(");
 			builder.append(retry.getErrorMessageSet().stream().map(m -> "\"" + m + "\"").collect(Collectors.joining(", ")));
 			builder.append(")");
 		}
 
-		builder.append(BUILD).append(")");
+		builder.append(")");
 	}
 
 	private void write(StringBuilder builder, DelayLogicDefinition delay) {
@@ -293,12 +291,12 @@ public class ProcessDefinitionWriter {
 		}
 
 		if (error.getErrorLogic() != null) {
-			builder.append(".usingLogic(");
+			builder.append(".using(");
 			write(builder, error.getErrorLogic());
 			builder.append(")");
 		}
 
-		builder.append(BUILD).append(")");
+		builder.append(")");
 	}
 
 	private void write(StringBuilder builder, BranchLogicDefinition branch) {
@@ -351,7 +349,7 @@ public class ProcessDefinitionWriter {
 	
 	private void write(StringBuilder builder, ScriptLogicDefinition logic) {
 		String escaped = escape(logic.getExpression().getExpression());
-		builder.append("script(fromText(").append(escaped).append("))");
+		builder.append("script(").append(escaped).append(")");
 		if (logic.getReturnAs() != null) {
 			builder.append(".returnAs(\"").append(logic.getReturnAs()).append("\")");
 		} else if (logic.isReturnAsMap()) {
@@ -360,7 +358,6 @@ public class ProcessDefinitionWriter {
 	}
 	
 	private String escape(String expr) {
-//		expr = expr.replace("\n", "\\n").replace("\"", "\\\"").replace("$", "\\$").replace("^", "\\^");
 		return "decode(\"" + LinkedLogicsBuilder.encode(expr) + "\")";
 	}
 

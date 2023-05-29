@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.linkedlogics.model.ProcessLogicTypes;
+import io.linkedlogics.model.process.ErrorLogicDefinition.ErrorLogicBuilder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -52,10 +53,10 @@ public abstract class BaseLogicDefinition extends TypedLogicDefinition implement
 	protected abstract BaseLogicDefinition clone() ;
 	
 	@Getter
-	public static class LogicBuilder<T, L extends BaseLogicDefinition> {
+	public static class BaseLogicBuilder<T, L extends BaseLogicDefinition> {
 		protected L logic;
 		
-		public LogicBuilder(L logic) {
+		public BaseLogicBuilder(L logic) {
 			this.logic = logic;
 		}
 		
@@ -100,8 +101,8 @@ public abstract class BaseLogicDefinition extends TypedLogicDefinition implement
 			return (T) this;
 		}
 		
-		public T handle(ErrorLogicDefinition error) {
-			this.logic.setError(error);
+		public T handle(ErrorLogicBuilder error) {
+			this.logic.setError(error.build());
 			return (T) this;
 		}
 		

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import io.linkedlogics.model.ProcessLogicTypes;
+import io.linkedlogics.model.process.RetryLogicDefinition.RetryLogicBuilder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,10 +37,10 @@ public class GroupLogicDefinition extends BaseLogicDefinition {
 		logics.forEach(l -> getLogics().add(l));
 	}
 	
-	public static class GroupLogicBuilder extends LogicBuilder<GroupLogicBuilder, GroupLogicDefinition> {
-		public GroupLogicBuilder(BaseLogicDefinition... logics) {
+	public static class GroupLogicBuilder extends BaseLogicBuilder<GroupLogicBuilder, GroupLogicDefinition> {
+		public GroupLogicBuilder(BaseLogicBuilder... logics) {
 			super(new GroupLogicDefinition());
-			this.getLogic().addLogics(Arrays.stream(logics).collect(Collectors.toList()));
+			this.getLogic().addLogics(Arrays.stream(logics).map(b -> b.build()).collect(Collectors.toList()));
 		}
 		
 		public GroupLogicBuilder retry(int maxRetries, int delay) {
@@ -47,8 +48,8 @@ public class GroupLogicDefinition extends BaseLogicDefinition {
 			return this;
 		}
 		
-		public GroupLogicBuilder retry(RetryLogicDefinition retry) {
-			this.getLogic().setRetry(retry);
+		public GroupLogicBuilder retry(RetryLogicBuilder retry) {
+			this.getLogic().setRetry(retry.build());
 			return this;
 		}
 		

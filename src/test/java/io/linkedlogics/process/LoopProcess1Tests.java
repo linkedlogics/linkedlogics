@@ -49,8 +49,8 @@ public class LoopProcess1Tests {
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
 				.add(loop(when("list.size() < 6"), 
-						logic("INSERT").input("list", expr("list")).input("val", "v1").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v2").build()).build())
+						logic("INSERT").input("list", expr("list")).input("val", "v1"),
+						logic("INSERT").input("list", expr("list")).input("val", "v2")))
 				.build();
 	}
 	
@@ -73,11 +73,11 @@ public class LoopProcess1Tests {
 	
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
-				.add(script(expr("0")).returnAs("i").build())
+				.add(script("0").returnAs("i"))
 				.add(loop(when("i < source.size()"), 
-						logic("INSERT").input("list", expr("list")).input("val", expr("source[i]")).build(),
-						log("i = {i}").input("i", expr("i")).build(),
-						script(expr("i + 1")).returnAs("i").build()).build())
+						logic("INSERT").input("list", expr("list")).input("val", expr("source[i]")),
+						log("i = {i}").input("i", expr("i")),
+						script("i + 1").returnAs("i")))
 				.build();
 	}
 	
@@ -102,13 +102,13 @@ public class LoopProcess1Tests {
 	
 	public static ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
-				.add(script(expr("0")).returnAs("i").build())
+				.add(script("0").returnAs("i"))
 				.add(loop(when("i < list1.size()"), 
-						script(expr("0")).returnAs("j").build(),
+						script("0").returnAs("j"),
 						loop(when("j < list2.size()"), 
-								logic("INSERT").input("list", expr("list")).input("val", expr("list1[i] + list2[j]")).build(),
-								script(expr("j + 1")).returnAs("j").build()).build(),
-						script(expr("i + 1")).returnAs("i").build()).build())
+								logic("INSERT").input("list", expr("list")).input("val", expr("list1[i] + list2[j]")),
+								script("j + 1").returnAs("j")),
+						script("i + 1").returnAs("i")))
 				.build();
 	}
 

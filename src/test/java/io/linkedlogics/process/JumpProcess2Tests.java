@@ -2,7 +2,6 @@ package io.linkedlogics.process;
 
 import static io.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static io.linkedlogics.LinkedLogicsBuilder.expr;
-import static io.linkedlogics.LinkedLogicsBuilder.fromText;
 import static io.linkedlogics.LinkedLogicsBuilder.jump;
 import static io.linkedlogics.LinkedLogicsBuilder.logic;
 import static io.linkedlogics.LinkedLogicsBuilder.script;
@@ -49,11 +48,11 @@ public class JumpProcess2Tests {
 
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
-				.add(script(fromText("NEXT = 'L2'")).returnAs("NEXT").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
-				.add(jump(expr("NEXT")).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").label("L1").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").label("L2").build())
+				.add(script("NEXT = 'L2'").returnAs("NEXT"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1"))
+				.add(jump(expr("NEXT")))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").label("L1"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").label("L2"))
 				.build();
 	}
 

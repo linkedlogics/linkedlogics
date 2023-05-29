@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 import io.linkedlogics.model.ProcessLogicTypes;
+import io.linkedlogics.model.process.RetryLogicDefinition.RetryLogicBuilder;
 import io.linkedlogics.service.LogicService;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,7 +31,7 @@ public class SingleLogicDefinition extends BaseLogicDefinition {
 		return clone;
 	}
 	
-	public static class SingleLogicBuilder extends LogicBuilder<SingleLogicBuilder, SingleLogicDefinition> {
+	public static class SingleLogicBuilder extends BaseLogicBuilder<SingleLogicBuilder, SingleLogicDefinition> {
 		public SingleLogicBuilder() {
 			super(new SingleLogicDefinition());
 		}
@@ -55,8 +56,8 @@ public class SingleLogicDefinition extends BaseLogicDefinition {
 			return this;
 		}
 		
-		public SingleLogicBuilder compensate(SingleLogicDefinition compensationLogic) {
-			this.getLogic().setCompensationLogic(compensationLogic);
+		public SingleLogicBuilder compensate(SingleLogicBuilder compensationLogic) {
+			this.getLogic().setCompensationLogic(compensationLogic.build());
 			return this;
 		}
 		
@@ -75,8 +76,8 @@ public class SingleLogicDefinition extends BaseLogicDefinition {
 			return this;
 		}
 		
-		public SingleLogicBuilder retry(RetryLogicDefinition retry) {
-			this.getLogic().setRetry(retry);
+		public SingleLogicBuilder retry(RetryLogicBuilder retry) {
+			this.getLogic().setRetry(retry.build());
 			return this;
 		}
 		

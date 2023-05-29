@@ -24,7 +24,7 @@ public class LogLogicDefinition extends BaseLogicDefinition {
 		return clone;
 	}
 	
-	public static class LogLogicBuilder extends LogicBuilder<LogLogicBuilder, LogLogicDefinition> {
+	public static class LogLogicBuilder extends BaseLogicBuilder<LogLogicBuilder, LogLogicDefinition> {
 		public LogLogicBuilder(String message) {
 			super(new LogLogicDefinition(message));
 		}

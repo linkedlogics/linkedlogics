@@ -29,7 +29,7 @@ public class VerifyLogicDefinition extends BaseLogicDefinition {
 		return clone;
 	}
 
-	public static class VerifyLogicBuilder extends LogicBuilder<VerifyLogicBuilder, VerifyLogicDefinition> {
+	public static class VerifyLogicBuilder extends BaseLogicBuilder<VerifyLogicBuilder, VerifyLogicDefinition> {
 		public VerifyLogicBuilder(ExpressionLogicDefinition expression) {
 			super(new VerifyLogicDefinition());
 			getLogic().setExpression(expression);

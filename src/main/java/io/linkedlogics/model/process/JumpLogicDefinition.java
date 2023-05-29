@@ -23,7 +23,7 @@ public class JumpLogicDefinition extends BaseLogicDefinition {
 		return clone;
 	}
 	
-	public static class JumpLogicBuilder extends LogicBuilder<JumpLogicBuilder, JumpLogicDefinition> {
+	public static class JumpLogicBuilder extends BaseLogicBuilder<JumpLogicBuilder, JumpLogicDefinition> {
 		public JumpLogicBuilder(String label) {
 			super(new JumpLogicDefinition(label));
 		}

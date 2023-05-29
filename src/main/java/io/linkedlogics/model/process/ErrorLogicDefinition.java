@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import io.linkedlogics.model.ProcessLogicTypes;
+import io.linkedlogics.model.process.BaseLogicDefinition.BaseLogicBuilder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -54,8 +55,8 @@ public class ErrorLogicDefinition extends TypedLogicDefinition {
 			return withMessages(errorMessages);
 		}
 		
-		public ErrorLogicBuilder usingLogic(BaseLogicDefinition errorLogic) {
-			this.getLogic().setErrorLogic(errorLogic);
+		public ErrorLogicBuilder using(BaseLogicBuilder<?, ?> errorLogic) {
+			this.getLogic().setErrorLogic(errorLogic.build());
 			return this;
 		}
 		

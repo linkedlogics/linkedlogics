@@ -53,9 +53,9 @@ public class DelayedProcessor1Tests {
 
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
-				.add(logic("INSERT").input("list", var("list")).input("val", "v1").build())
-				.add(logic("INSERT").input("list", var("list")).input("val", "v2").delayed(seconds(3)).build())
-				.add(logic("INSERT").input("list", var("list")).input("val", "v3").build())
+				.add(logic("INSERT").input("list", var("list")).input("val", "v1"))
+				.add(logic("INSERT").input("list", var("list")).input("val", "v2").delayed(seconds(3)))
+				.add(logic("INSERT").input("list", var("list")).input("val", "v3"))
 				.build();
 	}
 	
@@ -84,15 +84,15 @@ public class DelayedProcessor1Tests {
 
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
-				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v11").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v12").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v13").build()).build())
-				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v21").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v22").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v23").build()).delayed(3).build())
-				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v31").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v32").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v33").build()).build())
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v11"),
+						logic("INSERT").input("list", expr("list")).input("val", "v12"),
+						logic("INSERT").input("list", expr("list")).input("val", "v13")))
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v21"),
+						logic("INSERT").input("list", expr("list")).input("val", "v22"),
+						logic("INSERT").input("list", expr("list")).input("val", "v23")).delayed(3))
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v31"),
+						logic("INSERT").input("list", expr("list")).input("val", "v32"),
+						logic("INSERT").input("list", expr("list")).input("val", "v33")))
 				.build();
 	}
 

@@ -92,9 +92,9 @@ public class ProcessReaderWriterTest {
 
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0).inputs(constants())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v2"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v3"))
 				.build();
 	}
 	
@@ -113,58 +113,58 @@ public class ProcessReaderWriterTest {
 						logic("INSERT")
 						.input("list", expr("list")).input("val", "v1").input("number", 2020)
 						.delayed(5)
-						.handle(error().withCodes(100,101).orMessages("error1", "error2").usingLogic(logic("ERROR").build()).build())
+						.handle(error().withCodes(100,101).orMessages("error1", "error2").using(logic("ERROR")))
 						.fork("F1")
 						.join("F2")
 						.label("L1")
-						.retry(retry(5, 3).includeCodes(100).andMessages("error1").build())
+						.retry(retry(5, 3).codes(100).messages("error1"))
 						.timeout(5)
-						.build()).build(),
-					exit().build(),
-					fail().withCode(200).andMessage("failure").build(),
-					jump("L1").build(),
-					savepoint().build(),
-					verify(expr("false")).elseFailWithCode(100).andMessage("failure").build(),
-					process("SIMPLE_SCENARIO_1", 0).build()
-				).build()).build();
+						),
+					exit(),
+					fail().withCode(200).andMessage("failure"),
+					jump("L1"),
+					savepoint(),
+					verify(expr("false")).elseFailWithCode(100).andMessage("failure"),
+					process("SIMPLE_SCENARIO_1", 0)
+				)).build();
 
 	}
 	
 	public static ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_2", 0).input("list", expr("list")).input("val", "v1").input("number", 2020)
-				.add(logic("INSERT").inputs("list", expr("list"), "val", "v1").build())
+				.add(logic("INSERT").inputs("list", expr("list"), "val", "v1"))
 				.add(logic("INSERT").inputs("list", expr("list"), "val", "v1")
-						.retry(retry(max(5), seconds(3)).includeCodes(100,234).andMessages("error1","dfgdg").build())
+						.retry(retry(max(5), seconds(3)).codes(100,234).messages("error1","dfgdg"))
 						.delayed(5)
 						.fork("F1")
 						.join("F0")
 						.timeout(5)
 						.label("L1")
-						.handle(error().withCodes(100,101).orMessages("error1", "error2").usingLogic(logic("ERROR").build()).build())
-						.build())
-				.add(exit().build())
-				.add(fail().withCode(200).andMessage("failure").build())
-				.add(loop(expr("true"), logic("INSERT").build()).fork().build())
-				.add(loop(expr("true"), logic("INSERT").build()).fork("F2").build())
-				.add(branch(when("account == 222"), logic("INSERT").inputs("list", expr("list"), "val", "v1").build()).build())
+						.handle(error().withCodes(100,101).orMessages("error1", "error2").using(logic("ERROR")))
+						)
+				.add(exit())
+				.add(fail().withCode(200).andMessage("failure"))
+				.add(loop(expr("true"), logic("INSERT")).fork())
+				.add(loop(expr("true"), logic("INSERT")).fork("F2"))
+				.add(branch(when("account == 222"), logic("INSERT").inputs("list", expr("list"), "val", "v1")))
 				.add(group(
 					branch(expr("a > 5"), 
 							logic("INSERT")
 							.input("list", expr("list")).input("val", "v1").input("number", 2020)
 							.delayed(5)
-							.handle(error().withCodes(100,101).orMessages("error1", "error2").usingLogic(logic("ERROR").build()).build())
+							.handle(error().withCodes(100,101).orMessages("error1", "error2").using(logic("ERROR")))
 							.fork("F1")
 							.join("F2")
 							.label("L1")
-							.retry(retry(max(5), seconds(3)).includeCodes(100).andMessages("error1").build())
+							.retry(retry(max(5), seconds(3)).codes(100).messages("error1"))
 							.timeout(5)
-							.build()).build(),
-					exit().build(),
-					fail().withCode(200).andMessage("failure").build(),
-					jump("L1").build(),
-					savepoint().build(),
-					verify(expr("false")).elseFailWithCode(100).andMessage("failure").build()
-					).build())
+							),
+					exit(),
+					fail().withCode(200).andMessage("failure"),
+					jump("L1"),
+					savepoint(),
+					verify(expr("false")).elseFailWithCode(100).andMessage("failure")
+					))
 				.build();
 	}
 }

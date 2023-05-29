@@ -18,7 +18,9 @@ import io.linkedlogics.annotation.Input;
 import io.linkedlogics.annotation.Logic;
 import io.linkedlogics.model.ProcessDefinition;
 import io.linkedlogics.model.process.BaseLogicDefinition;
+import io.linkedlogics.model.process.BaseLogicDefinition.BaseLogicBuilder;
 import io.linkedlogics.model.process.ExpressionLogicDefinition;
+import io.linkedlogics.model.process.GroupLogicDefinition.GroupLogicBuilder;
 import io.linkedlogics.model.process.SingleLogicDefinition;
 import io.linkedlogics.model.process.SingleLogicDefinition.SingleLogicBuilder;
 import io.linkedlogics.service.local.LocalServiceConfigurer;
@@ -40,37 +42,37 @@ public class OfferActivateLogics {
 	public static ProcessDefinition offerActivate() {
 		return createProcess(ACTIVATE_OFFER, 0)
 				.add(getSubscriberInfo())
-				.add(branch(checkNotActive(), sendFailNotification("NOT_ACTIVE")).build())
-				.add(branch(checkNotPrepaid(), sendFailNotification("NOT_PREPAID")).build())
-				.add(branch(checkNotTime(), sendFailNotification("NOT_TIME")).build())
+				.add(branch(checkNotActive(), sendFailNotification("NOT_ACTIVE")))
+				.add(branch(checkNotPrepaid(), sendFailNotification("NOT_PREPAID")))
+				.add(branch(checkNotTime(), sendFailNotification("NOT_TIME")))
 				.add(activateOffer("OFFER_1")
 						.compensate(deactivateOffer("OFFER_1"))
-						.handle(error().usingLogic(sendFailNotification("NO_BALANCE")).build()).build())
+						.handle(error().using(sendFailNotification("NO_BALANCE"))))
 				.add(sendSuccessNotification("SUCCESS"))
-						.add(verify(expr("false")).disabled().build())
-				.add(activateOffer("OFFER_2").delayed(5).build())
+				.add(verify(expr("false")).disabled())
+				.add(activateOffer("OFFER_2").delayed(5))
 				.build();
 	}
 	
-	private static SingleLogicDefinition getSubscriberInfo() {
-		return logic(GET_SUBSCRIBER_INFO).application(NGBSS_ADAPTER).build();
+	private static SingleLogicBuilder getSubscriberInfo() {
+		return logic(GET_SUBSCRIBER_INFO).application(NGBSS_ADAPTER);
 	}
 	
-	private static BaseLogicDefinition sendFailNotification(String template) {
-		return group(logic(SEND_FAIL_NOTIFICATION).input("msisdn", expr("msisdn")).input("template", template).build(),
-				exit().build()).build();
+	private static GroupLogicBuilder sendFailNotification(String template) {
+		return group(logic(SEND_FAIL_NOTIFICATION).input("msisdn", expr("msisdn")).input("template", template),
+				exit());
 	}
 	
-	private static SingleLogicDefinition sendSuccessNotification(String template) {
-		return logic(SEND_SUCCESS_NOTIFICATION).input("msisdn", expr("msisdn")).input("template", template).build();
+	private static SingleLogicBuilder sendSuccessNotification(String template) {
+		return logic(SEND_SUCCESS_NOTIFICATION).input("msisdn", expr("msisdn")).input("template", template);
 	}
 	
 	private static SingleLogicBuilder activateOffer(String offerId) {
 		return logic(ACTIVATE_OFFER).input("msisdn", expr("msisdn")).input("offer", offerId);
 	}
 	
-	private static SingleLogicDefinition deactivateOffer(String offerId) {
-		return logic(DEACTIVATE_OFFER).input("msisdn", expr("msisdn")).input("offer", offerId).build();
+	private static SingleLogicBuilder deactivateOffer(String offerId) {
+		return logic(DEACTIVATE_OFFER).input("msisdn", expr("msisdn")).input("offer", offerId);
 	}
 	
 	private static ExpressionLogicDefinition checkNotActive() {

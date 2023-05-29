@@ -46,8 +46,8 @@ public class InputProcess1Tests {
 
 	public ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
-				.add(logic("GET_FULLNAME").input("person", expr("person")).build())
-				.add(logic("SET_STATE").input("person", expr("person")).build())
+				.add(logic("GET_FULLNAME").input("person", expr("person")))
+				.add(logic("SET_STATE").input("person", expr("person")))
 				.build();
 	}
 	
@@ -73,7 +73,7 @@ public class InputProcess1Tests {
 
 	public ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
-				.add(logic("COUNT_BUSY_STATES").input("persons", expr("persons")).build())
+				.add(logic("COUNT_BUSY_STATES").input("persons", expr("persons")))
 				.build();
 	}
 	
@@ -99,7 +99,7 @@ public class InputProcess1Tests {
 
 	public ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
-				.add(logic("COUNT_UNIQUE").input("persons", expr("persons")).build())
+				.add(logic("COUNT_UNIQUE").input("persons", expr("persons")))
 				.build();
 	}
 	
@@ -125,7 +125,7 @@ public class InputProcess1Tests {
 
 	public static ProcessDefinition scenario4() {
 		return createProcess("SIMPLE_SCENARIO_4", 0)
-				.add(logic("CHECK_BY_FIRSTNAME").input("persons", expr("persons")).input("firstname", "firstname1").build())
+				.add(logic("CHECK_BY_FIRSTNAME").input("persons", expr("persons")).input("firstname", "firstname1"))
 				.build();
 	}
 	
@@ -143,7 +143,7 @@ public class InputProcess1Tests {
 
 	public ProcessDefinition scenario5() {
 		return createProcess("SIMPLE_SCENARIO_5", 0)
-				.add(logic("GET_PERSON").inputs("firstname", "firstname", "lastname", "lastname", "state", "FREE", "unknown", "unknown").build())
+				.add(logic("GET_PERSON").inputs("firstname", "firstname", "lastname", "lastname", "state", "FREE", "unknown", "unknown"))
 				.build();
 	}
 	
@@ -161,7 +161,7 @@ public class InputProcess1Tests {
 
 	public ProcessDefinition scenario6() {
 		return createProcess("SIMPLE_SCENARIO_6", 0)
-				.add(logic("GET_PERSON_MAP").inputs("firstname", "firstname", "lastname", "lastname", "state", "FREE", "unknown", "unknown").build())
+				.add(logic("GET_PERSON_MAP").inputs("firstname", "firstname", "lastname", "lastname", "state", "FREE", "unknown", "unknown"))
 				.build();
 	}
 

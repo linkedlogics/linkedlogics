@@ -53,11 +53,11 @@ public class AsyncProcess1Tests {
 
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", 1).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
-				.add(logic("MULTIPLY_ASYNC").input("val1", 3).input("val2", 2).input("delay", 500L).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 4).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 1))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2))
+				.add(logic("MULTIPLY_ASYNC").input("val1", 3).input("val2", 2).input("delay", 500L))
+				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 4))
 				.build();
 	}
 
@@ -83,11 +83,11 @@ public class AsyncProcess1Tests {
 
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", 1).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
-				.add(logic("MULTIPLY_ASYNC").input("val1", 3).input("val2", 2).input("delay", 6000L).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 4).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 1))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2))
+				.add(logic("MULTIPLY_ASYNC").input("val1", 3).input("val2", 2).input("delay", 6000L))
+				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 4))
 				.build();
 	}
 
@@ -114,12 +114,12 @@ public class AsyncProcess1Tests {
 
 	public static ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", 1).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 2).build())
-				.add(logic("MULTIPLY_ERROR").input("val1", 3).input("val2", 2).input("delay", 500L).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")).build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 4).forced().build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", 6).build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 1))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 2))
+				.add(logic("MULTIPLY_ERROR").input("val1", 3).input("val2", 2).input("delay", 500L))
+				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")))
+				.add(logic("INSERT").input("list", expr("list")).input("val", 4).forced())
+				.add(logic("INSERT").input("list", expr("list")).input("val", 6))
 				.build();
 	}
 

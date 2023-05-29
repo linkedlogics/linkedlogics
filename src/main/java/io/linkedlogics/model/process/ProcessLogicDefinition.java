@@ -30,7 +30,7 @@ public class ProcessLogicDefinition extends GroupLogicDefinition {
 		return "process ";
 	}
 
-	public static class ProcessLogicBuilder extends LogicBuilder<ProcessLogicBuilder, ProcessLogicDefinition> {
+	public static class ProcessLogicBuilder extends BaseLogicBuilder<ProcessLogicBuilder, ProcessLogicDefinition> {
 		public ProcessLogicBuilder(String processId, int version) {
 			super(new ProcessLogicDefinition(processId, version));
 		}

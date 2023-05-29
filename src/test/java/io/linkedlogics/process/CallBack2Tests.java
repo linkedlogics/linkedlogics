@@ -63,7 +63,7 @@ public class CallBack2Tests {
 
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
-				.add(logic("STRING_UPPER").input("s", expr("s")).returnAs("s").build())
+				.add(logic("STRING_UPPER").input("s", expr("s")).returnAs("s"))
 				.build();
 	}
 	

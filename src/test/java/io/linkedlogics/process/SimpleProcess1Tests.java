@@ -47,9 +47,9 @@ public class SimpleProcess1Tests {
 
 	public static ProcessDefinition scenario1() {
 		return createProcess("SIMPLE_SCENARIO_1", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v2"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v3"))
 				.build();
 	}
 
@@ -74,15 +74,15 @@ public class SimpleProcess1Tests {
 
 	public static ProcessDefinition scenario2() {
 		return createProcess("SIMPLE_SCENARIO_2", 0)
-				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v11").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v12").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v13").build()).build())
-				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v21").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v22").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v23").build()).build())
-				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v31").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v32").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v33").build()).build())
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v11"),
+						logic("INSERT").input("list", expr("list")).input("val", "v12"),
+						logic("INSERT").input("list", expr("list")).input("val", "v13")))
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v21"),
+						logic("INSERT").input("list", expr("list")).input("val", "v22"),
+						logic("INSERT").input("list", expr("list")).input("val", "v23")))
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v31"),
+						logic("INSERT").input("list", expr("list")).input("val", "v32"),
+						logic("INSERT").input("list", expr("list")).input("val", "v33")))
 				.build();
 	}
 
@@ -111,7 +111,7 @@ public class SimpleProcess1Tests {
 
 	public static ProcessDefinition scenario3() {
 		return createProcess("SIMPLE_SCENARIO_3", 0)
-				.add(group(group(group(group(group(group(logic("INSERT").input("list", expr("list")).input("val", "v1").build()).build()).build()).build()).build()).build()).build())
+				.add(group(group(group(group(group(group(logic("INSERT").input("list", expr("list")).input("val", "v1"))))))))
 				.build();
 	}
 
@@ -134,12 +134,12 @@ public class SimpleProcess1Tests {
 
 	public static ProcessDefinition scenario4() {
 		return createProcess("SIMPLE_SCENARIO_4", 0)
-				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v1").build(),
-						group(logic("INSERT").input("list", expr("list")).input("val", "v2").build(),
-								group(logic("INSERT").input("list", expr("list")).input("val", "v3").build(),
-										group(logic("INSERT").input("list", expr("list")).input("val", "v4").build(),
-												group(logic("INSERT").input("list", expr("list")).input("val", "v5").build(),
-														group(logic("INSERT").input("list", expr("list")).input("val", "v6").build()).build()).build()).build()).build()).build()).build())
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v1"),
+						group(logic("INSERT").input("list", expr("list")).input("val", "v2"),
+								group(logic("INSERT").input("list", expr("list")).input("val", "v3"),
+										group(logic("INSERT").input("list", expr("list")).input("val", "v4"),
+												group(logic("INSERT").input("list", expr("list")).input("val", "v5"),
+														group(logic("INSERT").input("list", expr("list")).input("val", "v6"))))))))
 				.build();
 	}
 
@@ -173,15 +173,15 @@ public class SimpleProcess1Tests {
 
 	public static ProcessDefinition scenario5() {
 		return createProcess("SIMPLE_SCENARIO_5", 0)
-				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v11").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v12").disabled().build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v13").build()).build())
-				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v21").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v22").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v23").build()).disabled().build())
-				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v31").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v32").build(),
-						logic("INSERT").input("list", expr("list")).input("val", "v33").build()).build())
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v11"),
+						logic("INSERT").input("list", expr("list")).input("val", "v12").disabled(),
+						logic("INSERT").input("list", expr("list")).input("val", "v13")))
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v21"),
+						logic("INSERT").input("list", expr("list")).input("val", "v22"),
+						logic("INSERT").input("list", expr("list")).input("val", "v23")).disabled())
+				.add(group(logic("INSERT").input("list", expr("list")).input("val", "v31"),
+						logic("INSERT").input("list", expr("list")).input("val", "v32"),
+						logic("INSERT").input("list", expr("list")).input("val", "v33")))
 				.build();
 	}
 
@@ -206,9 +206,9 @@ public class SimpleProcess1Tests {
 
 	public static ProcessDefinition scenario6() {
 		return createProcess("SIMPLE_SCENARIO_6", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
-				.add(logic("INSERT", 0).input("list", expr("list")).input("val", "v2").build())
-				.add(logic("INSERT", 0).input("list", expr("list")).input("val", "v3").build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1"))
+				.add(logic("INSERT", 0).input("list", expr("list")).input("val", "v2"))
+				.add(logic("INSERT", 0).input("list", expr("list")).input("val", "v3"))
 				.build();
 	}
 
@@ -235,9 +235,9 @@ public class SimpleProcess1Tests {
 
 	public static ProcessDefinition scenariol7() {
 		return createProcess("SIMPLE_SCENARIO_7", 0)
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v1").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").outputs("out", "o2").build())
-				.add(logic("INSERT").input("list", expr("list")).input("val", "v3").build())
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v1"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v2").outputs("out", "o2"))
+				.add(logic("INSERT").input("list", expr("list")).input("val", "v3"))
 				.build();
 	}
 
