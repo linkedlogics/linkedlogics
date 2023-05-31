@@ -75,6 +75,11 @@ public class ProcessDefinition implements Comparable<ProcessDefinition> {
 			return this;
 		}
 		
+		public ProcessBuilder add(List<BaseLogicBuilder<?, ?>> logics) {
+			logics.forEach(l -> this.process.getLogics().add(l.build()));
+			return this;
+		}
+		
 		public ProcessBuilder input(String key, Object value) {
 			this.process.getInputs().put(key, value);
 			return this;
