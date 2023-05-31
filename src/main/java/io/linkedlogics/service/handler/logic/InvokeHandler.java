@@ -39,7 +39,7 @@ public class InvokeHandler extends LogicHandler {
 			if (logic.isReturnAsync()) {
 				ServiceLocator.getInstance().getAsyncService().set(context);
 			}
-			log(context).handler(this).logic(logic).inputs().message("executing logic by calling " + logic.getMethod().getName() + "() in " + logic.getMethod().getDeclaringClass().getSimpleName() + ".java").info();
+			log(context).handler(this).logic(logic).inputs().message("executing logic by calling " + logic.getMethod().getName() + "() in " + logic.getMethod().getDeclaringClass().getSimpleName() + ".java").debug();
 			Object methodResult = invokeMethod(context, logic, getInvokeParams(context, logic));
 			context.setExecutedIn(Duration.between(context.getExecutedAt(), OffsetDateTime.now()).toMillis());
 //			ContextFlow.logic(context.getLogicPosition()).result(Boolean.TRUE).message(String.format("%s[%d]", context.getLogicId(), context.getLogicVersion())).duration(context.getExecutedIn()).log(context);

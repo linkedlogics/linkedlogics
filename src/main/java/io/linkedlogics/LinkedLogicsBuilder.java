@@ -51,11 +51,11 @@ public class LinkedLogicsBuilder {
 		return new SingleLogicBuilder().id(id).version(LogicService.LATEST_VERSION);
 	}
 	
-	public static GroupLogicBuilder group(BaseLogicBuilder... logics) {
+	public static GroupLogicBuilder group(BaseLogicBuilder<?, ?>... logics) {
 		return new GroupLogicBuilder(logics);
 	}
 	
-	public static LoopLogicBuilder loop(ExpressionLogicDefinition expression, BaseLogicBuilder... logics) {
+	public static LoopLogicBuilder loop(ExpressionLogicDefinition expression, BaseLogicBuilder<?, ?>... logics) {
 		return new LoopLogicBuilder(expression, logics);
 	}
 	

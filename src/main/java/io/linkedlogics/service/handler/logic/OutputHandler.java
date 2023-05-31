@@ -36,7 +36,7 @@ public class OutputHandler extends LogicHandler {
 		if (context.getOutput().isEmpty()) {
 			log(context).handler(this).logic(logic).outputs().message("not output").debug();
 		} else {
-			log(context).handler(this).logic(logic).outputs().message("setting output params").info();
+			log(context).handler(this).logic(logic).outputs().message("setting output params").debug();
 		}
 		
 		super.handle(context, null);

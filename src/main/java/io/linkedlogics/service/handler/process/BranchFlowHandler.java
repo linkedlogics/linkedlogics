@@ -27,12 +27,12 @@ public class BranchFlowHandler extends ProcessFlowHandler {
 				if (branchLogic.isSatisfied(context)) {
 					ContextFlow.branch(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message("branch is satisfied").log(context);
 					trace(context, "branch is satisfied going LEFT", candidatePosition, Flow.RESET);
-					log(context).handler(this).logic(branchLogic).message("branch is satisfied going LEFT").info();
+					log(context).handler(this).logic(branchLogic).message("branch is satisfied going LEFT").debug();
 					return HandlerResult.nextCandidate(candidatePosition + LogicPositioner.BRANCH_LEFT);
 				} else if (branchLogic.getRightLogic() != null) {
 					ContextFlow.branch(candidatePosition).name(candidate.get().getName()).result(Boolean.FALSE).message("branch is not satisfied").log(context);
 					trace(context, "branch is not satisfied going RIGHT", candidatePosition, Flow.RESET);
-					log(context).handler(this).logic(branchLogic).message("branch is satisfied going RIGHT").info();
+					log(context).handler(this).logic(branchLogic).message("branch is satisfied going RIGHT").debug();
 					return HandlerResult.nextCandidate(candidatePosition + LogicPositioner.BRANCH_RIGHT);
 				} else {
 					ContextFlow.branch(candidatePosition).name(candidate.get().getName()).result(Boolean.FALSE).message("branch is not satisfied (no logic)").log(context);

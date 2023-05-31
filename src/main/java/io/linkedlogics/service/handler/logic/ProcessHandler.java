@@ -128,7 +128,7 @@ public class ProcessHandler extends LogicHandler {
 		HandlerResult result = null;
 		
 		if (context.getStatus() == Status.INITIAL) {
-			log(context).handler(this).process().inputs(context.getParams()).message("starting context").info();
+			log(context).handler(this).process().inputs(context.getParams()).message("starting context").debug();
 			ContextFlow.start(context.getStartPosition()).name(String.format("%s[%d]", context.getProcessId(), context.getProcessVersion())).log(context);
 			result = HandlerResult.nextCandidate(context.getStartPosition());
 		} else if (context.getStatus() == Status.WAITING) {
