@@ -122,6 +122,9 @@ public class ProcessDefinitionWriter {
 			write(builder, (VerifyLogicDefinition) logic);
 		} else if (logic instanceof ScriptLogicDefinition) {
 			write(builder, (ScriptLogicDefinition) logic);
+			if (logic.getInputs() != null && !logic.getInputs().isEmpty()) {
+				write(builder, logic.getInputs(), true);
+			}
 		} else {
 			builder.append("MISSING TYPE ").append(logic.getType());
 		}

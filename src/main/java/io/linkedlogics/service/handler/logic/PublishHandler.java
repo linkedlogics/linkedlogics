@@ -12,6 +12,7 @@ import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.context.Context;
 import io.linkedlogics.context.ContextFlow;
 import io.linkedlogics.context.Status;
+import io.linkedlogics.model.process.BaseLogicDefinition;
 import io.linkedlogics.model.process.ExpressionLogicDefinition;
 import io.linkedlogics.model.process.ScriptLogicDefinition;
 import io.linkedlogics.model.process.SingleLogicDefinition;
@@ -41,12 +42,12 @@ public class PublishHandler extends LogicHandler {
 	public void handle(Context context, Object result) {
 		HandlerResult handlerResult = (HandlerResult) result;
 		if (handlerResult.isEndOfCandidates()) {
-			log(context).handler(this).context().message("execution " + (context.getError() == null ? "finished" : "failed")).info();
+			log(context).handler(this).context().message("execution " + (context.getError() == null ? "finished" : "failed")).debug();
 			finishContext(context);
 		} else if (handlerResult.getSelectedLogic().isPresent()) {
 			continueContext(context, handlerResult);
 		} else {
-			log(context).handler(this).context().message("execution paused").info();
+			log(context).handler(this).context().message("execution paused").debug();
 			pauseContext(context);
 		}
 		
@@ -69,7 +70,7 @@ public class PublishHandler extends LogicHandler {
 	}
 
 	private void finishContext(Context context) {
-		ContextFlow.finish(context.getLogicPosition()).result(context.getStatus() == Status.FINISHED ).log(context);
+		ContextFlow.finish("").result(context.getStatus() == Status.FINISHED ).log(context);
 		ServiceLocator.getInstance().getContextService().set(context);
 		if (context.isCallback()) {
 			ServiceLocator.getInstance().getCallbackService().publish(context);
@@ -107,6 +108,7 @@ public class PublishHandler extends LogicHandler {
 		context.setLogicReturnAs(logic.getReturnAs());
 		context.setLogicReturnAsMap(logic.isReturnAsMap());
 		context.setSubmittedAt(OffsetDateTime.now());
+		context.setInput(getInputs(context, logic));
 		context.setOutput(new HashMap<>());
 		context.setStatus(Status.STARTED);
 		context.setUpdatedAt(OffsetDateTime.now());
@@ -154,7 +156,7 @@ public class PublishHandler extends LogicHandler {
 		}
 	}
 
-	private Map<String, Object> getInputs(Context context, SingleLogicDefinition logic) {
+	private Map<String, Object> getInputs(Context context, BaseLogicDefinition logic) {
 		final EvaluatorService evaluator = ServiceLocator.getInstance().getEvaluatorService();
 		Map<String, Object> inputs = new HashMap<>();
 		logic.getInputs().entrySet().stream().forEach(e -> {

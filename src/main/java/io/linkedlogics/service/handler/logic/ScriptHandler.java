@@ -4,10 +4,10 @@ import static io.linkedlogics.context.ContextLog.log;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 import io.linkedlogics.context.Context;
-import io.linkedlogics.context.ContextFlow;
 import io.linkedlogics.service.ServiceLocator;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,14 +26,18 @@ public class ScriptHandler extends LogicHandler {
 	public void handle(Context context, Object result) {
 		context.setExecutedAt(OffsetDateTime.now());
 		try {
-			log(context).handler(this).inputs().message("executing script").info();
+			log(context).handler(this).inputs().message("executing script").debug();
 			String id = String.format("%s_%d_%s", context.getProcessId(), context.getProcessVersion(), context.getLogicPosition());
+			
+			Map<String, Object> scriptParams = new HashMap<>(context.getParams());
+			scriptParams.putAll(context.getInput());
+			
 			Object scriptResult = null;
 			if (context.getLogicReturnAs() != null) {
-				scriptResult = ServiceLocator.getInstance().getEvaluatorService().evaluate(context.getLogicScript(), context.getParams());
+				scriptResult = ServiceLocator.getInstance().getEvaluatorService().evaluate(context.getLogicScript(), scriptParams);
 				context.getOutput().put(context.getLogicReturnAs(), scriptResult);
 			} else if (context.isLogicReturnAsMap()) {
-				scriptResult = ServiceLocator.getInstance().getEvaluatorService().evaluateScript(context.getLogicScript(), id, context.getParams());
+				scriptResult = ServiceLocator.getInstance().getEvaluatorService().evaluateScript(context.getLogicScript(), id, scriptParams);
 				context.getOutput().putAll((Map) scriptResult);
 			}
 			
