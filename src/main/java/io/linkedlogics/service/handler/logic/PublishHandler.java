@@ -19,10 +19,12 @@ import io.linkedlogics.model.process.SingleLogicDefinition;
 import io.linkedlogics.service.EvaluatorService;
 import io.linkedlogics.service.SchedulerService;
 import io.linkedlogics.service.SchedulerService.Schedule;
+import io.linkedlogics.service.config.ServiceConfiguration;
 import io.linkedlogics.service.ServiceLocator;
 import io.linkedlogics.service.TriggerService;
 import io.linkedlogics.service.handler.process.HandlerResult;
 import io.linkedlogics.service.local.LocalProcessorService;
+import io.linkedlogics.service.local.config.LocalProcessorServiceConfig;
 import io.linkedlogics.service.task.ScriptTask;
 import io.linkedlogics.service.task.StartTask;
 import lombok.extern.slf4j.Slf4j;
@@ -91,7 +93,7 @@ public class PublishHandler extends LogicHandler {
 	
 	private void timeoutContext(Context context) {	
 		if (context.getExpiresAt() == null || context.getExpiresAt().isBefore(OffsetDateTime.now())) {
-			int timeout = ((LocalProcessorService) ServiceLocator.getInstance().getProcessorService()).getConfig().getTimeout();
+			int timeout = new ServiceConfiguration().getConfig(LocalProcessorServiceConfig.class).getTimeout();
 			context.setExpiresAt(OffsetDateTime.now().plusSeconds(timeout));
 		}
 		
@@ -147,7 +149,7 @@ public class PublishHandler extends LogicHandler {
 		
 		ServiceLocator.getInstance().getContextService().set(context);
 		
-		boolean localBypass = ((LocalProcessorService) ServiceLocator.getInstance().getProcessorService()).getConfig().getBypass(true);
+		boolean localBypass = new ServiceConfiguration().getConfig(LocalProcessorServiceConfig.class).getBypass(true);
 		
 		if (context.getApplication() == null || (localBypass && context.getApplication().equals(LinkedLogics.getApplicationName()))) {
 			ServiceLocator.getInstance().getConsumerService().consume(Context.forPublish(context));

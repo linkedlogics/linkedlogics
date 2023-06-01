@@ -7,6 +7,10 @@ import java.util.stream.Collectors;
 
 import io.linkedlogics.model.ProcessLogicTypes;
 import io.linkedlogics.model.process.RetryLogicDefinition.RetryLogicBuilder;
+import io.linkedlogics.service.ServiceLocator;
+import io.linkedlogics.service.config.ServiceConfiguration;
+import io.linkedlogics.service.local.config.LocalProcessServiceConfig;
+import io.linkedlogics.service.local.config.LocalProcessorServiceConfig;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -67,7 +71,11 @@ public class GroupLogicDefinition extends BaseLogicDefinition {
 		public GroupLogicDefinition build() {
 			this.getLogic().getLogics().forEach(l -> {
 				this.getLogic().getInputs().entrySet().forEach(e -> {
-					l.getInputs().putIfAbsent(e.getKey(), e.getValue());
+					if (new ServiceConfiguration().getConfig(LocalProcessServiceConfig.class).getParentInputsHasPriority().orElse(Boolean.FALSE)) {
+						l.getInputs().put(e.getKey(), e.getValue());
+					} else {
+						l.getInputs().putIfAbsent(e.getKey(), e.getValue());
+					}
 				});
 			});
 			return super.build();

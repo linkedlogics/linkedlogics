@@ -4,21 +4,18 @@ import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import io.linkedlogics.service.ConfigurableService;
 import io.linkedlogics.service.ProcessorService;
+import io.linkedlogics.service.config.ServiceConfiguration;
 import io.linkedlogics.service.local.config.LocalProcessorServiceConfig;
 import io.linkedlogics.service.task.LinkedLogicsTask;
 
-public class LocalProcessorService extends ConfigurableService<LocalProcessorServiceConfig> implements ProcessorService {
+public class LocalProcessorService implements ProcessorService {
 	private ExecutorService service;
-	
-	public LocalProcessorService() {
-		super(LocalProcessorServiceConfig.class);
-	}
+	private LocalProcessorServiceConfig config = new ServiceConfiguration().getConfig(LocalProcessorServiceConfig.class);
 	
 	@Override
 	public void start() {
-		Optional<Integer> threads = getConfig().getThreads();
+		Optional<Integer> threads = config.getThreads();
 		if (threads.isEmpty()) {
 			service = Executors.newCachedThreadPool();
 		} else {

@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import io.linkedlogics.context.Context;
 import io.linkedlogics.model.ProcessLogicTypes;
 import io.linkedlogics.service.ServiceLocator;
+import io.linkedlogics.service.config.ServiceConfiguration;
+import io.linkedlogics.service.local.config.LocalProcessServiceConfig;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -50,7 +52,11 @@ public class LoopLogicDefinition extends GroupLogicDefinition {
 		public LoopLogicDefinition build() {
 			this.getLogic().getLogics().forEach(l -> {
 				this.getLogic().getInputs().entrySet().forEach(e -> {
-					l.getInputs().putIfAbsent(e.getKey(), e.getValue());
+					if (new ServiceConfiguration().getConfig(LocalProcessServiceConfig.class).getParentInputsHasPriority().orElse(Boolean.FALSE)) {
+						l.getInputs().put(e.getKey(), e.getValue());
+					} else {
+						l.getInputs().putIfAbsent(e.getKey(), e.getValue());
+					}
 				});
 			});
 			return super.build();

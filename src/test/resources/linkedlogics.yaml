@@ -7,6 +7,6 @@ linkedlogics:
     callback:
       expire-time: 1
     processor:
-      timeout: 30
+      timeout: 300
     evaluator:
       check-syntax: true

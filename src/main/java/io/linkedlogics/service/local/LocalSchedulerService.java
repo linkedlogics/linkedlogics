@@ -7,21 +7,18 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import io.linkedlogics.service.ConfigurableService;
 import io.linkedlogics.service.SchedulerService;
+import io.linkedlogics.service.config.ServiceConfiguration;
 import io.linkedlogics.service.local.config.LocalSchedulerServiceConfig;
 import lombok.AllArgsConstructor;
 
-public class LocalSchedulerService extends ConfigurableService<LocalSchedulerServiceConfig> implements SchedulerService {
+public class LocalSchedulerService implements SchedulerService {
 	private ScheduledExecutorService service;
-	
-	public LocalSchedulerService() {
-		super(LocalSchedulerServiceConfig.class);
-	}
+	private LocalSchedulerServiceConfig config = new ServiceConfiguration().getConfig(LocalSchedulerServiceConfig.class);
 	
 	@Override
 	public void start() {
-		Optional<Integer> threads = getConfig().getThreads();
+		Optional<Integer> threads = config.getThreads();
 		if (threads.isEmpty()) {
 			service = Executors.newSingleThreadScheduledExecutor();
 		} else {

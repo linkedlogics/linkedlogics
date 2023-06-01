@@ -56,7 +56,6 @@ public class RetryLogicDefinition extends TypedLogicDefinition {
 		}
 		
 		public RetryLogicBuilder codes(Integer... errorCodes) {
-			this.getLogic().setExclude(false);
 			this.getLogic().setErrorCodeSet(Set.of(errorCodes));
 			return this;
 		}

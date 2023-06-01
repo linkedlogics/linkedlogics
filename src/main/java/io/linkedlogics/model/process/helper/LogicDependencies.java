@@ -3,6 +3,8 @@ package io.linkedlogics.model.process.helper;
 import io.linkedlogics.model.ProcessDefinition;
 import io.linkedlogics.model.process.ProcessLogicDefinition;
 import io.linkedlogics.service.ServiceLocator;
+import io.linkedlogics.service.config.ServiceConfiguration;
+import io.linkedlogics.service.local.config.LocalProcessServiceConfig;
 
 public class LogicDependencies {
 	
@@ -15,7 +17,11 @@ public class LogicDependencies {
 			p.setLogics(ServiceLocator.getInstance().getProcessService().getProcess(p.getProcessId(), p.getVersion()).get().cloneLogics());
 			p.getLogics().forEach(l -> {
 				p.getInputs().entrySet().forEach(e -> {
-					l.getInputs().putIfAbsent(e.getKey(), e.getValue());
+					if (new ServiceConfiguration().getConfig(LocalProcessServiceConfig.class).getParentInputsHasPriority().orElse(Boolean.FALSE)) {
+						l.getInputs().put(e.getKey(), e.getValue());
+					} else {
+						l.getInputs().putIfAbsent(e.getKey(), e.getValue());
+					}
 				});
 			});
 			LogicPositioner.setPositions(definition);

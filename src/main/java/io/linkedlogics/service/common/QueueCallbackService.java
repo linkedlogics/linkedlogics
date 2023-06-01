@@ -12,22 +12,19 @@ import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.LinkedLogicsCallback;
 import io.linkedlogics.context.Context;
 import io.linkedlogics.service.CallbackService;
-import io.linkedlogics.service.ConfigurableService;
 import io.linkedlogics.service.QueueService;
 import io.linkedlogics.service.ServiceLocator;
+import io.linkedlogics.service.config.ServiceConfiguration;
 import io.linkedlogics.service.local.config.LocalCallbackServiceConfig;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class QueueCallbackService extends ConfigurableService<LocalCallbackServiceConfig> implements CallbackService, Runnable {
+public class QueueCallbackService implements CallbackService, Runnable {
 	private ConcurrentHashMap<String, LinkedLogicsCallback> callbackMap;
 	private ScheduledExecutorService scheduler;
 	private Thread consumer;
 	private boolean isRunning;
-
-	public QueueCallbackService() {
-		super(LocalCallbackServiceConfig.class);
-	}
+	private LocalCallbackServiceConfig config = new ServiceConfiguration().getConfig(LocalCallbackServiceConfig.class);
 	
 	@Override
 	public void start() {
@@ -61,7 +58,7 @@ public class QueueCallbackService extends ConfigurableService<LocalCallbackServi
 	@Override
 	public void set(String contextId, LinkedLogicsCallback callback) {
 		callbackMap.put(contextId, callback);
-		scheduler.schedule(() -> callback.onTimeout(), getConfig().getExpireTimeOrDefault(5), TimeUnit.SECONDS);
+		scheduler.schedule(() -> callback.onTimeout(), config.getExpireTimeOrDefault(5), TimeUnit.SECONDS);
 	}
 
 	@Override

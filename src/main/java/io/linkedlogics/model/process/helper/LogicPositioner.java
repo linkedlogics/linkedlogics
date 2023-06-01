@@ -10,6 +10,8 @@ import io.linkedlogics.model.process.BranchLogicDefinition;
 import io.linkedlogics.model.process.GroupLogicDefinition;
 import io.linkedlogics.model.process.ProcessLogicDefinition;
 import io.linkedlogics.model.process.SingleLogicDefinition;
+import io.linkedlogics.service.config.ServiceConfiguration;
+import io.linkedlogics.service.local.config.LocalProcessServiceConfig;
 
 public abstract class LogicPositioner {
 	public static final String BRANCH_LEFT = "L";
@@ -29,7 +31,11 @@ public abstract class LogicPositioner {
 		
 		process.getLogics().forEach(l -> {
 			process.getInputs().entrySet().forEach(e -> {
-				l.getInputs().putIfAbsent(e.getKey(), e.getValue());
+				if (new ServiceConfiguration().getConfig(LocalProcessServiceConfig.class).getParentInputsHasPriority().orElse(Boolean.FALSE)) {
+					l.getInputs().put(e.getKey(), e.getValue());
+				} else {
+					l.getInputs().putIfAbsent(e.getKey(), e.getValue());
+				}
 			});
 		});
 	}

@@ -10,11 +10,14 @@ import io.linkedlogics.model.ProcessDefinitionReader;
 import io.linkedlogics.model.ProcessDefinitionWriter;
 import io.linkedlogics.model.process.helper.LogicDependencies;
 import io.linkedlogics.service.ProcessService;
+import io.linkedlogics.service.config.ServiceConfiguration;
+import io.linkedlogics.service.local.config.LocalProcessServiceConfig;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class LocalProcessService implements ProcessService {
 	protected Map<String, ProcessDefinition> definitions = new ConcurrentHashMap<>();
+	private LocalProcessServiceConfig config = new ServiceConfiguration().getConfig(LocalProcessServiceConfig.class);
 	
 	@Override
 	public Optional<ProcessDefinition> getProcess(String processId) {
