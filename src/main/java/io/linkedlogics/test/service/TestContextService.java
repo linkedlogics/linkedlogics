@@ -1,4 +1,4 @@
-package io.linkedlogics.test;
+package io.linkedlogics.test.service;
 
 import io.linkedlogics.context.Context;
 import io.linkedlogics.service.local.LocalContextService;

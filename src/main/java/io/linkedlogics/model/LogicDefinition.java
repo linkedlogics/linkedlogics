@@ -31,4 +31,16 @@ public class LogicDefinition {
 		this.parameters = Parameter.initParameters(method);
 		this.returnAs = !annotation.returnAs().isEmpty() ? annotation.returnAs() : null;
 	}
+	
+	public LogicDefinition(String id, int version, String description, boolean isReturnAsync, boolean isReturnMap, String returnAs, Method method, Object object) {
+		this.id = id;
+		this.version = version;
+		this.description = description;
+		this.isReturnAsync = isReturnAsync;
+		this.isReturnMap = isReturnMap;
+		this.method = method;
+		this.object = object;
+		this.parameters = Parameter.initParameters(method);
+		this.returnAs = returnAs;
+	}
 }

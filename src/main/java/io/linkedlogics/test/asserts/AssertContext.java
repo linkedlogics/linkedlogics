@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import io.linkedlogics.context.Context;
-import io.linkedlogics.test.TestContextService;
+import io.linkedlogics.test.service.TestContextService;
 
 public class AssertContext {
 	private Context context;

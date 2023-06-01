@@ -10,6 +10,8 @@ import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.service.LinkedLogicsService;
 import io.linkedlogics.service.ServiceConfigurer;
 import io.linkedlogics.service.local.LocalServiceConfigurer;
+import io.linkedlogics.test.service.TestContextService;
+import io.linkedlogics.test.service.TestLogicService;
 
 public class LinkedLogicsExtension implements BeforeEachCallback, AfterEachCallback {
 
@@ -22,6 +24,7 @@ public class LinkedLogicsExtension implements BeforeEachCallback, AfterEachCallb
 	public void beforeEach(ExtensionContext context) throws Exception {
 		LocalServiceConfigurer serviceConfigurer = new LocalServiceConfigurer();
 		serviceConfigurer.configure(new TestContextService());
+		serviceConfigurer.configure(new TestLogicService());
 		LinkedLogicsRegister annotation = context.getRequiredTestInstance().getClass().getAnnotation(LinkedLogicsRegister.class);
 		
 		if (annotation != null) {

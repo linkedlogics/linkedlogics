@@ -25,7 +25,7 @@ import io.linkedlogics.service.common.QueuePublisherService;
 import io.linkedlogics.service.common.QueueSchedulerService;
 import io.linkedlogics.test.LinkedLogicsExtension;
 import io.linkedlogics.test.LinkedLogicsRegister;
-import io.linkedlogics.test.TestContextService;
+import io.linkedlogics.test.service.TestContextService;
 
 @ExtendWith(LinkedLogicsExtension.class)
 @LinkedLogicsRegister(serviceClasses = {QueueCallbackService.class, QueueConsumerService.class, QueuePublisherService.class, QueueSchedulerService.class})

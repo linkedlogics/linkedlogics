@@ -21,7 +21,7 @@ import io.linkedlogics.context.ContextError;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.ProcessDefinition;
 import io.linkedlogics.test.LinkedLogicsExtension;
-import io.linkedlogics.test.TestContextService;
+import io.linkedlogics.test.service.TestContextService;
 
 @ExtendWith(LinkedLogicsExtension.class)
 public class CallBack1Tests {

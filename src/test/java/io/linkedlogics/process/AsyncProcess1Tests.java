@@ -22,7 +22,7 @@ import io.linkedlogics.context.Status;
 import io.linkedlogics.exception.LogicException;
 import io.linkedlogics.model.ProcessDefinition;
 import io.linkedlogics.test.LinkedLogicsExtension;
-import io.linkedlogics.test.TestContextService;
+import io.linkedlogics.test.service.TestContextService;
 
 @ExtendWith(LinkedLogicsExtension.class)
 public class AsyncProcess1Tests {
