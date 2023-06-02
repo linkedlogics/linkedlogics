@@ -29,7 +29,7 @@ public class JumpProcess2Tests {
 
 	@Test
 	public void testScenario1() {
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();

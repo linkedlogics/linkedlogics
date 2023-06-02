@@ -32,7 +32,7 @@ public class InputProcess1Tests {
 
 	@Test
 	public void testScenario1() {
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").params("person", new Person("firstname", "lastname", "FREE")).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_1").params("person", new Person("firstname", "lastname", "FREE")).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -60,7 +60,7 @@ public class InputProcess1Tests {
 		persons.add(new Person("firstname", "lastname", "BUSY"));
 		persons.add(new Person("firstname", "lastname", "BUSY"));
 		
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_2").params("persons", persons).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_2").params("persons", persons).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -86,7 +86,7 @@ public class InputProcess1Tests {
 		persons.add(new Person("firstname1", "lastname1", "FREE"));
 		persons.add(new Person("firstname3", "lastname3", "FREE"));
 		
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_3").params("persons", persons).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_3").params("persons", persons).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -112,7 +112,7 @@ public class InputProcess1Tests {
 		persons.put("firstname4", new Person("firstname4", "lastname4", "FREE"));
 		persons.put("firstname5", new Person("firstname5", "lastname5", "FREE"));
 		
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_4").params("persons", persons).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_4").params("persons", persons).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -131,7 +131,7 @@ public class InputProcess1Tests {
 	
 	@Test
 	public void testScenario5() {
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_5").params("firstname", "firstname", "lastname", "lastname", "state", "FREE").build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_5").params("firstname", "firstname", "lastname", "lastname", "state", "FREE").build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -149,7 +149,7 @@ public class InputProcess1Tests {
 	
 	@Test
 	public void testScenario6() {
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_6").params("firstname", "firstname", "lastname", "lastname", "state", "FREE").build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_6").params("firstname", "firstname", "lastname", "lastname", "state", "FREE").build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();

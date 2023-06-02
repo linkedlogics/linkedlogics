@@ -29,7 +29,7 @@ public class ExitProcess1Tests {
 
 	@Test
 	public void testScenario1() {
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -42,7 +42,7 @@ public class ExitProcess1Tests {
 		assertContext().when("1").isExecuted();
 		assertContext().when("2").isExecuted();
 		assertContext().when("3").asBranch().isNotSatisfied();
-		assertContext().when("3R").isExecuted();
+		assertContext().when("3").asBranch().rightBranch().isExecuted();
 		assertContext().when("4").isNotExecuted();
 		assertContext().when("5").isNotExecuted();
 	}

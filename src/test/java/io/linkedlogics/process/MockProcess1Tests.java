@@ -4,13 +4,12 @@ import static io.linkedlogics.LinkedLogicsBuilder.createProcess;
 import static io.linkedlogics.LinkedLogicsBuilder.expr;
 import static io.linkedlogics.LinkedLogicsBuilder.logic;
 import static io.linkedlogics.test.LinkedLogicsTest.assertContext;
-import static io.linkedlogics.test.LinkedLogicsTest.mockLogic;
 import static io.linkedlogics.test.LinkedLogicsTest.assertInputs;
+import static io.linkedlogics.test.LinkedLogicsTest.mockLogic;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +22,6 @@ import io.linkedlogics.context.ContextBuilder;
 import io.linkedlogics.context.Status;
 import io.linkedlogics.model.ProcessDefinition;
 import io.linkedlogics.test.LinkedLogicsExtension;
-import io.linkedlogics.test.LinkedLogicsTest;
 import io.linkedlogics.test.service.TestContextService;
 
 @ExtendWith(LinkedLogicsExtension.class)
@@ -33,7 +31,7 @@ public class MockProcess1Tests {
 	public void testScenario1() {
 		mockLogic("MULTIPLY").returnAs("multiply_result").thenReturn(-1);
 		
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -60,7 +58,7 @@ public class MockProcess1Tests {
 		mockLogic("MULTIPLY").when("val1 > val2").returnAs("multiply_result").thenReturn(-1);
 		mockLogic("MULTIPLY").when("val2 > val1").returnAs("multiply_result").thenReturn(-2);
 		
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_2").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_2").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -88,7 +86,7 @@ public class MockProcess1Tests {
 	public void testScenario3() {
 		mockLogic("MULTIPLY").when("val1 == val2").returnAs("multiply_result").thenReturn(-1);
 		
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_3").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_3").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -115,7 +113,7 @@ public class MockProcess1Tests {
 		mockLogic("MULTIPLY").when("val1 > val2").returnAs("multiply_result").thenReturn(-1);
 		mockLogic("MULTIPLY").when("val2 > val1").thenThrowError(-2, "error occured");
 		
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_4").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_4").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -145,7 +143,7 @@ public class MockProcess1Tests {
 	public void testScenario5() {
 		mockLogic("MULTIPLY").captureAs("MULTIPLY").returnAs("multiply_result").thenReturn(-1);
 		
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_5").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_5").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();

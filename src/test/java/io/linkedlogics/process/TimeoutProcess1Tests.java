@@ -28,7 +28,7 @@ public class TimeoutProcess1Tests {
 	@Test
 	public void testScenario1() {
 		long start = System.currentTimeMillis();
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil(2000);
 		long finish = System.currentTimeMillis();
 		
@@ -56,7 +56,7 @@ public class TimeoutProcess1Tests {
 	@Test
 	public void testScenario2() {
 		long start = System.currentTimeMillis();
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_2").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_2").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil(2000);
 		long finish = System.currentTimeMillis();
 		
@@ -83,7 +83,7 @@ public class TimeoutProcess1Tests {
 	@Test
 	public void testScenario3() {
 		long start = System.currentTimeMillis();
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_3").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_3").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil(2000);
 		long finish = System.currentTimeMillis();
 		
@@ -109,7 +109,7 @@ public class TimeoutProcess1Tests {
 	@Test
 	public void testScenario4() {
 		long start = System.currentTimeMillis();
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_4").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_4").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil(2000);
 		long finish = System.currentTimeMillis();
 		
@@ -138,7 +138,7 @@ public class TimeoutProcess1Tests {
 	@Test
 	public void testScenario5() {
 		long start = System.currentTimeMillis();
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_5").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_5").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil(2000);
 		long finish = System.currentTimeMillis();
 		

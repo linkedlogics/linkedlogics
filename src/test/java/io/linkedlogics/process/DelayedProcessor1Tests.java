@@ -31,7 +31,7 @@ public class DelayedProcessor1Tests {
 	@Test
 	public void testScenario1() {
 		long start = System.currentTimeMillis();
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		long finish = System.currentTimeMillis();
 		
@@ -62,7 +62,7 @@ public class DelayedProcessor1Tests {
 	@Test
 	public void testScenario2() {
 		long start = System.currentTimeMillis();
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_2").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_2").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		long finish = System.currentTimeMillis();
 		

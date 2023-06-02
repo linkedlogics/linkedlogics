@@ -14,17 +14,22 @@ import io.linkedlogics.service.ServiceLocator;
 
 public class ContextBuilder {
 	private String processId;
-	private int processVersion = ProcessService.LATEST_VERSION;
+	private int processVersion;
 	private String contextId;
 	private String contextKey;
 	private Map<String, Object> params = new HashMap<>();
 	
-	private ContextBuilder(String processId) {
+	private ContextBuilder(String processId, int processVersion) {
 		this.processId = processId;
+		this.processVersion = processVersion;
 	}
 	
-	public static ContextBuilder process(String processId) {
-		return new ContextBuilder(processId);
+	public static ContextBuilder newContext(String processId) {
+		return new ContextBuilder(processId, ProcessService.LATEST_VERSION);
+	}
+	
+	public static ContextBuilder newContext(String processId, int processVersion) {
+		return new ContextBuilder(processId, processVersion);
 	}
 	
 	public Context build() {
@@ -49,16 +54,6 @@ public class ContextBuilder {
 			
 			return new Context(contextId, contextKey, process.getId(), process.getVersion(), params);
 		}).orElseThrow(() -> new IllegalArgumentException(String.format("process %s is not found", processId)));
-	}
-	
-	public ContextBuilder version(int processVersion) {
-		this.processVersion = processVersion;
-		return this;
-	}
-	
-	public ContextBuilder latestVersion() {
-		this.processVersion = ProcessService.LATEST_VERSION;
-		return this;
 	}
 	
 	public ContextBuilder id(String id) {

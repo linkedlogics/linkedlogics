@@ -30,7 +30,7 @@ public class SimpleProcess2Tests {
 
 	@Test
 	public void testScenario1() {
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -60,7 +60,7 @@ public class SimpleProcess2Tests {
 
 	@Test
 	public void testScenario2() {
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_2").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_2").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -89,7 +89,7 @@ public class SimpleProcess2Tests {
 
 	@Test
 	public void testScenario3() {
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_3").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_3").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -119,7 +119,7 @@ public class SimpleProcess2Tests {
 
 	@Test
 	public void testScenario4() {
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_4").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_4").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -148,7 +148,7 @@ public class SimpleProcess2Tests {
 
 	@Test
 	public void testScenario5() {
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_5").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_5").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -180,7 +180,7 @@ public class SimpleProcess2Tests {
 
 	@Test
 	public void testScenario6() {
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_6").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_6").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -215,7 +215,7 @@ public class SimpleProcess2Tests {
 
 	@Test
 	public void testScenario7() {
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_7").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_7").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -250,7 +250,7 @@ public class SimpleProcess2Tests {
 
 	@Test
 	public void testScenario8() {
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_8").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_8").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		
 		Context ctx = TestContextService.getCurrentContext();

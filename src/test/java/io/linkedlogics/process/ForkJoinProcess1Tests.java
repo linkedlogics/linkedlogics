@@ -28,7 +28,7 @@ public class ForkJoinProcess1Tests {
 	@Test
 	public void testScenario1() {
 		long start = System.currentTimeMillis();
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_1").build());
 
 		TestContextService.blockUntil();
 		long finish = System.currentTimeMillis();
@@ -69,7 +69,7 @@ public class ForkJoinProcess1Tests {
 	@Test
 	public void testScenario2() {
 		long start = System.currentTimeMillis();
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_2").build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_2").build());
 		TestContextService.blockUntil();
 		long finish = System.currentTimeMillis();
 
@@ -116,7 +116,7 @@ public class ForkJoinProcess1Tests {
 	@Test
 	public void testScenario3() {
 		long start = System.currentTimeMillis();
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_3").build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_3").build());
 		TestContextService.blockUntil();
 		long finish = System.currentTimeMillis();
 

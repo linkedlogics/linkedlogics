@@ -34,7 +34,7 @@ public class CallBack2Tests {
 	@Test
 	public void testScenario1() {
 		AtomicBoolean result = new AtomicBoolean();
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").params("s", "hello").build(),
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_1").params("s", "hello").build(),
 				new LinkedLogicsCallback() {
 					
 					@Override

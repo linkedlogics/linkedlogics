@@ -26,14 +26,14 @@ public class CycledProcess1Tests {
 	@Test
 	public void testScenario1() {
 		assertThatThrownBy(() -> {
-			LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
+			LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_1").params("list", new ArrayList<>()).build());
 		}).isInstanceOf(MissingLogicError.class);
 	}
 	
 	@Test
 	public void testScenario2() {
 		assertThatThrownBy(() -> {
-			LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_2").params("list", new ArrayList<>()).build());
+			LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_2").params("list", new ArrayList<>()).build());
 		}).isInstanceOf(MissingLogicError.class);
 	}
 	

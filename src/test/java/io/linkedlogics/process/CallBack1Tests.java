@@ -29,7 +29,7 @@ public class CallBack1Tests {
 	@Test
 	public void testScenario1() {
 		AtomicBoolean result = new AtomicBoolean();
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").params("s", "hello").build(),
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_1").params("s", "hello").build(),
 				new LinkedLogicsCallback() {
 					
 					@Override
@@ -65,7 +65,7 @@ public class CallBack1Tests {
 	@Test
 	public void testScenario2() {
 		AtomicBoolean result = new AtomicBoolean();
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_2").params("s", "hello").build(),
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_2").params("s", "hello").build(),
 				new LinkedLogicsCallback() {
 					
 					@Override
@@ -101,7 +101,7 @@ public class CallBack1Tests {
 	@Test
 	public void testScenario3() {
 		AtomicBoolean result = new AtomicBoolean();
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_3").params("s", "hello").build(),
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_3").params("s", "hello").build(),
 				new LinkedLogicsCallback() {
 					
 					@Override

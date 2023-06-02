@@ -30,7 +30,7 @@ public class AsyncProcess1Tests {
 	@Test
 	public void testScenario1() {
 		long start = System.currentTimeMillis();
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_1").param("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_1").param("list", new ArrayList<>()).build());
 		TestContextService.blockUntil();
 		long finish = System.currentTimeMillis();
 		
@@ -63,7 +63,7 @@ public class AsyncProcess1Tests {
 
 	@Test
 	public void testScenario2() {
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_2").param("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_2").param("list", new ArrayList<>()).build());
 		TestContextService.blockUntil(10000);
 		
 		Context ctx = TestContextService.getCurrentContext();
@@ -93,7 +93,7 @@ public class AsyncProcess1Tests {
 
 	@Test
 	public void testScenario3() {
-		String contextId = LinkedLogics.start(ContextBuilder.process("SIMPLE_SCENARIO_3").params("list", new ArrayList<>()).build());
+		String contextId = LinkedLogics.start(ContextBuilder.newContext("SIMPLE_SCENARIO_3").params("list", new ArrayList<>()).build());
 		TestContextService.blockUntil(10000);
 		
 		Context ctx = TestContextService.getCurrentContext();
