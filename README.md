@@ -86,23 +86,14 @@ public class Processes {
 	
 	public static ProcessDefinition createNewOrderProcess() {
 		return createProcess("NEW_ORDER", 0)
-				.add(logic(CHARGE_CUSTOMER)
-						.application(CHARGING_SERVICE)
-						.input("customer", expr("customer"))
-						.input("amount", 1.25)
-						.compensate(logic(REFUND_CUSTOMER)
-							.application(CHARGING_SERVICE)
-						 	.input("customer", expr("customer"))
-						 	.input("amount", 1.25)
-						 .build())
-					.build())
-				.add(branch(expr("charging_result == true"), 
-						logic(CREATE_ORDER)
-							.application(ORDER_SERVICE)
-							.input("customer", expr("customer"))
-							.input("itemId", "ITEM_1")
-						.build())
-					.build())
+				.add(logic(CHARGE_CUSTOMER).application(CHARGING_SERVICE)
+						.inputs("customer", var("customer"), "amount", 1.25)
+						.compensate(logic(REFUND_CUSTOMER).application(CHARGING_SERVICE)
+						 	.input("customer", var("customer"))
+						 	.input("amount", 1.25)))
+				.add(branch(when("charging_result == true"), 
+						logic(CREATE_ORDER).application(ORDER_SERVICE)
+							.inputs("customer", var("customer"), "itemId", "ITEM_1")))
 				.build();
 	}
 }
@@ -119,7 +110,59 @@ public class Main {
 		Customer customer = new Customer();
 		customer.setCustomerId(1L);
 		
-		LinkedLogics.start("NEW_ORDER", new HashMap<>() {{ put("customer", customer);}});
+		LinkedLogics.start(newContext("NEW_ORDER").params(new HashMap<>() {{ put("customer", customer);}}).build());
+	}
+}
+```
+
+### Testing ###
+Processes also can be tested using mocks.
+#### Process Testing ####
+```
+package io.linkedlogics.sample.process;
+
+@ExtendWith(LinkedLogicsExtension.class)
+@LinkedLogicsRegister(Processes.class)
+public class Tests {
+	
+	@Test
+	public void testSuccess() {
+		mockLogic("CHARGE_CUSTOMER").returnAs("charging_result").thenReturn(true);
+		mockLogic("CREATE_ORDER").returnAs("order").thenReturn(new Order());
+	
+		Customer customer = new Customer();
+		customer.setCustomerId(1L);
+		
+		LinkedLogics.start(newContext("NEW_ORDER").params("customer", customer).build());
+		TestContextService.blockUntil();
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
+		
+		assertContext().when("1").isExecuted();
+		assertContext().when("2").asBranch().isSatisfied();
+		assertContext().when("2").asBranch().leftBranch().isExecuted();
+	}
+	
+	@Test
+	public void testFailure() {
+		mockLogic("CHARGE_CUSTOMER").returnAs("charging_result").thenReturn(true);
+		mockLogic("CREATE_ORDER").thenThrowError(-1, "create order failed");
+		mockLogic("REFUND_CUSTOMER").returnAs("refund_result").thenReturn(true);
+	
+		Customer customer = new Customer();
+		customer.setCustomerId(1L);
+		
+		LinkedLogics.start(newContext("NEW_ORDER").params("customer", customer).build());
+		TestContextService.blockUntil();
+		
+		Context ctx = TestContextService.getCurrentContext();
+		assertThat(ctx.getStatus()).isEqualTo(Status.FAILED);
+		
+		assertContext().when("1").isExecuted();
+		assertContext().when("1").onError().isCompensated();
+		assertContext().when("2").asBranch().isSatisfied();
+		assertContext().when("2").asBranch().leftBranch().isNotExecuted();
 	}
 }
 ```
