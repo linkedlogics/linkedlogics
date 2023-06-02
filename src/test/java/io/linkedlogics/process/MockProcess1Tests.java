@@ -152,8 +152,9 @@ public class MockProcess1Tests {
 		assertThat(ctx.getId()).isEqualTo(contextId);
 		assertThat(ctx.getStatus()).isEqualTo(Status.FINISHED);
 		assertThat(ctx.getParams().containsKey("list")).isTrue();
-		assertThat(ctx.getParams().get("list")).asList().hasSize(3);
+		assertThat(ctx.getParams().get("list")).asList().hasSize(5);
 		assertThat(ctx.getParams().get("list")).asList().contains(2, 4, -1);
+		assertThat(ctx.getParams().get("list")).asList().doesNotContain(9, 6, 3);
 		
 		assertContext().whenAll("1", "2", "3", "4").areExecuted();
 		assertInputs().capturedAs("MULTIPLY").when("val1 == 3");
@@ -164,7 +165,11 @@ public class MockProcess1Tests {
 		return createProcess("SIMPLE_SCENARIO_5", 0)
 				.add(logic("INSERT").input("list", expr("list")).input("val", 2))
 				.add(logic("INSERT").input("list", expr("list")).input("val", 4))
+				.add(logic("MULTIPLY").input("val1", 3).input("val2", 3))
+				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")))
 				.add(logic("MULTIPLY").input("val1", 3).input("val2", 2))
+				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")))
+				.add(logic("MULTIPLY").input("val1", 3).input("val2", 1))
 				.add(logic("INSERT").input("list", expr("list")).input("val", expr("multiply_result")))
 				.build();
 	}

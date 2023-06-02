@@ -3,7 +3,6 @@ package io.linkedlogics.test;
 import io.linkedlogics.context.Context;
 import io.linkedlogics.service.LogicService;
 import io.linkedlogics.service.ServiceLocator;
-import io.linkedlogics.test.asserts.AssertCaptured;
 import io.linkedlogics.test.asserts.AssertContext;
 import io.linkedlogics.test.asserts.AssertInputs;
 import io.linkedlogics.test.service.TestLogicService;

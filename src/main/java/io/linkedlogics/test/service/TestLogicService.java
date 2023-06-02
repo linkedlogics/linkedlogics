@@ -19,7 +19,7 @@ import lombok.Getter;
 
 public class TestLogicService extends LocalLogicService {
 	private Map<String, List<MockedLogicDefinition>> mockedDefinitions = new HashMap<>();
-	private Map<String, Map<String, Object>> capturedInputs = new HashMap<>(); 
+	private Map<String, List<Map<String, Object>>> capturedInputs = new HashMap<>(); 
 	
 	@Override
 	public Optional<LogicDefinition> getLogic(String logicId, int version) {
@@ -34,7 +34,7 @@ public class TestLogicService extends LocalLogicService {
 		}
 	}
 
-	public Optional<Map<String, Object>> getCaptured(String capturedAs) {
+	public Optional<List<Map<String, Object>>> getCaptured(String capturedAs) {
 		return Optional.ofNullable(capturedInputs.get(capturedAs));
 	}
 	
@@ -54,7 +54,9 @@ public class TestLogicService extends LocalLogicService {
 				.orElseThrow(() -> new IllegalArgumentException("no mock has matched"));
 			
 			if (definition.getCaptureAs() != null) {
-				capturedInputs.put(definition.getCaptureAs(), input);
+				List<Map<String, Object>> capturedList = capturedInputs.getOrDefault(definition.getCaptureAs(), new ArrayList<>());
+				capturedList.add(input);
+				capturedInputs.put(definition.getCaptureAs(), capturedList);
 			}
 			
 			if (definition.getError() != null) {
