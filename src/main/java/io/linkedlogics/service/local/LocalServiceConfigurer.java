@@ -7,6 +7,7 @@ public class LocalServiceConfigurer extends ServiceConfigurer {
 		configure(new LocalLogicService());
 		configure(new LocalProcessService());
 		configure(new LocalProcessorService());
+		configure(new LocalLimitService());
 		configure(new LocalPublisherService());
 		configure(new LocalConsumerService());
 		configure(new LocalAsyncService());

@@ -90,6 +90,10 @@ public class ServiceLocator {
 		return getService(TopicService.class);
 	}
 	
+	public LimitService getLimitService() {
+		return getService(LimitService.class);
+	}
+	
 	public void shutdown() {
 		services.values().stream().distinct().sorted(Comparator.comparing(LinkedLogicsService::order).reversed()).forEach(s -> s.stop());
 	}

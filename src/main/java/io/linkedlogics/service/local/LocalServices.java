@@ -24,12 +24,12 @@ public class LocalServices extends ServiceProvider {
 
 	@Override
 	public List<LinkedLogicsService> getProcessingServices() {
-		return List.of(new LocalProcessorService(), new LocalAsyncService(), new LocalMapperService(), new LocalCallbackService());
+		return List.of(new LocalProcessorService(), new LocalAsyncService(), new LocalMapperService(), new LocalCallbackService(), new LocalLimitService());
 	}
 
 	@Override
 	public List<LinkedLogicsService> getMonitoringServices() {
-		return List.of(new LocalMetricService(), new LocalTrackerService());
+		return List.of(new LocalMetricService());
 	}
 
 	@Override
