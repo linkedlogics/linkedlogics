@@ -26,7 +26,7 @@ public class Context {
 	private String parentId;
 	private Status status = Status.INITIAL;
 	private int version;
-	private final String origin = LinkedLogics.INSTANCE_NAME;
+	private String origin;
 	private boolean callback;
 	
 	private String processId;
@@ -60,13 +60,14 @@ public class Context {
 	private Map<String, Integer> loopMap = new HashMap<>();
 	private List<String> execList = new ArrayList<>();
 	
-	public Context(String id, String key, String processId, int processVersion, Map<String, Object> params) {
+	public Context(String id, String key, String processId, int processVersion, Map<String, Object> params, String origin) {
 		this.id = id == null ? UUID.randomUUID().toString() : id;
 		this.key = key == null ? this.id : key;
 		this.processId = processId;
 		this.processVersion = processVersion;
 		this.params.putAll(params);
 		this.createdAt = OffsetDateTime.now();
+		this.origin = origin;
 	}
 	
 	public static Context forPublish(Context context) {
@@ -81,6 +82,7 @@ public class Context {
 		logicContext.setInput(context.getInput());
 		logicContext.setOutput(new HashMap<>());
 		logicContext.setCreatedAt(context.getSubmittedAt());
+		logicContext.setOrigin(context.getOrigin());
 		return logicContext;
 	}
 

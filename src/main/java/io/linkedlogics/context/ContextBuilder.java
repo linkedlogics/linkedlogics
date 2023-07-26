@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.exception.MissingLogicError;
 import io.linkedlogics.model.process.ExpressionLogicDefinition;
 import io.linkedlogics.model.process.ProcessLogicDefinition;
@@ -17,6 +18,7 @@ public class ContextBuilder {
 	private int processVersion;
 	private String contextId;
 	private String contextKey;
+	private String origin = LinkedLogics.getInstanceName();
 	private Map<String, Object> params = new HashMap<>();
 	
 	private ContextBuilder(String processId, int processVersion) {
@@ -52,8 +54,8 @@ public class ContextBuilder {
 				});
 			}
 			
-			return new Context(contextId, contextKey, process.getId(), process.getVersion(), params);
-		}).orElseThrow(() -> new IllegalArgumentException(String.format("process %s is not found", processId)));
+			return new Context(contextId, contextKey, process.getId(), process.getVersion(), params, origin);
+		}).orElseThrow(() -> new IllegalArgumentException(String.format("process %s[%d] is not found", processId, processVersion)));
 	}
 	
 	public ContextBuilder id(String id) {
@@ -63,6 +65,11 @@ public class ContextBuilder {
 	
 	public ContextBuilder key(String key) {
 		this.contextKey = key;
+		return this;
+	}
+	
+	public ContextBuilder origin(String origin) {
+		this.origin = origin;
 		return this;
 	}
 	

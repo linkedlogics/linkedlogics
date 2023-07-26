@@ -17,14 +17,31 @@ public class LinkedLogicsConfiguration {
 	}
 
 	public static Optional<Object> get(String key) {
+		if (getEnv(key) != null) {
+			return Optional.of(getEnv(key));
+		}
+		
 		return Optional.ofNullable(config.getNested(key));
 	}
 
 	public static Object getOrDefault(String key, Object defaultValue) {
+		if (getEnv(key) != null) {
+			return getEnv(key);
+		}
+		
 		return Optional.ofNullable(config.getNested(key)).orElse(defaultValue);
 	}
 	
 	public static Object getOrThrow(String key, String message) {
+		if (getEnv(key) != null) {
+			return getEnv(key);
+		}
+		
 		return Optional.ofNullable(config.getNested(key)).orElseThrow(() -> new NullPointerException(message));
+	}
+	
+	private static String getEnv(String key) {
+		String envKey = key.toUpperCase().replace('.', '_').replace('-', '_');
+		return System.getenv(envKey);
 	}
 }

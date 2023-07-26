@@ -14,7 +14,7 @@ import io.linkedlogics.service.task.CancelTask;
 import io.linkedlogics.service.task.StartTask;
 
 public class LinkedLogics {
-	public static final String INSTANCE_NAME = getApplicationName() + "-" + UUID.randomUUID().toString();
+	public static final String INSTANCE_UUID = UUID.randomUUID().toString();
 	
 	static {
 		configure(new LocalServiceConfigurer());
@@ -78,6 +78,7 @@ public class LinkedLogics {
 	}
 	
 	public static String getInstanceName() {
-		return INSTANCE_NAME;
+		String instance = (String) LinkedLogicsConfiguration.getOrDefault("linkedlogics.instance.name", INSTANCE_UUID); 
+		return getApplicationName() + "-" + instance;
 	}
 }

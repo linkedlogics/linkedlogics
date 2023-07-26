@@ -33,7 +33,10 @@ public class LinkedLogicsExtension implements BeforeEachCallback, AfterEachCallb
 			
 			Arrays.stream(annotation.serviceClasses())
 				.forEach(c -> serviceConfigurer.configure((LinkedLogicsService) getInstance(c)));
-			
+		}
+		LinkedLogics.configure(serviceConfigurer);
+		
+		if (annotation != null) {
 			Arrays.stream(annotation.classes())
 				  .forEach(c -> LinkedLogics.registerLogic(getInstance(c)));
 			
@@ -47,7 +50,6 @@ public class LinkedLogicsExtension implements BeforeEachCallback, AfterEachCallb
 			  .forEach(c -> LinkedLogics.registerProcess(c));
 		}
 		
-		LinkedLogics.configure(serviceConfigurer);
 		LinkedLogics.registerLogic(context.getRequiredTestInstance());
 		LinkedLogics.registerProcess(context.getRequiredTestInstance());
 		LinkedLogics.launch();
