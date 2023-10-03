@@ -38,9 +38,8 @@ public class AssertUtil {
 	public static Map<String, Boolean> getMapByType(Context context, Type type) {
 		return context.getExecList()
 			.stream()
-			.map(s -> s.split("\\|"))
-			.filter(s -> s[0].equals(type.name()))
-			.collect(Collectors.toMap(s -> (String) s[1], s -> Boolean.parseBoolean(s[2]), (a, b) -> b));
+			.filter(s -> s.getType().equals(type.name()))
+			.collect(Collectors.toMap(s -> s.getPosition(), s -> s.getResult(), (a, b) -> b));
 	}
 	
 	public static Map<String, Boolean> getMapByTypes(Context context, Set<Type> types) {
@@ -48,31 +47,28 @@ public class AssertUtil {
 		
 		return context.getExecList()
 			.stream()
-			.map(s -> s.split("\\|"))
-			.filter(s -> typeNames.contains(s[0]))
-			.collect(Collectors.toMap(s -> (String) s[1], s -> Boolean.parseBoolean(s[2]), (a, b) -> b));
+			.filter(s -> typeNames.contains(s.getType()))
+			.collect(Collectors.toMap(s -> s.getPosition(), s -> s.getResult(), (a, b) -> b));
 	}
 	
 	public static Map<String, Boolean> getMap(Context context) {
 		return context.getExecList()
 			.stream()
-			.map(s -> s.split("\\|"))
-			.collect(Collectors.toMap(s -> (String) s[1], s -> Boolean.parseBoolean(s[2]), (a, b) -> b));
+			.collect(Collectors.toMap(s -> s.getPosition(), s -> s.getResult(), (a, b) -> b));
 	}
 	
 	public static Set<String> getSet(Context context) {
 		return context.getExecList()
 			.stream()
-			.map(s -> s.split("\\|")[1])
+			.map(s -> s.getPosition())
 			.collect(Collectors.toSet());
 	}
 	
 	public static Set<String> getSetByType(Context context, Type type) {
 		return context.getExecList()
 			.stream()
-			.map(s -> s.split("\\|"))
-			.filter(s -> s[0].equals(type.name()))
-			.map(s -> s[1])
+			.filter(s -> s.getType().equals(type.name()))
+			.map(s -> s.getPosition())
 			.collect(Collectors.toSet());
 	}
 	
@@ -81,19 +77,17 @@ public class AssertUtil {
 		
 		return context.getExecList()
 			.stream()
-			.map(s -> s.split("\\|"))
-			.filter(s -> typeNames.contains(s[0]))
-			.map(s -> s[1])
+			.filter(s -> typeNames.contains(s.getType()))
+			.map(s -> s.getPosition())
 			.collect(Collectors.toSet());
 	}
 	
 	public static List<String> getListByType(Context context, Type type, Boolean result) {
 		return context.getExecList()
 			.stream()
-			.map(s -> s.split("\\|"))
-			.filter(s -> s[0].equals(type.name()))
-			.filter(s -> Boolean.parseBoolean(s[2]) == result)
-			.map(s -> s[1])
+			.filter(s -> s.getType().equals(type.name()))
+			.filter(s -> s.getResult() == result)
+			.map(s -> s.getPosition())
 			.collect(Collectors.toList());
 	}
 }

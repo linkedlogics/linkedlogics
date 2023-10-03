@@ -58,7 +58,7 @@ public class Context {
 	private List<String> compensables = new ArrayList<>();
 	private Map<String, String> joinMap = new HashMap<>();
 	private Map<String, Integer> loopMap = new HashMap<>();
-	private List<String> execList = new ArrayList<>();
+	private List<ContextFlow> execList = new ArrayList<>();
 	
 	public Context(String id, String key, String processId, int processVersion, Map<String, Object> params, String origin) {
 		this.id = id == null ? UUID.randomUUID().toString() : id;

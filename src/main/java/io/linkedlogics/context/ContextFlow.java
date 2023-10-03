@@ -1,7 +1,11 @@
 package io.linkedlogics.context;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+
+import javax.swing.text.DateFormatter;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -153,8 +157,12 @@ public class ContextFlow {
 	}
 	
 	public void log(Context context) {
-		log.info(getLog());
-		context.getExecList().add(String.format("%s|%s|%b", type.name(), position, result));
-		Optional.ofNullable(name).ifPresent(n -> context.getExecList().add(String.format("%s|%s|%b", type.name(), n, result)));
+//		context.getExecList().add(String.format("%s|%s|%s%s|%b|%s", DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalDateTime.now()), type.name(), position, name == null ? "" : "(" + name + ")", result == null ? "" : result, message == null ? "" : message));
+		context.getExecList().add(this);
+	}
+	
+	public String toString() {
+		return String.format("%s FLOW %-12s %s%s, result={%b}, message={%s}", DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(executedAt),
+				type.name(), position, name == null ? "" : "[" + name + "]", result == null ? "" : result, message == null ? "" : message);
 	}
 }

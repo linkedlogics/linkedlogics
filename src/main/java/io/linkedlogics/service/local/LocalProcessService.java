@@ -42,11 +42,6 @@ public class LocalProcessService implements ProcessService {
 		}
 		
 		ProcessDefinition validatedDefinition = new ProcessDefinitionReader(new ProcessDefinitionWriter(process).write()).read();
-		
-		if (definitions.containsKey(getProcessKey(validatedDefinition))) {
-//			log.warn("process {}:{} was overwritten", process.getId(), process.getVersion());
-		}
-		
 		definitions.put(getProcessKey(validatedDefinition), validatedDefinition);
 		definitions.values()
 			.stream()

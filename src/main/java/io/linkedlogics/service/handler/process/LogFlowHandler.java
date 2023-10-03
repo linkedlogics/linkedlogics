@@ -37,7 +37,6 @@ public class LogFlowHandler extends ProcessFlowHandler {
 			}
 			
 			ContextLog log = ContextLog.log(context).message(message);
-
 			if (logLogic.getLevel() == Level.TRACE) {
 				log.trace();
 			} else if (logLogic.getLevel() == Level.DEBUG) {
