@@ -38,7 +38,7 @@ public class AssertUtil {
 	public static Map<String, Boolean> getMapByType(Context context, Type type) {
 		return context.getExecList()
 			.stream()
-			.filter(s -> s.getType().equals(type.name()))
+			.filter(s -> s.getType().equals(type))
 			.collect(Collectors.toMap(s -> s.getPosition(), s -> s.getResult(), (a, b) -> b));
 	}
 	
@@ -47,7 +47,7 @@ public class AssertUtil {
 		
 		return context.getExecList()
 			.stream()
-			.filter(s -> typeNames.contains(s.getType()))
+			.filter(s -> typeNames.contains(s.getType().name()))
 			.collect(Collectors.toMap(s -> s.getPosition(), s -> s.getResult(), (a, b) -> b));
 	}
 	
@@ -67,7 +67,7 @@ public class AssertUtil {
 	public static Set<String> getSetByType(Context context, Type type) {
 		return context.getExecList()
 			.stream()
-			.filter(s -> s.getType().equals(type.name()))
+			.filter(s -> s.getType().equals(type))
 			.map(s -> s.getPosition())
 			.collect(Collectors.toSet());
 	}
@@ -77,7 +77,7 @@ public class AssertUtil {
 		
 		return context.getExecList()
 			.stream()
-			.filter(s -> typeNames.contains(s.getType()))
+			.filter(s -> typeNames.contains(s.getType().name()))
 			.map(s -> s.getPosition())
 			.collect(Collectors.toSet());
 	}
@@ -85,7 +85,7 @@ public class AssertUtil {
 	public static List<String> getListByType(Context context, Type type, Boolean result) {
 		return context.getExecList()
 			.stream()
-			.filter(s -> s.getType().equals(type.name()))
+			.filter(s -> s.getType().equals(type))
 			.filter(s -> s.getResult() == result)
 			.map(s -> s.getPosition())
 			.collect(Collectors.toList());

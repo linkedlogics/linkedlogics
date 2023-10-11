@@ -21,22 +21,24 @@ public class ErrorFlowHandler extends ProcessFlowHandler {
 	@Override
 	public HandlerResult handle(Optional<BaseLogicDefinition> candidate, String candidatePosition, Context context) {
 		if (candidate.isPresent() && context.getError() != null) {
-			if (candidate.get().getError() != null && matches(context.getError(), candidate.get().getError())) {
-				setError(context, candidate.get().getError());
-				
-				if (candidate.get().getError().getErrorLogic() != null) {
-					trace(context, "error handled with logic", candidatePosition, Flow.RESET);
-					ContextFlow.error(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message("error handled with logic " + candidate.get().getError().getErrorLogic().getPosition()).log(context);
-					return HandlerResult.nextCandidate(candidate.get().getError().getErrorLogic().getPosition());
-				} else {
-					trace(context, "error handled", candidatePosition, Flow.RESET);
-					ContextFlow.error(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message("error handled").log(context);
-					return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
+			if (candidate.get().getErrors() != null && candidate.get().getErrors().size() > 0) {
+				Optional<ErrorLogicDefinition> error = candidate.get().getErrors().stream().filter(e -> matches(context.getError(), e)).findFirst();
+				if (error.isPresent()) {
+					setError(context, error.get());
+					if (error.get().getErrorLogic() != null) {
+						trace(context, "error handled with logic", candidatePosition, Flow.RESET);
+						ContextFlow.error(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message("error handled with logic " +  error.get().getErrorLogic().getPosition()).log(context);
+						return HandlerResult.nextCandidate( error.get().getErrorLogic().getPosition());
+					} else {
+						trace(context, "error handled", candidatePosition, Flow.RESET);
+						ContextFlow.error(candidatePosition).name(candidate.get().getName()).result(Boolean.TRUE).message("error handled").log(context);
+						return HandlerResult.nextCandidate(adjacentLogicPosition(candidatePosition));
+					}
 				}
-			} else {
-				trace(context, "error occured", candidatePosition, Flow.CONTINUE);
-				return super.handle(candidate, candidatePosition, context);
 			}
+			
+			trace(context, "error occured", candidatePosition, Flow.CONTINUE);
+			return super.handle(candidate, candidatePosition, context);
 		} else {
 			trace(context, "no error", candidatePosition, Flow.CONTINUE);
 			return super.handle(candidate, candidatePosition, context);

@@ -45,8 +45,8 @@ public class LogicFinder {
 //				}
 //			}
 			
-			if (l.getError() != null && l.getError().getErrorLogic() != null) {
-				traverse(List.of(l.getError().getErrorLogic()), foundList, logicDefinitionClass);
+			if (l.getErrors() != null && l.getErrors().size() > 0) {
+				l.getErrors().stream().filter(e -> e.getErrorLogic() != null).forEach(e -> traverse(List.of(e.getErrorLogic()), foundList, logicDefinitionClass));
 			}
 		});
 	}

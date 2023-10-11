@@ -173,8 +173,8 @@ public class ProcessDefinitionWriter {
 			write(builder, logic.getRetry());
 		}
 
-		if (logic.getError() != null) {
-			write(builder, logic.getError());
+		if (logic.getErrors() != null && logic.getErrors().size() > 0) {
+			write(builder, logic.getErrors());
 		}
 	}
 
@@ -268,37 +268,43 @@ public class ProcessDefinitionWriter {
 		builder.append(".label(\"").append(label.getLabel()).append("\")");
 	}
 
-	private void write(StringBuilder builder, ErrorLogicDefinition error) {
-		builder.append(".handle(error()");
+	private void write(StringBuilder builder, List<ErrorLogicDefinition> errors) {
+		builder.append(".handle(");
 
-		if (!error.getErrorCodeSet().isEmpty()) {
-			builder.append(".withCodes(").append(error.getErrorCodeSet().stream().map(i -> String.valueOf(i)).collect(Collectors.joining(", "))).append(")");
+		builder.append(errors.stream().map(error -> {
+			StringBuilder errorBuilder = new StringBuilder("error()");
+			
+			if (!error.getErrorCodeSet().isEmpty()) {
+				errorBuilder.append(".withCodes(").append(error.getErrorCodeSet().stream().map(i -> String.valueOf(i)).collect(Collectors.joining(", "))).append(")");
 
-			if (!error.getErrorMessageSet().isEmpty()) {
-				builder.append(".orMessages(");
-				builder.append(error.getErrorMessageSet().stream().map(m -> "\"" + m + "\"").collect(Collectors.joining(", ")));
-				builder.append(")");
+				if (!error.getErrorMessageSet().isEmpty()) {
+					errorBuilder.append(".orMessages(");
+					errorBuilder.append(error.getErrorMessageSet().stream().map(m -> "\"" + m + "\"").collect(Collectors.joining(", ")));
+					errorBuilder.append(")");
+				}
+			} else if (!error.getErrorMessageSet().isEmpty()) {
+				errorBuilder.append(".withMessages(");
+				errorBuilder.append(error.getErrorMessageSet().stream().map(m -> "\"" + m + "\"").collect(Collectors.joining(", ")));
+				errorBuilder.append(")");
 			}
-		} else if (!error.getErrorMessageSet().isEmpty()) {
-			builder.append(".withMessages(");
-			builder.append(error.getErrorMessageSet().stream().map(m -> "\"" + m + "\"").collect(Collectors.joining(", ")));
-			builder.append(")");
-		}
 
-		if (error.isThrowAgain()) {
-			builder.append(".throwAgain(");
-			if (error.getThrowErrorCode() != null) {
-				builder.append(error.getThrowErrorCode()).append(", \"").append(error.getThrowErrorMessage()).append("\"");
+			if (error.isThrowAgain()) {
+				errorBuilder.append(".throwAgain(");
+				if (error.getThrowErrorCode() != null) {
+					errorBuilder.append(error.getThrowErrorCode()).append(", \"").append(error.getThrowErrorMessage()).append("\"");
+				}
+				errorBuilder.append(")");
 			}
-			builder.append(")");
-		}
 
-		if (error.getErrorLogic() != null) {
-			builder.append(".using(");
-			write(builder, error.getErrorLogic());
-			builder.append(")");
-		}
-
+			if (error.getErrorLogic() != null) {
+				errorBuilder.append(".using(");
+				write(errorBuilder, error.getErrorLogic());
+				errorBuilder.append(")");
+			}
+			
+			return errorBuilder.toString();
+		}).collect(Collectors.joining(",")));
+		
 		builder.append(")");
 	}
 

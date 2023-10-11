@@ -1,6 +1,8 @@
 package io.linkedlogics.model.process;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
@@ -24,7 +26,7 @@ public abstract class BaseLogicDefinition extends TypedLogicDefinition implement
 	protected Boolean forced = Boolean.FALSE;
 	protected RetryLogicDefinition retry;
 	protected DelayLogicDefinition delay;
-	protected ErrorLogicDefinition error;
+	protected List<ErrorLogicDefinition> errors = new ArrayList<>();
 	protected TimeoutLogicDefinition timeout;
 	protected LabelLogicDefinition label;
 	protected String name;
@@ -42,7 +44,7 @@ public abstract class BaseLogicDefinition extends TypedLogicDefinition implement
 		clone.setForced(getForced());
 		clone.setRetry(retry != null ? retry.cloneLogic() : null);
 		clone.setDelay(delay != null ? delay.cloneLogic() : null);
-		clone.setError(error != null ? error.cloneLogic() : null);
+		clone.setErrors(errors != null ? errors.stream().map(e -> e.cloneLogic()).toList() : null);
 		clone.getInputs().putAll(getInputs());
 		clone.getOutputs().putAll(getOutputs());
 		clone.setTimeout(timeout != null ? timeout.cloneLogic() : null);
@@ -101,8 +103,10 @@ public abstract class BaseLogicDefinition extends TypedLogicDefinition implement
 			return (T) this;
 		}
 		
-		public T handle(ErrorLogicBuilder error) {
-			this.logic.setError(error.build());
+		public T handle(ErrorLogicBuilder... errors) {
+			for(ErrorLogicBuilder error : errors) {
+				this.logic.getErrors().add(error.build());
+			}
 			return (T) this;
 		}
 		

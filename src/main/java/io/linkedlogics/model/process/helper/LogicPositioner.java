@@ -3,6 +3,7 @@ package io.linkedlogics.model.process.helper;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import io.linkedlogics.model.ProcessDefinition;
 import io.linkedlogics.model.process.BaseLogicDefinition;
@@ -61,9 +62,15 @@ public abstract class LogicPositioner {
 			((SingleLogicDefinition) logic).getCompensationLogic().setForced(true);
 		} 
 
-		if (logic.getError() != null && logic.getError().getErrorLogic() != null) {
-			setPosition(logic.getError().getErrorLogic(), positions, labels, position + ERROR);
-			logic.getError().getErrorLogic().setForced(true);
+		if (logic.getErrors() != null && logic.getErrors().size() > 0) {
+			StringBuilder e = new StringBuilder();
+			for (int i = 0; i < logic.getErrors().size(); i++) {
+				e.append(ERROR);
+				if (logic.getErrors().get(i).getErrorLogic() != null) {
+					setPosition(logic.getErrors().get(i).getErrorLogic(), positions, labels, position + e.toString());
+					logic.getErrors().get(i).getErrorLogic().setForced(true);
+				}
+			}
 		}
 	}
 }
