@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import javax.swing.text.DateFormatter;
 
+import io.linkedlogics.service.ServiceLocator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -157,12 +158,11 @@ public class ContextFlow {
 	}
 	
 	public void log(Context context) {
-//		context.getExecList().add(String.format("%s|%s|%s%s|%b|%s", DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalDateTime.now()), type.name(), position, name == null ? "" : "(" + name + ")", result == null ? "" : result, message == null ? "" : message));
 		context.getExecList().add(this);
+		ServiceLocator.getInstance().getLoggingService().info(context, toString());
 	}
 	
 	public String toString() {
-		return String.format("%s FLOW %-12s %s%s, result={%b}, message={%s}", DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(executedAt),
-				type.name(), position, name == null ? "" : "[" + name + "]", result == null ? "" : result, message == null ? "" : message);
+		return String.format("FLOW %-12s %s%s, result={%b}, message={%s}", type.name(), position, name == null ? "" : "[" + name + "]", result == null ? "" : result, message == null ? "" : message);
 	}
 }

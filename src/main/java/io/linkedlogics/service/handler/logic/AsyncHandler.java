@@ -22,7 +22,6 @@ public class AsyncHandler extends LogicHandler {
 		LogicDefinition logic = findLogic(context.getLogicId(), context.getLogicVersion());
 		
 		if (!logic.isReturnAsync()) {
-			log(context).handler(this).logic(logic).message("logic is not async").debug();
 			super.handle(context, result);	
 		} else {
 			log(context).handler(this).logic(logic).message("logic is async waiting for callback").info();

@@ -20,5 +20,6 @@ public class LocalServiceConfigurer extends ServiceConfigurer {
 		configure(new LocalSchedulerService());
 		configure(new LocalTrackerService());
 		configure(new LocalQueueService());
+		configure(new LocalLoggingService());
 	}
 }

@@ -2,6 +2,7 @@ package io.linkedlogics.service.handler.logic;
 
 import static io.linkedlogics.context.ContextLog.log;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -42,12 +43,12 @@ public class InvokeHandler extends LogicHandler {
 			log(context).handler(this).logic(logic).inputs().message("executing logic by calling " + logic.getMethod().getName() + "() in " + logic.getMethod().getDeclaringClass().getSimpleName() + ".java").debug();
 			Object methodResult = invokeMethod(context, logic, getInvokeParams(context, logic));
 			context.setExecutedIn(Duration.between(context.getExecutedAt(), OffsetDateTime.now()).toMillis());
-//			ContextFlow.logic(context.getLogicPosition()).result(Boolean.TRUE).message(String.format("%s[%d]", context.getLogicId(), context.getLogicVersion())).duration(context.getExecutedIn()).log(context);
+			ContextFlow.logic(context.getLogicPosition()).result(Boolean.TRUE).message(String.format("%s[%d]", context.getLogicId(), context.getLogicVersion())).duration(context.getExecutedIn()).log(context);
 			log(context).handler(this).message("executing finished in " + context.getExecutedIn() + " msec").debug();
 			super.handle(context, methodResult);	
 		} catch (Exception e) {
 			context.setExecutedIn(Duration.between(context.getExecutedAt(), OffsetDateTime.now()).toMillis());
-//			ContextFlow.logic(context.getLogicPosition()).result(Boolean.FALSE).message(String.format("%s[%d] %s", context.getLogicId(), context.getLogicVersion(), e.getLocalizedMessage())).duration(context.getExecutedIn()).log(context);
+			ContextFlow.logic(context.getLogicPosition()).result(Boolean.FALSE).message(String.format("%s[%d] %s", context.getLogicId(), context.getLogicVersion(), e.getLocalizedMessage())).duration(context.getExecutedIn()).log(context);
 			log(context).handler(this).message("executing failed with " + e.getLocalizedMessage()).error();
 			super.handleError(context, e);
 		}
@@ -78,11 +79,17 @@ public class InvokeHandler extends LogicHandler {
 		Object result = null;
 		logic.getMethod().setAccessible(true);
 		
-		if (Modifier.isStatic(logic.getMethod().getModifiers())) {
-			result = logic.getMethod().invoke(null, params);
-		} else {
-			result = logic.getMethod().invoke(logic.getObject(), params);
+		try {
+			ServiceLocator.getInstance().getLoggingService().set(context);
+			if (Modifier.isStatic(logic.getMethod().getModifiers())) {
+				result = logic.getMethod().invoke(null, params);
+			} else {
+				result = logic.getMethod().invoke(logic.getObject(), params);
+			}
+		} finally {
+			ServiceLocator.getInstance().getLoggingService().remove(context);
 		}
+		
 		
 		Arrays.stream(getInvokeReturnedParamIndexes(context, logic)).forEach(i -> {
 			context.getOutput().put(logic.getParameters()[i].getName(), params[i]);

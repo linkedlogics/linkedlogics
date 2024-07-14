@@ -26,7 +26,6 @@ public class ScriptHandler extends LogicHandler {
 	public void handle(Context context, Object result) {
 		context.setExecutedAt(OffsetDateTime.now());
 		try {
-			log(context).handler(this).inputs().message("executing script").debug();
 			String id = String.format("%s_%d_%s", context.getProcessId(), context.getProcessVersion(), context.getLogicPosition());
 			
 			Map<String, Object> scriptParams = new HashMap<>(context.getParams());

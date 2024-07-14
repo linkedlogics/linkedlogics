@@ -12,6 +12,7 @@ public class ProcessDefinitionReader {
 		Binding binding = new Binding();
 		GroovyShell groovyShell = new GroovyShell(binding);
 		Object result = groovyShell.evaluate(process);
+		groovyShell.resetLoadedClasses();
 		return (ProcessDefinition) result;
 	}
 }

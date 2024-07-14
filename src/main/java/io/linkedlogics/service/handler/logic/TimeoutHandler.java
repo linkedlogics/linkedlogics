@@ -26,7 +26,6 @@ public class TimeoutHandler extends LogicHandler {
 		
 		if (context.isPresent() && context.get().getLogicPosition().startsWith(logicContext.getLogicPosition())) {
 			if (context.get().getStatus() != Status.FINISHED && context.get().getStatus() != Status.FAILED) {
-				log(context.get()).handler(this).context().message("context is timed out").debug();
 				super.handleError(logicContext, new LogicTimeoutException(logicContext.getLogicId()));
 			} else {
 				ServiceLocator.getInstance().getContextService().remove(context.get().getId());

@@ -37,7 +37,6 @@ public class LocalProcessService implements ProcessService {
 	
 	public void addProcess(ProcessDefinition process) {
 		if (process.isArchived()) {
-			log.info(String.format("process %s:%d is archived", process.getId(), process.getVersion()));
 			return;
 		}
 		

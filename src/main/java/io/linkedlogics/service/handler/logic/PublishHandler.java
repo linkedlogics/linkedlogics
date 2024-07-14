@@ -96,7 +96,6 @@ public class PublishHandler extends LogicHandler {
 			int timeout = new ServiceConfiguration().getConfig(LocalProcessorServiceConfig.class).getTimeout();
 			context.setExpiresAt(OffsetDateTime.now().plusSeconds(timeout));
 		}
-		
 		Schedule schedule = new Schedule(context.getId(), context.getLogicId(), context.getLogicPosition(), context.getExpiresAt(), SchedulerService.ScheduleType.TIMEOUT); 
 		ServiceLocator.getInstance().getSchedulerService().schedule(schedule);
 		context.setExpiresAt(null);

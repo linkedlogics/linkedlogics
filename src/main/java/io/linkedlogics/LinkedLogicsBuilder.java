@@ -109,7 +109,6 @@ public class LinkedLogicsBuilder {
 	
 	public static ExpressionLogicDefinition file(String file) {
 		try (InputStream in = LinkedLogics.class.getClassLoader().getResourceAsStream(file)) {
-			log.info("loading {}", file);
 			return new ExpressionLogicDefinition.ExpressionLogicDefinitionBuilder(new String(in.readAllBytes())).source(file).build();
 		} catch (Exception e) {
 			throw new RuntimeException(e);

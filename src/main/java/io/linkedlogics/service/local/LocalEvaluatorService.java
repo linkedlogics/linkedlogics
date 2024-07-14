@@ -26,7 +26,11 @@ public class LocalEvaluatorService implements EvaluatorService {
 			binding.setVariable(e.getKey(), e.getValue());
 		});
 		GroovyShell groovyShell = new GroovyShell(binding);
-		return groovyShell.evaluate(expression);
+		try {
+			return groovyShell.evaluate(expression);
+		} finally {
+			groovyShell.resetLoadedClasses();
+		}
 	}
 
 	@Override
@@ -34,12 +38,14 @@ public class LocalEvaluatorService implements EvaluatorService {
 		if (!config.getCheckSyntax(true)) {
 			return Optional.empty();
 		}
+		GroovyShell groovyShell = new GroovyShell();
 		try {
-			GroovyShell groovyShell = new GroovyShell();
 			groovyShell.parse(expression);
 			return Optional.empty();
 		} catch (CompilationFailedException e) {
 			return Optional.of(e.getMessage());
+		} finally {
+			groovyShell.resetLoadedClasses();
 		}
 	}
 	

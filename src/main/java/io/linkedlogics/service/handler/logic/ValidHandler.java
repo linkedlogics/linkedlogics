@@ -25,14 +25,11 @@ public class ValidHandler  extends LogicHandler {
 		if (maybeContext.isPresent()) {
 			Context fullContext = maybeContext.get();
 			if (fullContext.getLogicPosition().equals(context.getLogicPosition()) && fullContext.isNotFinished()) {
-				log(context).handler(this).context().message("context is valid").debug();
 				super.handle(context, result);
 			} else {
-				log(context).handler(this).context().message("context is already updated").error();
 				super.handleError(context, new RuntimeException("context not valid"));
 			}
 		} else {
-			log(context).handler(this).context().message("context is not found").error();
 			super.handleError(context, new RuntimeException("context not found"));
 		}
 	}

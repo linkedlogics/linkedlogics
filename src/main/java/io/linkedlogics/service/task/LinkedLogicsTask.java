@@ -6,19 +6,26 @@ import org.slf4j.MDC;
 
 import io.linkedlogics.LinkedLogics;
 import io.linkedlogics.context.Context;
+import io.linkedlogics.service.ProcessorService;
 import io.linkedlogics.service.ServiceLocator;
 import io.linkedlogics.service.handler.logic.ErrorHandler;
 import io.linkedlogics.service.handler.logic.LogicHandler;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Getter
-@AllArgsConstructor
 @Slf4j
 public abstract class LinkedLogicsTask implements Runnable {
 	protected Context context;
 	protected LogicHandler handler;
+	@Setter
+	protected ProcessorService service;
+	
+	public LinkedLogicsTask(Context context, LogicHandler handler) {
+		this.context = context;
+		this.handler = handler;
+	}
 	
 	@Override
 	public void run() {
