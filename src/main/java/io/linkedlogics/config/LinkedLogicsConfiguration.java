@@ -2,6 +2,9 @@ package io.linkedlogics.config;
 
 import java.util.Optional;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class LinkedLogicsConfiguration {
 	public static final String LINKEDLOGICS = "linkedlogics";
 	private static final String DEFAULT_CONFIG_FILE = "linkedlogics.yaml";
@@ -42,6 +45,8 @@ public class LinkedLogicsConfiguration {
 	
 	private static String getEnv(String key) {
 		String envKey = key.toUpperCase().replace('.', '_').replace('-', '_');
-		return System.getenv(envKey);
+		String envValue =  System.getenv(envKey);
+		log.error("Reading ENV VAR " + envKey + "=" + envValue);
+		return envValue;
 	}
 }

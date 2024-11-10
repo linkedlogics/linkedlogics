@@ -38,6 +38,18 @@ public class ConfigInvocationHandler implements InvocationHandler {
 			return Optional.ofNullable(configValue);
 		}
 		
+		if (configValue instanceof String) {
+			if (method.getReturnType() == Integer.class) {
+				return Integer.parseInt(configValue.toString());
+			} else if (method.getReturnType() == Long.class) {
+				return Long.parseLong(configValue.toString());
+			} else if (method.getReturnType() == Double.class) {
+				return Double.parseDouble(configValue.toString());
+			} else if (method.getReturnType() == Boolean.class) {
+				return Boolean.parseBoolean(configValue.toString());
+			}
+		}
+		
 		return configValue;
 	}
 	
